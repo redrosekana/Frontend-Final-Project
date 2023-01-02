@@ -1,0 +1,8 @@
+.notActiveclassName{
+      @apply mx-5 text-lg font-medium hover:border-b-2 hover:border-black
+}
+
+.activeclassName{
+      @apply mx-5 text-lg font-medium border-b-2 border-black
+}
+
