@@ -38,7 +38,7 @@ export default async function LoginApi( body: LoginMember ): Promise<string | un
     return "เข้าสู่ระบบเสร็จสิ้น ระบบจะนำไปยังหน้าหลัก";
   } catch (err: unknown | AxiosError) {
     if (axios.isAxiosError(err)) {
-      const message = (err.response?.data as errorResponse).message;
+      const message:string = (err.response?.data as errorResponse).message;
       
       if (message === "please input username or password") {
         return "ต้องใส่ข้อมูลให้ครบ";

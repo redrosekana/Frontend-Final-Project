@@ -7,10 +7,12 @@ module.exports = {
     extend: {
       colors:{
         "redrose":"#B70000",
-        "limegreen":"#00B728"
+        "limegreen":"#00B728",
+        "orangey":"#FF8F3E"
       },
       screens:{
-        telephone:"430px"
+        telephone:"430px",
+        specific:"860px"
       }
     },
   },

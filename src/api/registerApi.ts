@@ -28,7 +28,7 @@ export default async function RegisterApi( body: RegisterMember ): Promise<strin
     return "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ";
   } catch (err: unknown | AxiosError) {
     if (axios.isAxiosError(err)) {
-      const message = (err.response?.data as errorResponse).message;
+      const message:string = (err.response?.data as errorResponse).message;
       if (message === "need additnal information") {
         return "ใส่ข้อมูลไม่ครบ";
       } else if (message === "displayName repeated") {

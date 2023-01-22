@@ -1,8 +1,17 @@
-.notActiveclassName{
-      @apply mx-5 text-lg font-medium hover:border-b-2 hover:border-black
+.shakeAnimation {
+      animation-name: shakeAnimationName;
+      animation-duration: 2s;
+      animation-timing-function: ease;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
 }
 
-.activeclassName{
-      @apply mx-5 text-lg font-medium border-b-2 border-black
+@keyframes shakeAnimationName {
+      from {
+            transform: translateY(0);
+      }
+      to {
+            transform: translateY(5px);
+      }
 }
 
