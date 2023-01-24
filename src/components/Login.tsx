@@ -8,11 +8,13 @@ import LoginApi from "../api/loginApi";
 //* import controller
 import { createSwal } from "../controller/createSwal";
 
-//* declare interface
+//* declare interface and instance
 interface LoginMember {
   username: string;
   password: string;
 }
+
+const url = import.meta.env.VITE_URL_DEV + "/facebookMember";
 
 export default function Login() {
   const navigate: NavigateFunction = useNavigate();
@@ -91,7 +93,7 @@ export default function Login() {
         <button
           className="text-white bg-blue-500 shadow-lg shadow-blue-200  hover:bg-blue-600 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full telephone:w-auto px-5 py-2 text-center mt-3 telephone:ml-2 telephone:mt-0"
           onClick={() => {
-            window.location.href = "http://localhost:5000/facebookMember"
+            window.location.href = `${url}`
           }}
         >
           facebook
