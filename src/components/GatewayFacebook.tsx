@@ -11,8 +11,9 @@ export default function GatewayFacebook() {
   useEffect(() => {
       const url = new URLSearchParams(location.search)
       
-      cookie.set("accessToken",url.get("accessToken"))
-      cookie.set("refreshToken",url.get("refreshToken"))
+      cookie.set("accessToken",url.get("accessToken"),{ path: "/" })
+      cookie.set("refreshToken",url.get("refreshToken"),{ path: "/" })
+
       
       navigate("/page/home")
   },[])
