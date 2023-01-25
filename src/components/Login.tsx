@@ -1,6 +1,9 @@
 //* import library
 import React, { useRef } from "react";
-import { useNavigate, NavigateFunction, NavLink } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
+import FacebookLogin from 'react-facebook-login'
+import axios from "axios";
+import Cookies from "universal-cookie";
 
 //* import function api
 import LoginApi from "../api/loginApi";
@@ -15,8 +18,10 @@ interface LoginMember {
 }
 
 const url = import.meta.env.VITE_URL_DEV + "/facebookMember";
+const urlFacebook = import.meta.env.VITE_URL_DEV + "/testfacebook"
 
 export default function Login() {
+  const cookie = new Cookies()
   const navigate: NavigateFunction = useNavigate();
   const usernameEl = useRef<HTMLInputElement>(null);
   const passwordEl = useRef<HTMLInputElement>(null);
@@ -51,6 +56,28 @@ export default function Login() {
       });
     }
   };
+  
+  
+  const responseFacebook = async (res:any) => {
+    console.log(res)
+
+    const userId = res.userID
+    const accessToken = res.accessToken
+    
+    try{
+      const result = await axios.post(urlFacebook,{
+        "userId":userId,
+        "accessTokenFacebook":accessToken
+      })
+      console.log(result)
+      cookie.set("accessToken",result.data.accessToken, {path:"/"})
+      cookie.set("refreshToken",result.data.refreshToken,{ path:"/"})
+      navigate("/page/home")
+    }catch(err){
+      console.log(err)
+    }
+
+  }
 
   return (
     <main className="container max-w-7xl min-h-screen mx-auto flex justify-center items-center">
@@ -98,6 +125,17 @@ export default function Login() {
         >
           facebook
         </button>
+        <div className=" inline-block text-white bg-blue-500 shadow-lg shadow-blue-200  hover:bg-blue-600 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-md w-full telephone:w-auto px-5 py-2 text-center mt-3 telephone:ml-2 telephone:mt-0">
+          <FacebookLogin
+            appId="737163997656779"
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={responseFacebook}
+            cssClass="my-facebook-button-class"
+            icon="fa-facebook"
+          />
+        </div>
+        
       </div>
     </main>
   );
