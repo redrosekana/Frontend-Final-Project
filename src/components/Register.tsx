@@ -1,12 +1,15 @@
 //* import library
-import React, { useRef } from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import React, { useRef, useState } from "react"
+import { useNavigate, NavigateFunction } from "react-router-dom"
 
 //* import fucntion api
-import RegisterApi from "../api/registerApi";
+import RegisterApi from "../api/registerApi"
+
+//* import component reload
+import Reload from "./reload"
 
 //* import controller
-import { createSwal } from "../controller/createSwal";
+import { createSwal } from "../controller/createSwal"
 
 //* declare interface
 interface RegisterMember {
@@ -25,6 +28,8 @@ export default function Register() {
   const passwordEl = useRef<HTMLInputElement>(null);
   const confirm_passwordEl = useRef<HTMLInputElement>(null);
 
+  const [reload,SetReload] = useState<boolean>(false)
+
   const submitBtn = async (ev: React.FormEvent) => {
     ev.preventDefault();
 
@@ -40,7 +45,10 @@ export default function Register() {
       password: passwordEl.current!.value.trim(),
     };
 
-    const result = await RegisterApi(body);
+    SetReload(true)
+    const result = await RegisterApi(body)
+    SetReload(false)
+    
     if (
       result === "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว" ||
       result === "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว" ||
@@ -52,7 +60,7 @@ export default function Register() {
       result === "มีข้อผิดพลาดของเซิฟเวอร์" ||
       result === "มีข้อผิดพลาดของบราวเซอร์"
     ) {
-      createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000");
+      createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000")
     } else if (result === "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ") {
       createSwal("สำเร็จ", result, "success", "#06b400").then(() => {
         navigate("/login");
@@ -61,104 +69,105 @@ export default function Register() {
   };
 
   return (
-    <main className="container max-w-7xl mx-auto">
-      <form
-        className="max-w-xl mx-auto mt-5 py-8 p-5 sm:px-0"
-        onSubmit={(ev) => submitBtn(ev)}
-      >
-        <h1 className="text-[1.6rem] font-bold text-center mb-10 telephone:text-[2rem] sm:text-[2.8rem]">
-          แบบฟอร์มสมัครเข้าสู่ระบบ
-        </h1>
+    <React.Fragment>
+      {reload ? <Reload/> : null}
+      <main className="container max-w-7xl mx-auto">
+        <form className="max-w-xl mx-auto mt-5 py-8 p-5 sm:px-0" onSubmit={(ev) => submitBtn(ev)}>
+          <h1 className="text-[1.6rem] font-bold text-center mb-10 telephone:text-[2rem] sm:text-[2.8rem]">
+            แบบฟอร์มสมัครเข้าสู่ระบบ
+          </h1>
 
-        <div className="mb-3">
-          <label
-            htmlFor="displayName"
-            className="block mb-2 text-base font-medium text-gray-900"
-          >
-            ชื่อแสดงในเว็บไซต์ <span className=" text-red-700">*</span>
-          </label>
-          <input
-            type="text"
-            id="displayName"
-            ref={displayNameEl}
-            className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label
-            htmlFor="username"
-            className="block mb-2 text-base font-medium text-gray-900"
-          >
-            ชื่อผู้ใช้งาน <span className=" text-red-700">*</span>
-          </label>
-          <input
-            type="text"
-            id="username"
-            ref={usernameEl}
-            className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-base font-medium text-gray-900"
-          >
-            อีเมลล์ <span className=" text-red-700">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            ref={emailEl}
-            className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label
-            htmlFor="password"
-            className="block mb-2 text-base font-medium text-gray-900"
-          >
-            รหัสผ่าน <span className=" text-red-700">*</span>
-          </label>
-          <input
-            type="password"
-            id="password"
-            ref={passwordEl}
-            className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
-            required
-          />
-        </div>
-        <div className="mb-5">
-          <label
-            htmlFor="confirm_password"
-            className="block mb-2 text-base font-medium text-gray-900"
-          >
-            ยืนยันรหัสผ่าน <span className=" text-red-700">*</span>
-          </label>
-          <input
-            type="password"
-            id="confirm_password"
-            ref={confirm_passwordEl}
-            className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
-            required
-          />
-        </div>
+          <div className="mb-3">
+            <label
+              htmlFor="displayName"
+              className="block mb-2 text-base font-medium text-gray-900"
+            >
+              ชื่อแสดงในเว็บไซต์ <span className=" text-red-700">*</span>
+            </label>
+            <input
+              type="text"
+              id="displayName"
+              ref={displayNameEl}
+              className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label
+              htmlFor="username"
+              className="block mb-2 text-base font-medium text-gray-900"
+            >
+              ชื่อผู้ใช้งาน <span className=" text-red-700">*</span>
+            </label>
+            <input
+              type="text"
+              id="username"
+              ref={usernameEl}
+              className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label
+              htmlFor="email"
+              className="block mb-2 text-base font-medium text-gray-900"
+            >
+              อีเมลล์ <span className=" text-red-700">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              ref={emailEl}
+              className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label
+              htmlFor="password"
+              className="block mb-2 text-base font-medium text-gray-900"
+            >
+              รหัสผ่าน <span className=" text-red-700">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              ref={passwordEl}
+              className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <label
+              htmlFor="confirm_password"
+              className="block mb-2 text-base font-medium text-gray-900"
+            >
+              ยืนยันรหัสผ่าน <span className=" text-red-700">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirm_password"
+              ref={confirm_passwordEl}
+              className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"
+              required
+            />
+          </div>
 
-        <button
-          className="text-white bg-redrose shadow-lg shadow-red-200  hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg w-auto px-4 py-1.5 text-center"
-          onClick={() => navigate("/page/home")}
-        >
-          ยกเลิก
-        </button>
-        <button
-          type="submit"
-          className="text-white bg-limegreen shadow-lg shadow-green-200  hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg w-auto px-4 py-1.5 text-center ml-2"
-        >
-          ยืนยัน
-        </button>
-      </form>
-    </main>
-  );
+          <button
+            className="text-white bg-redrose shadow-lg shadow-red-200  hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg w-auto px-4 py-1.5 text-center"
+            onClick={() => navigate("/home")}
+          >
+            กลับหน้าหลัก
+          </button>
+          <button
+            type="submit"
+            className="text-white bg-limegreen shadow-lg shadow-green-200  hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-lg w-auto px-4 py-1.5 text-center ml-2"
+          >
+            ยืนยัน
+          </button>
+        </form>
+      </main>
+    </React.Fragment>
+    
+  )
 }

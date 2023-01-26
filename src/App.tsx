@@ -14,7 +14,6 @@ import Login from "./components/Login"
 import Register from "./components/Register"
 import PageBefore from "./components/PagebeforeLogin/PageBefore"
 import HomeBefore from "./components/PagebeforeLogin/HomeBefore"
-import GatewayFacebook from "./components/GatewayFacebook"
 
 type Temp = {
   name:string
@@ -32,7 +31,7 @@ function App() {
   return (
     <React.Fragment>
       <Routes>
-        <Route path="main" element={<PageBefore/>}>
+        <Route path="/" element={<PageBefore/>}>
           <Route index element={<HomeBefore/>}/>
           <Route path="home" element={<HomeBefore/>}/>
           <Route path="about" element={<Tmp name={"about"}/>}/>
@@ -49,7 +48,6 @@ function App() {
           <Route index path="home" element={<HomeAfter/>}/>
         </Route>
         
-        <Route path="gateway_facebook" element={<GatewayFacebook />}/>
       </Routes>
     </React.Fragment>
   );

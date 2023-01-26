@@ -25,24 +25,24 @@ export default async function RegisterApi( body: RegisterMember ): Promise<strin
       timeout: 5000,
     });
 
-    return "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ";
+    return "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ"
   } catch (err: unknown | AxiosError) {
     if (axios.isAxiosError(err)) {
-      const message:string = (err.response?.data as errorResponse).message;
+      const message:string = (err.response?.data as errorResponse).message
       if (message === "need additnal information") {
-        return "ใส่ข้อมูลไม่ครบ";
+        return "ใส่ข้อมูลไม่ครบ"
       } else if (message === "displayName repeated") {
-        return "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว";
+        return "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว"
       } else if (message === "username repeated") {
-        return "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว";
+        return "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว"
       } else if (message === "email repeated") {
-        return "อีเมลล์ ถูกใช้งานแล้ว";
+        return "อีเมลล์ ถูกใช้งานแล้ว"
       } else if (message === "occurred error in server") {
-        return "มีข้อผิดพลาดของเซิฟเวอร์";
+        return "มีข้อผิดพลาดของเซิฟเวอร์"
       }
     } else {
-      console.log(err);
-      return "มีข้อผิดพลาดของบราวเซอร์";
+      console.log(err)
+      return "มีข้อผิดพลาดของบราวเซอร์"
     }
   }
 }

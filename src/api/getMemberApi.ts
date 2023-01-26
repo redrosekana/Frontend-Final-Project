@@ -35,7 +35,7 @@ export default async function GetMemberApi(token:string,path:string):Promise<str
       }catch(err: unknown | AxiosError) {
             if (axios.isAxiosError(err)) {
                   const message = (err.response?.data as errorResponse).message
-                  console.log(message)
+                  // console.log(message)
                   if (message === "must pass Bearer in front of token or haven't token"){
                         return "รูปแบบการส่งไม่ถูกต้อง"
                   }else if (message === "expired accessToken") {

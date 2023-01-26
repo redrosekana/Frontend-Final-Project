@@ -54,6 +54,8 @@ function HomeAfter() {
             cookie.set("accessToken",res.accessToken,{path:"/"})
             cookie.set("refreshToken",res.refreshToken,{path:"/"})
             navigate("/page/home")
+          }else{
+            window.location.reload()
           }
         })
       }

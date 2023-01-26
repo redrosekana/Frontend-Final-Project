@@ -1,7 +1,10 @@
 //* import library
-import React ,{ useRef, useEffect } from "react";
+import React ,{ useRef, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+
+//* import components
+import ScopeProfile from "../scopeProfile";
 
 //* import picture
 import avatar from "../../assets/avatar.svg"
@@ -17,6 +20,8 @@ function NavbarAfter() {
   const buttonHamberger = useRef<HTMLButtonElement>(null)
 	const sideBar = useRef<HTMLDivElement>(null)
 
+  const [profile,SetProfile] = useState<boolean>(false)
+
   useEffect(() => {
     window.addEventListener("resize",autoDisplaySideBar)
     return () => {
@@ -28,6 +33,8 @@ function NavbarAfter() {
     if (window.outerWidth >= 860){
       sideBar.current?.classList.remove("-translate-x-full")
       sideBar.current?.classList.add("-translate-x-full") 
+    }else {
+      SetProfile(false)
     }
   }
 	
@@ -37,17 +44,17 @@ function NavbarAfter() {
 
   const LogoutButton = () => {
     createSwal("คุณต้องการออกจากระบบใช่ไหม", "ยืนยันการออกจากระบบ", "question", "#0083e1",true).then((value:any) => {
-      console.log(value)
       if (value.isConfirmed){
         cookie.remove("accessToken",{path:"/"})
         cookie.remove("refreshToken",{path:"/"})
-        navigate("/main/home")
+        navigate("/")
       }
     })
   }
 
   return (
     <React.Fragment>
+      {profile ? <ScopeProfile LogoutButton={LogoutButton} /> : null}
       <nav className="container max-w-[1400px] mx-auto w-full py-4 px-5">
         <div className="flex justify-between">
           <div className="flex text-2xl cursor-pointer items-center">
@@ -69,7 +76,7 @@ function NavbarAfter() {
           <div className="hidden specific:flex specific:items-center">
             <div className="text-xl mr-1">Sukachathum</div>
             <div className="w-[50px] cursor-pointer">
-              <img src={avatar} alt="avatar" className="w-full object-cover" />
+              <img src={avatar} alt="avatar" className="w-full object-cover" onClick={() => SetProfile(prev => !prev)} />
             </div>
           </div>
         </div>
@@ -111,8 +118,6 @@ function NavbarAfter() {
             className="mt-3 text-md bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40">
             Logout
           </button>
-
-          
         </div>
       </div>
     </React.Fragment>

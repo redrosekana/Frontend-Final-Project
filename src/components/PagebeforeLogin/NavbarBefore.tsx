@@ -48,11 +48,11 @@ function NavbarBefore() {
           </ul>
 
           <div className="hidden specific:flex">
-            <NavLink to="/login">
-              <button className="mr-2 text-md bg-slate-100 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md">
-                Login
-              </button>
-            </NavLink>
+            
+            <a href="/login" className="mr-2 text-md bg-slate-100 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md">
+              Login
+            </a>
+            
             <NavLink to="/register">
               <button className="ml-1 text-md bg-limegreen hover:bg-green-600 font-medium px-3 py-1.5 rounded-md text-white">
                 Sign up
@@ -81,11 +81,11 @@ function NavbarBefore() {
         </ul>
 
         <div className="flex flex-col items-center mt-10">
-          <NavLink to="/login">
-            <button className="text-md bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40">
+          
+            <a href="/login" className="text-md flex justify-center bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40">
               Login
-            </button>
-          </NavLink>
+            </a>
+          
           <NavLink to="/register">
             <button className="mt-2 text-md bg-limegreen hover:bg-green-600 font-medium px-3 py-1.5 rounded-md text-white w-40">
               Sign up
@@ -101,7 +101,7 @@ const ItemMenu = (path:string, index:number) => {
   return (
     <React.Fragment key={index}>
       <NavLink
-        to={`/main/${path.toLowerCase()}`}
+        to={`/${path.toLowerCase()}`}
         className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
       >
         {path}
@@ -120,7 +120,7 @@ const SideBar = (path:string, index:number) => {
           <i className={`fa-solid ${Icon[index]}`}></i>
           <NavLink
             key={index}
-            to={`/main/${path.toLowerCase()}`}
+            to={`/${path.toLowerCase()}`}
             className="ml-3"
           >
             {path}
