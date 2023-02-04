@@ -28,9 +28,9 @@ export default function Register() {
   const passwordEl = useRef<HTMLInputElement>(null);
   const confirm_passwordEl = useRef<HTMLInputElement>(null);
 
-  const [reload,SetReload] = useState<boolean>(false)
+  const [reload,setReload] = useState<boolean>(false)
 
-  const submitBtn = async (ev: React.FormEvent) => {
+  const submitBtn = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
     if (passwordEl.current?.value !== confirm_passwordEl.current?.value) {
@@ -45,25 +45,24 @@ export default function Register() {
       password: passwordEl.current!.value.trim(),
     };
 
-    SetReload(true)
+    setReload(true)
     const result = await RegisterApi(body)
-    SetReload(false)
+    setReload(false)
     
     if (
-      result === "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว" ||
-      result === "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว" ||
-      result === "อีเมลล์ ถูกใช้งานแล้ว" ||
-      result === "ใส่ข้อมูลไม่ครบ"
+      result === "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว" ||result === "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว" ||
+      result === "อีเมลล์ ถูกใช้งานแล้ว" ||result === "ใส่ข้อมูลไม่ครบ"
     ) {
-      createSwal("แจ้งเตือน", result, "warning", "#ec9e18");
-    } else if (
-      result === "มีข้อผิดพลาดของเซิฟเวอร์" ||
-      result === "มีข้อผิดพลาดของบราวเซอร์"
-    ) {
-      createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000")
+      createSwal("แจ้งเตือน", result, "warning", "#ec9e18").then(() => {
+        return
+      })
+    } else if (result === "มีข้อผิดพลาดของเซิฟเวอร์" ||result === "มีข้อผิดพลาดของบราวเซอร์") {
+      createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000").then(() => {
+        return
+      })
     } else if (result === "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ") {
       createSwal("สำเร็จ", result, "success", "#06b400").then(() => {
-        navigate("/login");
+        navigate("/login")
       });
     }
   };
@@ -154,6 +153,7 @@ export default function Register() {
           </div>
 
           <button
+            type="button"
             className="text-white bg-redrose shadow-lg shadow-red-200  hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-lg w-auto px-4 py-1.5 text-center"
             onClick={() => navigate("/home")}
           >

@@ -12,6 +12,8 @@ import HomeAfter from "./components/PageAfterLogin/HomeAfter"
 //* import components before login
 import Login from "./components/Login"
 import Register from "./components/Register"
+import SendEmail from "./components/SendEmail"
+import UpdatePassword from "./components/UpdatePassword"
 import PageBefore from "./components/PagebeforeLogin/PageBefore"
 import HomeBefore from "./components/PagebeforeLogin/HomeBefore"
 
@@ -42,6 +44,8 @@ function App() {
         
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="email" element={<SendEmail/>} />
+        <Route path="update" element={<UpdatePassword/>} />
         
         <Route path="page" element={<PageAfter />}>
           <Route index element={<HomeAfter/>}/>

@@ -27,7 +27,7 @@ function NavbarAfter() {
     return () => {
       window.removeEventListener("resize",autoDisplaySideBar)
     }
-  })
+  },[])
 
   const autoDisplaySideBar = () => {
     if (window.outerWidth >= 860){
@@ -107,7 +107,7 @@ function NavbarAfter() {
             </button>
           </NavLink>
           
-          <NavLink to="/resetpassword">
+          <NavLink to="/email">
             <button className="mt-3 text-md bg-limegreen hover:bg-green-600 font-medium px-3 py-1.5 rounded-md text-white w-40">
               Reset Password
             </button>

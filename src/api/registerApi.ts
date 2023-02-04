@@ -11,7 +11,6 @@ interface RegisterMember {
   password: string;
   email: string;
 }
-
 interface errorResponse {
   message: string;
 }

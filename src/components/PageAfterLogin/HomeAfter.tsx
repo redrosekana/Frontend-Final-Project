@@ -29,7 +29,7 @@ function HomeAfter() {
       console.log(res)
       if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "accessToken ไม่มีสิทธิเข้าถึง"){
         createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
-          navigate("/main/home")
+          navigate("/home")
         })
       }else if (res === "มีข้อผิดพลาดของเซิฟเวอร์" || res === "มีข้อผิดพลาดของบราวเซอร์"){
         createSwal("เกิดข้อผิดพลาด", `${res} ทำการเข้าสู่ระบบอีกครั้ง`, "error", "#e10000").then(() => {
@@ -40,7 +40,7 @@ function HomeAfter() {
           console.log(res)
           if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "refreshToken ไม่มีสิทธิเข้าถึง"){
             createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
-              navigate("/main/home")
+              navigate("/home")
             })
           }else if (res === "มีข้อผิดพลาดของเซิฟเวอร์" || res === "มีข้อผิดพลาดของบราวเซอร์"){
             createSwal("เกิดข้อผิดพลาด", `${res} ทำการเข้าสู่ระบบอีกครั้ง`, "error", "#e10000").then(() => {
@@ -48,7 +48,7 @@ function HomeAfter() {
             })
           }else if (res === "refreshToken หมดอายุ"){
             createSwal("ขาดการเชื่อมต่อ", `โปรดทำการเข้าสู่ระบบใหม่`, "warning", "#ec9e18").then(() => {
-              navigate("/main/home")
+              navigate("/home")
             })
           }else if (res.message === "renew token success") {
             cookie.set("accessToken",res.accessToken,{path:"/"})
@@ -83,7 +83,7 @@ function HomeAfter() {
             <h3 className='font-bold text-2xl telephone:text-4xl'>บอร์ดเกมยอดนิยม</h3>
             <div>
                 {amountItem.map((e,i) => {
-                    return ItemPopular(e,i)
+                    return <ItemPopular key={i} detail={e}/>
                 })}
             </div>
         </div>
@@ -91,9 +91,13 @@ function HomeAfter() {
   )
 }
 
-const ItemPopular = (detail:number,index:number) => {
+interface ItemPopular {
+  detail:number
+}
+
+const ItemPopular = ({detail}:ItemPopular) => {
   return (
-      <div key={index} className="flex flex-col sm:flex-row items-center border-b-2 border-b-gray-300 my-8 pb-4">
+      <div className="flex flex-col sm:flex-row items-center border-b-2 border-b-gray-300 my-8 pb-4">
           <div>
               <img src={picture1} alt="picture1" className='w-[320px] sm:w-[220px] rounded-md' />
           </div>

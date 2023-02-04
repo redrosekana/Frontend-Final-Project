@@ -1,5 +1,8 @@
+//* import library
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
+//* declare interface
 interface ScopeProfileProps {
     LogoutButton: () => void
 }
@@ -10,7 +13,9 @@ export default function ScopeProfile({ LogoutButton }:ScopeProfileProps) {
         <div className='absolute w-52 h-32 bg-gray-50 rounded-md right-5 top-24 z-50 drop-shadow-xl'>
             <ul className='h-full p-2 flex flex-col justify-center'>
                 <li className='flex items-center pl-2 rounded-md flex-grow cursor-pointer hover:bg-gray-200'>Profile</li>
-                <li className='flex items-center pl-2 rounded-md flex-grow cursor-pointer hover:bg-gray-200'>Reset Password</li>
+                <li className='flex items-center pl-2 rounded-md flex-grow cursor-pointer hover:bg-gray-200'>
+                  <NavLink to="/email">Reset password</NavLink>
+                </li>
                 <li className='flex items-center pl-2 rounded-md flex-grow cursor-pointer hover:bg-gray-200' onClick={LogoutButton}>Logout</li>
             </ul>
         </div>
