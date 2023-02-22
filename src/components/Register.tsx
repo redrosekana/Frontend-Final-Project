@@ -31,16 +31,24 @@ function Register() {
    // ไว้เก็บค่าสถานะตอน reload
    const [reload,setReload] = useState<boolean>(false)
 
-
    // ฟังชันก์เมื่อกดปุ่มยืนยัน
    const submitBtn = async (ev: React.FormEvent<HTMLFormElement>) => {
       ev.preventDefault();
-
+      
       // เช็คว่าต้องใส่ค่าให้ครบทุก input
+      if ((!displayNameEl.current?.value)
+      || !(usernameEl.current?.value) 
+      || !(emailEl.current?.value) 
+      || !(passwordEl.current!.value)
+      || !(confirm_passwordEl.current?.value)){
+         createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
+         return 
+      }
+
+      // เช็คว่ารหัสผ่าน กับ คอนเฟิมรหัสผ่านต้องตรงกัน
       if (passwordEl.current?.value !== confirm_passwordEl.current?.value) {
-         createSwal("แจ้งเตือน", "โปรดใส่รหัสผ่านให้ตรงกัน", "warning", "#ec9e18").then(() => {
-            return
-         })
+         createSwal("แจ้งเตือน", "โปรดใส่รหัสผ่านให้ตรงกัน", "warning", "#ec9e18")
+         return
       }
 
       const body: RegisterMember = {

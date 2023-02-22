@@ -12,7 +12,7 @@ import GetMemberApi from "../api/getMemberApi"
 import { createSwal } from "../controller/createSwal"
 
 // declare inteface for display information user
-interface successResponseOne {
+interface InformationDisplay {
    message: string;
    displayName:string;
    username:string;
@@ -42,7 +42,7 @@ function Profile() {
                navigate("/login")
             })
          }else if (res === "accessToken หมดอายุ"){
-            GetMemberApi(refreshToken,"/renewUser").then((res:any) => {
+            GetMemberApi(refreshToken,"/renew").then((res:any) => {
                if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "refreshToken ไม่มีสิทธิเข้าถึง"){
                   createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
                      navigate("/home")
@@ -58,15 +58,13 @@ function Profile() {
                }else if (res.message === "renew token success") {
                   cookie.set("accessToken",res.accessToken,{path:"/"})
                   cookie.set("refreshToken",res.refreshToken,{path:"/"})
-                  navigate("/page/home")
-               }else{
-                  window.location.reload()
+                  navigate("/profile")
                }
             })
          }else {
-            usernameEl.current!.value = (res as successResponseOne).username
-            displayNameEl.current!.value = (res as successResponseOne).displayName
-            emailEl.current!.value = (res as successResponseOne).email
+            usernameEl.current!.value = (res as InformationDisplay).username
+            displayNameEl.current!.value = (res as InformationDisplay).displayName
+            emailEl.current!.value = (res as InformationDisplay).email
             passwordEl.current!.value = "helloworldkanaloveapex"
          }
       })

@@ -1,14 +1,14 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError } from "axios"
 
-const url = import.meta.env.VITE_URL_DEV;
+const url = import.meta.env.VITE_URL_DEV
 
-interface successResponseOne {
+interface successResponseMember {
     message: string;
     displayName:string;
     username:string;
     email:string
 }
-interface successResponseTwo {
+interface successResponseFacebookMember {
     message: string;
     displayName:string;
     facebookId:string;
@@ -18,19 +18,23 @@ interface errorResponse {
     message: string;
 }
 
-export default async function GetMemberApi(token:string,path:string):Promise<string | undefined | successResponseOne | successResponseTwo> {
+export default async function GetMemberApi( token:string , path:string ):Promise<string | undefined | successResponseMember | successResponseFacebookMember> {
     try {
         const patternToken:string = `Bearer ${token}`
         const result = await axios({
             url:`${url}${path}`,
             method:"get",
-            headers:{"Authorization":patternToken},
-            timeout:10000
+            headers:{Authorization:patternToken},
+            timeout:20000
         })
+        
+        console.log(result.data)
         return result.data
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
             const message = (err.response?.data as errorResponse).message
+            console.log(message)
+
             if (message === "must pass Bearer in front of token or haven't token"){
                 return "รูปแบบการส่งไม่ถูกต้อง"
             }else if (message === "expired accessToken") {

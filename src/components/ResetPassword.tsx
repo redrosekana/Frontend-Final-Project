@@ -34,7 +34,6 @@ export default function ResetPassword() {
             })
         }else {
             CheckValidToken(token).then(result => {
-                console.log(result)
                 if (result === "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง") {
                     createSwal("แจ้งเตือน","เกินเวลา 5 นาทีโปรดทำการใหม่อีกครั้ง","warning","#ec9e18").then(() => {
                         navigate("/email")
@@ -43,8 +42,8 @@ export default function ResetPassword() {
                     createSwal("เกิดข้อผิดพลาด","ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น","error","#e10000").then(() => {
                         navigate("/email")
                     })
-                }else if (result === "มีข้อผิดพลาดของเซิฟเวอร์") {
-                    createSwal("เกิดข้อผิดพลาด",result + "โปรดทำการใหม่","error","#e10000").then(() => {
+                }else if (result === "มีข้อผิดพลาดของเซิฟเวอร์" || result === "มีข้อผิดพลาดของบราวเซอร์") {
+                    createSwal("เกิดข้อผิดพลาด",result + "โปรดทำการใหม่อีกครั้ง","error","#e10000").then(() => {
                         navigate("/email")
                     })
                 }
@@ -81,8 +80,6 @@ export default function ResetPassword() {
             const result = await UpdatePasswordApi(body)
             setReload(false)
 
-            console.log(result)
-            
             if (result === "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง") {
                 createSwal("แจ้งเตือน","เกินเวลา 5 นาทีโปรดทำการใหม่อีกครั้ง","warning","#ec9e18").then(() => {
                     navigate("/email")

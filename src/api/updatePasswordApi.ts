@@ -1,10 +1,10 @@
-//* import library
+// import library
 import axios, { AxiosError } from "axios";
 
-//* declare instance
+// declare instance
 const url = import.meta.env.VITE_URL_DEV + "/password";
 
-//* declare interface
+// declare interface
 interface errorResponse {
     message:string
 }
@@ -20,16 +20,16 @@ export default async function UpdatePasswordApi(body:bodyProps) {
             method:"post",
             headers:{"content-type":"application/json"},
             data:body,
-            timeout:10000
+            timeout:20000
         })
         
         return "เปลี่ยนรหัสผ่านสำเร็จ"
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
-            console.log(err)
             const message = ( err.response?.data as errorResponse ).message
+            console.log(message)
 
-            if (message === "required password and token") {
+            if (message === "need password and token") {
                 return "ข้อมูลไม่ถูกต้อง"
             }else if (message === "jwt expired token") {
                 return "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง"

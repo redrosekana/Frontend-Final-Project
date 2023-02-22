@@ -42,36 +42,36 @@ function Login() {
     
 		// เช็คเงื่อนไขว่าต้องใส่ input ให้ครบ
 		if (!usernameEl.current?.value.trim() || !passwordEl.current?.value.trim()) {
-			createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18").then(() => {
+			createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
+			return
+		}
+			
+		const body:LoginMember = {
+			username: usernameEl.current!.value.trim(),
+			password: passwordEl.current!.value.trim(),
+		}
+
+		SetReload(true)
+		const result = await LoginApi(body)
+		SetReload(false)
+	
+		if (result === "ต้องใส่ข้อมูลให้ครบ"
+		|| result === "ไม่มีชื่อผู้ใช้งานนี้ในระบบ" 
+		|| result === "รหัสผ่านไม่ถูกต้อง"){
+			createSwal("แจ้งเตือน", result, "warning", "#ec9e18").then(() => {
 				return
 			})
-		}else {
-			const body:LoginMember = {
-				username: usernameEl.current!.value.trim(),
-				password: passwordEl.current!.value.trim(),
-			}
-
-			SetReload(true)
-			const result = await LoginApi(body)
-			SetReload(false)
-		
-			if (result === "ต้องใส่ข้อมูลให้ครบ"
-				|| result === "ไม่มีชื่อผู้ใช้งานนี้ในระบบ" 
-				|| result === "รหัสผ่านไม่ถูกต้อง"){
-					createSwal("แจ้งเตือน", result, "warning", "#ec9e18").then(() => {
-						return
-					})
-			} else if (result === "มีข้อผิดพลาดของเซิฟเวอร์" 
-				|| result === "มีข้อผิดพลาดของบราวเซอร์" ) {
-					createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000").then(() => {
-						return
-					})
-			} else if (result === "เข้าสู่ระบบเสร็จสิ้น ระบบจะนำไปยังหน้าหลัก") {
-				createSwal("สำเร็จ", result, "success", "#06b400").then(() => {
-					navigate("/page/home");
-				})
-			}
+		} else if (result === "มีข้อผิดพลาดของเซิฟเวอร์" 
+		|| result === "มีข้อผิดพลาดของบราวเซอร์" ) {
+			createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000").then(() => {
+				return
+			})
+		} else if (result === "เข้าสู่ระบบเสร็จสิ้น ระบบจะนำไปยังหน้าหลัก") {
+			createSwal("สำเร็จ", result, "success", "#06b400").then(() => {
+				navigate("/page/home")
+			})
 		}
+		
   	}
   
 	// ฟังชันก์เมื่อมีการกดปุ่ม facebook
@@ -97,14 +97,16 @@ function Login() {
 		}catch(err: unknown |AxiosError ){
 			if (axios.isAxiosError(err)){
 				const message = (err.response?.data as errorResponse).message
-				if (message === "must pass also userId and accessTokenFacebook" 
-					|| message === "error in server"){
+				console.log(message)
+
+				if (message === "need userId and accessTokenFacebook" 
+				|| message === "occurred error in server"){
 					createSwal("เกิดข้อผิดพลาด", "ไม่สามารถเข้าสู่ระบบได้ โปรดดำเนินการอีกครั้ง", "error", "#e10000").then(() => {
 						window.location.href = "/login"
 					})
 				}
 			}else {
-				createSwal("เกิดข้อผิดพลาด", "มีข้อผิดพลาดของเซิฟเวอร์", "error", "#e10000").then(() => {
+				createSwal("เกิดข้อผิดพลาด", "มีข้อผิดพลาดของบราวเซอร์", "error", "#e10000").then(() => {
 					window.location.href = "/login"
 				})
 			}

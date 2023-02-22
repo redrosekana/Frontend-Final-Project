@@ -49,7 +49,7 @@ function HomeAfter() {
                     navigate("/login")
                 })
             }else if (res === "accessToken หมดอายุ"){
-                GetMemberApi(refreshToken,"/renewUser").then((res:any) => {
+                GetMemberApi(refreshToken,"/renew").then((res:any) => {
                     if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "refreshToken ไม่มีสิทธิเข้าถึง"){
                         createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
                             navigate("/home")
@@ -66,8 +66,6 @@ function HomeAfter() {
                         cookie.set("accessToken",res.accessToken,{path:"/"})
                         cookie.set("refreshToken",res.refreshToken,{path:"/"})
                         navigate("/page/home")
-                    }else{
-                        window.location.reload()
                     }
                 })
             }else {

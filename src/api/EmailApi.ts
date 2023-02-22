@@ -16,7 +16,7 @@ export default async function EmailApi(email:string):Promise<string | undefined>
             method:"post",
             data:{ email:email },
             headers:{"content-type":"application/json"},
-            timeout:10000
+            timeout:20000
         })
 
         return "ส่งข้อมูลไปในอีเมล์ของคุณแล้ว" + "\n" + "กรุณาตรวจสอบด้วยครับ"

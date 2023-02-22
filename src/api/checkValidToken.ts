@@ -1,10 +1,10 @@
-//* import library
+// import library
 import axios, { AxiosError } from "axios";
 
-//* declare instance
+// declare instance
 const url = import.meta.env.VITE_URL_DEV + "/email";
 
-//* declare interface
+// declare interface
 interface errorResponse {
     message:string
 }
@@ -15,14 +15,14 @@ export default async function CheckValidToken(token:string):Promise<string | und
             url:url,
             method:"get",
             params:{token:token},
-            timeout:10000
+            timeout:20000
         })
 
         return "ทำการยืนยันตัวตนสำเร็จ"
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
-            console.log(err)
             const message = ( err.response?.data as errorResponse ).message
+            console.log(message)
             
             if (message === "jwt expired token") {
                 return "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง"
@@ -32,6 +32,7 @@ export default async function CheckValidToken(token:string):Promise<string | und
                 return "มีข้อผิดพลาดของเซิฟเวอร์"
             }
         }else {
+            console.log(err)
             return "มีข้อผิดพลาดของบราวเซอร์"
         }
     }
