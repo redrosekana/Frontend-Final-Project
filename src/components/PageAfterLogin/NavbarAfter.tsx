@@ -1,22 +1,29 @@
-//* import library
-import React ,{ useRef, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+// import library
+import React ,{ useRef, useEffect, useState, useContext } from "react";
+import { NavLink, useNavigate, NavigateFunction } from "react-router-dom";
 import Cookies from "universal-cookie";
 
-//* import components
+// import components
 import ScopeProfile from "../scopeProfile";
 
-//* import picture
+// import picture
 import avatar from "../../assets/avatar.svg"
 
-//* import controller
+// import controller
 import { createSwal } from "../../controller/createSwal";
 
+// import context api
+import { Store } from "../../context/store";
+
 function NavbarAfter() {
-  const navigate = useNavigate()
+  const navigate:NavigateFunction = useNavigate()
   const cookie = new Cookies()
+
+  // link ของ navbar
   const Link:string[] = ["Home", "About", "Recommend", "Party", "Map"];
 
+  const context = useContext(Store)
+  
   const buttonHamberger = useRef<HTMLButtonElement>(null)
 	const sideBar = useRef<HTMLDivElement>(null)
 
@@ -29,6 +36,7 @@ function NavbarAfter() {
     }
   },[])
 
+  // ฟังชันก์เปิดปิด sidebar อัตโนมัต จากการ check event resize
   const autoDisplaySideBar = () => {
     if (window.outerWidth >= 860){
       sideBar.current?.classList.remove("-translate-x-full")
@@ -38,6 +46,7 @@ function NavbarAfter() {
     }
   }
 	
+  // ฟังชันก์เมื่อมีการคลิ๊กที่ hamberger ให้เปิดปิด sidebar
 	const clickButtonHamberger = () => {
 		sideBar.current?.classList.toggle("-translate-x-full")
   }
@@ -69,12 +78,12 @@ function NavbarAfter() {
 
           <ul className="hidden specific:flex items-center">
             {Link.map((e, i) => {
-              return ItemMenu(e,i)
+              return <ItemMenu key={i} path={e} />
             })}
           </ul>
 
           <div className="hidden specific:flex specific:items-center">
-            <div className="text-xl mr-1">Sukachathum</div>
+            <div className="text-xl mr-1">{context?.displayName}</div>
             <div className="w-[50px] cursor-pointer">
               <img src={avatar} alt="avatar" className="w-full object-cover" onClick={() => SetProfile(prev => !prev)} />
             </div>
@@ -96,26 +105,20 @@ function NavbarAfter() {
 
         <ul className="flex flex-col items-center px-3 mt-10">
           {Link.map((e, i) => {
-            return SideBar(e,i)
+            return <ItemSideBar key={i} path={e} index={i} />
           })}
         </ul>
 
         <div className="flex flex-col items-center mt-10">
           <NavLink to="/profile">
-            <button className="text-md bg-green-600 hover:bg-green-700 font-medium px-3 py-1.5 rounded-md text-white w-40">
+            <button className="text-md bg-limegreen hover:bg-green-500 font-medium px-3 py-1.5 rounded-md text-white w-40 transition-colors duration-200 ease-in">
               Profile
-            </button>
-          </NavLink>
-          
-          <NavLink to="/email">
-            <button className="mt-3 text-md bg-limegreen hover:bg-green-600 font-medium px-3 py-1.5 rounded-md text-white w-40">
-              Reset Password
             </button>
           </NavLink>
           
           <button 
             onClick={LogoutButton}
-            className="mt-3 text-md bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40">
+            className="mt-3 text-md bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in">
             Logout
           </button>
         </div>
@@ -124,39 +127,39 @@ function NavbarAfter() {
   );
 }
 
-const ItemMenu = (path:string, index:number) => {
-  return (
-    <React.Fragment key={index}>
-      <NavLink
-        to={`/page/${path.toLowerCase()}`}
-        className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
-      >
-        {path}
-      </NavLink>
-    </React.Fragment>
-  );
-};
+// declare interface ItemMenu
+interface ItemMenuProps {
+  path:string,
+}
 
-const SideBar = (path:string, index:number) => {
+const ItemMenu = ({path}:ItemMenuProps) => {
+  return (
+    <NavLink to={`/page/${path.toLowerCase()}`}
+      className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
+    >
+      {path}
+    </NavLink>
+  )
+}
+
+// declare interface ItemSideBar
+interface ItemSideBarProps extends ItemMenuProps {
+  index:number
+}
+
+const ItemSideBar = ({path,index}:ItemSideBarProps) => {
   const Icon: string[] = ["fa-house", "fa-address-card", "fa-comment", "fa-user-group", "fa-map"]
   
   return (
-    <React.Fragment key={index}>
-      <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
-        <button className="flex items-center ml-4 w-full h-full">
-          <i className={`fa-solid ${Icon[index]}`}></i>
-          <NavLink
-            key={index}
-            to={`/page/${path.toLowerCase()}`}
-            className="ml-3"
-          >
-            {path}
-          </NavLink>
-        </button>
-      </li>
-    </React.Fragment>
-    
-  );
-};
+    <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
+      <button className="flex items-center ml-4 w-full h-full">
+        <i className={`fa-solid ${Icon[index]}`}></i>
+        <NavLink to={`/page/${path.toLowerCase()}`} className="ml-3">
+          {path}
+        </NavLink>
+      </button>
+    </li>
+  )
+}
 
 export default NavbarAfter

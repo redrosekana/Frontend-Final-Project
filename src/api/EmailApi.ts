@@ -9,22 +9,20 @@ interface errorResponse {
     message:string
 }
 
-export default async function SendEmailApi(email:string):Promise<string | undefined> {
+export default async function EmailApi(email:string):Promise<string | undefined> {
     try {
         await axios({
             url:url,
             method:"post",
-            data:{email:email},
+            data:{ email:email },
             headers:{"content-type":"application/json"},
-            timeout:5000
+            timeout:10000
         })
 
         return "ส่งข้อมูลไปในอีเมล์ของคุณแล้ว" + "\n" + "กรุณาตรวจสอบด้วยครับ"
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
-            console.log(err)
             const message = ( err.response?.data as errorResponse ).message
-
             if (message === "don't exist a user email in the database") {
                 return "ไม่มีอีเมลล์ของผู้ใช้งานนี้"
             }else if (message === "require a user email"){
@@ -35,6 +33,7 @@ export default async function SendEmailApi(email:string):Promise<string | undefi
                 return "มีข้อผิดพลาดของเซิฟเวอร์"
             }
         }else {
+            console.log(err)
             return "มีข้อผิดพลาดของบราวเซอร์"
         }
     }

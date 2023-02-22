@@ -15,7 +15,7 @@ export default async function CheckValidToken(token:string):Promise<string | und
             url:url,
             method:"get",
             params:{token:token},
-            timeout:5000
+            timeout:10000
         })
 
         return "ทำการยืนยันตัวตนสำเร็จ"

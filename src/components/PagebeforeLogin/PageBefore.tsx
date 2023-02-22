@@ -1,12 +1,16 @@
-//* import layouts
-import NavbarBefore from "./NavbarBefore";
-import { Outlet } from "react-router";
+// import library
+import { Outlet } from "react-router"
 
-export default function PageBefore() {
-  return (
-    <div className="relative">
-      <NavbarBefore />
-      <Outlet/>
-    </div>
-  );
+// import layouts
+import NavbarBefore from "./NavbarBefore"
+
+function PageBefore() {
+   return (
+      <main>
+         <NavbarBefore />
+         <Outlet/>
+      </main>
+   )
 }
+
+export default PageBefore

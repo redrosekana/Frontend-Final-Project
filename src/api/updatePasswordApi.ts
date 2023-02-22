@@ -20,7 +20,7 @@ export default async function UpdatePasswordApi(body:bodyProps) {
             method:"post",
             headers:{"content-type":"application/json"},
             data:body,
-            timeout:5000
+            timeout:10000
         })
         
         return "เปลี่ยนรหัสผ่านสำเร็จ"

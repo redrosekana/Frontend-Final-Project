@@ -28,7 +28,7 @@ export default async function LoginApi( body: LoginMember ): Promise<string | un
       url: url,
       method: "post",
       data: body,
-      timeout: 5000,
+      timeout: 10000,
     });
 
     const result = response.data as successResponse;
@@ -39,18 +39,17 @@ export default async function LoginApi( body: LoginMember ): Promise<string | un
   } catch (err: unknown | AxiosError) {
     if (axios.isAxiosError(err)) {
       const message:string = (err.response?.data as errorResponse).message;
-      
-      if (message === "please input username or password") {
+      if (message === "please input username or password"){
         return "ต้องใส่ข้อมูลให้ครบ";
-      } else if (message === "don't exist user in database") {
+      } else if (message === "don't exist user in database"){
         return "ไม่มีชื่อผู้ใช้งานนี้ในระบบ";
-      } else if (message === "password invalid") {
+      } else if (message === "password invalid"){
         return "รหัสผ่านไม่ถูกต้อง";
-      } else if (message === "occurred error in server") {
+      } else if (message === "occurred error in server"){
         return "มีข้อผิดพลาดของเซิฟเวอร์";
       }
-    } else {
-      console.log(err);
+    }else{
+      console.log(err)
       return "มีข้อผิดพลาดของบราวเซอร์";
     }
   }

@@ -1,20 +1,20 @@
-//* import library
+// import library
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useLocation, Location, useNavigate , NavigateFunction } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 
-//* import controller
+// import controller
 import { createSwal } from '../controller/createSwal'
 
-//* import component reload
+// import component reload
 import Reload from './reload'
 
-//* import api
+// import api
 import CheckValidToken from '../api/checkValidToken'
 import UpdatePasswordApi from '../api/updatePasswordApi'
 
-export default function UpdatePassword() {
+export default function ResetPassword() {
     const [password,setPassword] = useState<string>("")
     const [checkPassword,setCheckPassword] = useState<string>("")
     const [reload,setReload] = useState<boolean>(false)
@@ -27,27 +27,29 @@ export default function UpdatePassword() {
         const { search } = location
         const params:URLSearchParams = new URLSearchParams(search)
         const token:string | null = params.get("token")
-        
-        if (!token) {
-            return
-        }
 
-        CheckValidToken(token).then(result => {
-            console.log(result)
-            if (result === "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง") {
-                createSwal("แจ้งเตือน","เกินเวลา 5 นาทีโปรดทำการใหม่อีกครั้ง","warning","#ec9e18").then(() => {
-                    navigate("/email")
-                })
-            }else if (result === "ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น") {
-                createSwal("เกิดข้อผิดพลาด","ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น","error","#e10000").then(() => {
-                    navigate("/email")
-                })
-            }else if (result === "มีข้อผิดพลาดของเซิฟเวอร์") {
-                createSwal("เกิดข้อผิดพลาด",result + "โปรดทำการใหม่","error","#e10000").then(() => {
-                    navigate("/email")
-                })
-            }
-        })
+        if (!token) {
+            createSwal("แจ้งเตือน","ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น","warning","#ec9e18").then(() => {
+                navigate("/home")
+            })
+        }else {
+            CheckValidToken(token).then(result => {
+                console.log(result)
+                if (result === "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง") {
+                    createSwal("แจ้งเตือน","เกินเวลา 5 นาทีโปรดทำการใหม่อีกครั้ง","warning","#ec9e18").then(() => {
+                        navigate("/email")
+                    })
+                }else if (result === "ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น") {
+                    createSwal("เกิดข้อผิดพลาด","ต้องดำเนินการภายในอีเมลล์ที่ส่งข้อมูลไปเท่านั้น","error","#e10000").then(() => {
+                        navigate("/email")
+                    })
+                }else if (result === "มีข้อผิดพลาดของเซิฟเวอร์") {
+                    createSwal("เกิดข้อผิดพลาด",result + "โปรดทำการใหม่","error","#e10000").then(() => {
+                        navigate("/email")
+                    })
+                }
+            })
+        }
     },[])
 
     const onSubmit = async (password:string ,checkPassword:string, ev:React.FormEvent<HTMLFormElement>) => {
@@ -66,7 +68,7 @@ export default function UpdatePassword() {
             const params:URLSearchParams = new URLSearchParams(search)
             const token:string | null = params.get("token")
 
-            if (!token) {
+            if (!token) { 
                 return
             }
 

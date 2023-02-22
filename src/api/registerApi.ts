@@ -21,7 +21,7 @@ export default async function RegisterApi( body: RegisterMember ): Promise<strin
       url: url,
       method: "post",
       data: body,
-      timeout: 5000,
+      timeout: 10000,
     });
 
     return "สมัครเสร็จสิ้น ระบบจะนำไปยังหน้าเข้าสู่ระบบ"

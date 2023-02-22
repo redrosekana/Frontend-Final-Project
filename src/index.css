@@ -9,10 +9,10 @@ html,body{
 
 @layer components {
     .notActiveclassName{
-        @apply mx-5 text-xl font-medium hover:border-b-2 hover:border-black xl:mx-8
+        @apply mx-5 text-xl font-medium hover:border-b-2 hover:border-black xl:mx-8 transition duration-150 ease-in
     }
   
     .activeclassName{
-        @apply mx-5 text-xl font-medium border-b-2 border-black xl:mx-8
+        @apply mx-5 text-xl font-medium border-b-2 border-black xl:mx-8 transition duration-150 ease-in
     }
 }

@@ -1,14 +1,16 @@
-//* import library
+// import library
 import { Outlet } from "react-router";
 
-//* import layouts
+// import layouts
 import NavbarAfter from "./NavbarAfter";
 
-export default function PageAfter() {
-  return (
-    <div className="relative">
-      <NavbarAfter />
-      <Outlet/>
-    </div>
-  );
+function PageAfter() {
+	return (
+		<div>
+			<NavbarAfter />
+			<Outlet/>
+		</div>
+	);
 }
+
+export default PageAfter
