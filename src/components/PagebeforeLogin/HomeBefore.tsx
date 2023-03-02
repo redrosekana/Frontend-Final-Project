@@ -1,15 +1,32 @@
 // import library
 import { NavLink } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 // import component
 import Footer from "../footer"
 
-const amountItem:number[] = []
-for (let i=1;i<=10;i++){
-    amountItem.push(i)
+// import api
+import PopularBoardgameApi from '../../api/popularBoardgameApi'
+
+// declare interface
+interface ListBoardGameItem {
+    name:string
+    picture:string
+    year:string
 }
 
 function HomeBefore() {
+    const [popularBoardGame,setPopularBoardGame] = useState<ListBoardGameItem[]>([])
+
+    // หลังจาก render ก็ดึงข้อมูลบอร์ดเกมยอดนิยมมาแสดงผล
+    useEffect(() => {
+        PopularBoardgameApi().then((res) => {
+            if (!(typeof res === "string") && !(typeof res === "undefined")) {
+                setPopularBoardGame(res)
+            }
+        })
+    },[])
+
     return (
         <main>
             <div className='mt-12 mb-4 max-w-[1400px] mx-auto px-5'>
@@ -33,9 +50,9 @@ function HomeBefore() {
                 </div>
 
                 <div className='mt-24'>
-                    <h3 className='font-bold text-2xl telephone:text-4xl'>บอร์ดเกมยอดนิยม</h3>
-                    {amountItem.map((e,i) => {
-                        return <ItemPopular key={i} detail={e} index={i}/>
+                    <h3 className='font-bold text-2xl telephone:text-4xl mb-10'>บอร์ดเกมยอดนิยม</h3>
+                    {popularBoardGame.map((e:any,i:number) => {
+                        return <ItemPopular key={i} name={e.name} picture={e.picture} year={e.year} index={i} />
                     })}
                 </div>
             </div>
@@ -44,32 +61,28 @@ function HomeBefore() {
     )
 }
 
-
 // declare interface for ItemPopular
 interface ItemPopularProps {
-    detail:number,
+    name:string
+    picture:string
+    year:string
     index:number
 }
 
-const ItemPopular = ({detail,index}:ItemPopularProps) => {
-    let pictureTmp:React.ReactNode
-    if (index % 4 === 0){
-        pictureTmp = <img src="/picture2.jpg" alt="picture1" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 1) {
-        pictureTmp = <img src="/picture3.jpg" alt="picture2" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 2) {
-        pictureTmp = <img src="/picture4.jpg" alt="picture3" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 3) {
-        pictureTmp = <img src="/picture5.jpg" alt="picture3" className='w-[320px] sm:w-[220px] rounded-md' />
-    }
-    
+const ItemPopular = ({name, picture, year, index}:ItemPopularProps) => {
     return (
-        <div className="flex flex-col sm:flex-row items-center my-8 pb-4 border-b-2 border-b-gray-300">
-            <div>{pictureTmp}</div>
-            <div className='mt-4 sm:mt-0 sm:ml-4 sm:flex-grow'>
-                <h4 className='ml-2 sm:ml-0 text-2xl font-semibold'>Board Game {detail}</h4>
-                <p className='ml-2 sm:ml-0 text-lg text-gray-400'>2022</p>
-                <p className='ml-2 sm:ml-0 text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+        <div className="flex flex-col sm:flex-row items-center my-8 pb-5 border-b-2 border-b-gray-300">
+            <div>
+                <img src={picture} alt="picture1" className='w-[300px] sm:w-[200px] sm:h-[200px] rounded-md object-fill' />
+            </div>
+            <div className='mt-6 w-full max-w-[350px] sm:mt-0 sm:ml-4 sm:flex-grow sm:max-w-full sm:w-auto'>
+                {index === 0 || index === 1 || index === 2 ? <div className='sm:ml-4 w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center cursor-pointer flashingAnimation'>มาแรง {index+1}</div> : null }
+                <h4 className='sm:ml-4 text-2xl font-semibold'>
+                    {index+1}. {name}
+                </h4>
+                <p className='sm:ml-4 text-lg text-gray-400'>{year}</p>
+                <p className='sm:ml-4 text-lg mt-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                
             </div>
         </div>
     )

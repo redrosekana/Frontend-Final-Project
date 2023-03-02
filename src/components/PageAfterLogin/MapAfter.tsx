@@ -15,7 +15,7 @@ import DisplayEntrieMap from './DisplayEntrieMap'
 import SearchMap from './SearchMap'
 
 // declare interface for context api
-interface StoreInteface {
+interface StoreInterface {
     message: string;
     displayName:string;
     username:string;
@@ -87,7 +87,7 @@ function MapAfter() {
                     }
                 })
             }else {
-                context?.setDisplayName((res as StoreInteface).displayName)
+                context?.setDisplayName((res as StoreInterface).displayName)
             }
         })
         return () => {}
@@ -114,7 +114,7 @@ function MapAfter() {
             <main className='max-w-[1400px] mx-auto mt-4 p-5'>
                 <div className='text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-8'>ร้านบอร์ดเกมใกล้เคียง</div>
                 {/* ทำการ sort ข้อมูลตามระยะทางที่สั้นที่สุด */}
-                {entrieShops.sort((a,b) => a.distance - b.distance).map((e,i) => <DisplayEntrieMaps key={i} {...e}  clickEntrieMap={clickEntrieMap}/>)}
+                {entrieShops.sort((a,b) => a.distance - b.distance).map((e,i) => <DisplayEntrieMaps key={i} {...e} clickEntrieMap={clickEntrieMap}/>)}
                 <div className='mt-10'>
                     <button 
                         className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"

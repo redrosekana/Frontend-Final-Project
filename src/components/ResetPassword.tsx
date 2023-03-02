@@ -12,7 +12,7 @@ import Reload from './reload'
 
 // import api
 import CheckValidToken from '../api/checkValidToken'
-import UpdatePasswordApi from '../api/updatePasswordApi'
+import ResetPasswordApi from '../api/resetPasswordApi'
 
 export default function ResetPassword() {
     const [password,setPassword] = useState<string>("")
@@ -77,7 +77,7 @@ export default function ResetPassword() {
             }
             
             setReload(true)
-            const result = await UpdatePasswordApi(body)
+            const result = await ResetPasswordApi(body)
             setReload(false)
 
             if (result === "โทเคนหมดอายุแล้ว กรุณาทำการใหม่อีกครั้ง") {

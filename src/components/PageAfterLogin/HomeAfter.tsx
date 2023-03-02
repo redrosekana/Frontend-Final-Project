@@ -1,10 +1,11 @@
 // import library
-import { useEffect,useContext } from "react"
+import { useEffect, useContext, useState } from "react"
 import Cookies from "universal-cookie"
 import { useNavigate , NavigateFunction , NavLink } from "react-router-dom"
 
 // import api
 import GetMemberApi from "../../api/getMemberApi"
+import PopularBoardgameApi from "../../api/popularBoardgameApi"
 
 // import controller
 import { createSwal } from "../../controller/createSwal"
@@ -15,17 +16,19 @@ import Footer from "../footer"
 // import context api
 import { Store } from "../../context/store"
 
-const amountItem:number[] = []
-for (let i=1;i<=10;i++){
-    amountItem.push(i)
-}
-
 // declare interface for context api
-interface StoreInteface {
+interface StoreInterface {
     message: string;
     displayName:string;
     username:string;
     email:string
+}
+
+// declare interface for popular boardgame
+interface ListBoardGameItem {
+    name:string
+    picture:string
+    year:string
 }
 
 function HomeAfter() {
@@ -36,6 +39,18 @@ function HomeAfter() {
     const accessToken: string = cookie.get("accessToken")
     const refreshToken:string = cookie.get("refreshToken")
 
+    const [popularBoardGame,setPopularBoardGame] = useState<ListBoardGameItem[]>([])
+
+    // หลังจาก render ก็ดึงข้อมูลบอร์ดเกมยอดนิยมมาแสดงผล
+    useEffect(() => {
+        PopularBoardgameApi().then((res) => {
+            if (!(typeof res === "string") && !(typeof res === "undefined")) {
+                setPopularBoardGame(res)
+            }
+        })
+    },[])
+
+    
     useEffect(() => {
         window.scrollTo(0,0)
 
@@ -69,7 +84,7 @@ function HomeAfter() {
                     }
                 })
             }else {
-                context?.setDisplayName((res as StoreInteface).displayName)
+                context?.setDisplayName((res as StoreInterface).displayName)
             }
         })
         return () => {}
@@ -83,7 +98,7 @@ function HomeAfter() {
                         <h3 className='font-bold text-2xl telephone:text-4xl lg:text-5xl'>Board Game RecCommu</h3>
                         <p className='mt-4 text-xl text-slate-500'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque esse ab ipsam blanditiis quaerat odit exercitationem necessitatibus totam rem omnis tempore vitae quos odio, deserunt tempora sunt enim quo! Quibusdam?</p>
                         <div className='mt-4 flex flex-col telephone:block'>
-                        <button className='bg-orangey p-2 font-medium text-xl rounded-md text-white hover:bg-orange-500 transition-colors duration-150 ease-in'>
+                            <button className='bg-orangey p-2 font-medium text-xl rounded-md text-white hover:bg-orange-500 transition-colors duration-150 ease-in'>
                                 <NavLink to="/page/recommend">ระบบแนะนำบอร์ดเกม</NavLink>
                             </button>
                             <button className='border-2 border-black p-2 font-medium text-xl rounded-md ml-0 mt-3 telephone:ml-4 telephone:mt-0 hover:bg-slate-100 transition-colors duration-150 ease-in'>
@@ -99,11 +114,9 @@ function HomeAfter() {
 
                 <div className='mt-20'>
                     <h3 className='font-bold text-2xl telephone:text-4xl'>บอร์ดเกมยอดนิยม</h3>
-                    <div>
-                        {amountItem.map((e,i) => {
-                            return <ItemPopular key={i} detail={e} index={i}/>
-                        })}
-                    </div>
+                    {popularBoardGame.map((e:any,i:number) => {
+                        return <ItemPopular key={i} name={e.name} picture={e.picture} year={e.year} index={i} />
+                    })}
                 </div>
             </div>
             <Footer/>
@@ -113,30 +126,26 @@ function HomeAfter() {
 
 // declare interface for ItemPopular
 interface ItemPopularProps {
-    detail:number,
+    name:string
+    picture:string
+    year:string
     index:number
 }
 
-const ItemPopular = ({detail,index}:ItemPopularProps) => {
-    
-    let pictureTmp:React.ReactNode
-    if (index % 4 === 0){
-        pictureTmp = <img src="/picture2.jpg" alt="picture1" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 1) {
-        pictureTmp = <img src="/picture3.jpg" alt="picture2" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 2) {
-        pictureTmp = <img src="/picture4.jpg" alt="picture3" className='w-[320px] sm:w-[220px] rounded-md' />
-    }else if (index % 4 === 3) {
-        pictureTmp = <img src="/picture5.jpg" alt="picture3" className='w-[320px] sm:w-[220px] rounded-md' />
-    }
-
+const ItemPopular = ({name, picture, year, index}:ItemPopularProps) => {
     return (
-        <div className="flex flex-col sm:flex-row items-center border-b-2 border-b-gray-300 my-8 pb-4">
-            <div>{pictureTmp}</div>
-            <div className='flex-grow ml-16 sm:ml-8  mt-8 sm:mt-0'>
-                <h4 className='text-2xl font-semibold'>Board Game {detail}</h4>
-                <p className='text-lg text-gray-400'>2022</p>
-                <p className='text-lg'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+        <div className="flex flex-col sm:flex-row items-center my-8 pb-5 border-b-2 border-b-gray-300">
+            <div>
+                <img src={picture} alt="picture1" className='w-[300px] sm:w-[200px] sm:h-[200px] rounded-md object-fill' />
+            </div>
+            <div className='mt-6 w-full max-w-[350px] sm:mt-0 sm:ml-4 sm:flex-grow sm:max-w-full sm:w-auto'>
+                {index === 0 || index === 1 || index === 2 ? <div className='sm:ml-4 w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center cursor-pointer flashingAnimation'>มาแรง {index+1}</div> : null }
+                <h4 className='sm:ml-4 text-2xl font-semibold'>
+                    {index+1}. {name}
+                </h4>
+                <p className='sm:ml-4 text-lg text-gray-400'>{year}</p>
+                <p className='sm:ml-4 text-lg mt-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
+                
             </div>
         </div>
     )

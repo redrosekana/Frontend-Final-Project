@@ -1,16 +1,18 @@
 // import library
 import axios, { AxiosError } from "axios";
 
-// declare instance url
+// declare url variable
 const url = import.meta.env.VITE_URL_DEV + "/register";
 
-// declare interface
+// declare interface for RegisterMember
 interface RegisterMember {
   displayName: string;
   username: string;
   password: string;
   email: string;
 }
+
+// declare interface for errorResponse
 interface errorResponse {
   message: string;
 }

@@ -1,10 +1,10 @@
-//* import library
+// import library
 import axios, { AxiosError } from "axios";
 
-//* declare instance
+// declare url variable
 const url = import.meta.env.VITE_URL_DEV + "/email";
 
-//* declare interface
+// declare interface
 interface errorResponse {
     message:string
 }

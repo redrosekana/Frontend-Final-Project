@@ -2,22 +2,24 @@
 import axios, { AxiosError } from "axios"
 import Cookies from "universal-cookie"
 
-// declare instance
+// declare url variable
 const cookie = new Cookies()
 const url = import.meta.env.VITE_URL_DEV + "/login"
 
-// declare interface
+// declare interface for LoginMember
 interface LoginMember {
    username: string
    password: string
 }
 
+// declare interface for successResponse
 interface successResponse {
    message: string;
    accessToken: string
    refreshToken: string
 }
 
+// declare interface for errorResponse
 interface errorResponse {
    message: string
 }

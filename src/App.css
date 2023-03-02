@@ -174,3 +174,24 @@
         transform: translateX(-2000px);
     }
 }
+
+/* flashing animation สำหรับรูปภาพหน้า Home */
+.flashingAnimation {
+    animation-name: flashingAnimationName;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes flashingAnimationName {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: .5;
+    }
+    100% {
+        opacity: 1;
+  }
+}

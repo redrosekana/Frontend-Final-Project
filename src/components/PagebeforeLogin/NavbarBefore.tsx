@@ -32,10 +32,10 @@ function NavbarBefore() {
   return (
     <React.Fragment>
       {/* Navbar */}
-      <nav className="container max-w-[1400px] mx-auto w-full py-4 px-5">
-        <div className="flex justify-between">
-          <div className="flex text-2xl cursor-pointer items-center">
-            <div className="font-bold">Boad Game</div>
+      <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
+        <div className="flex justify-between items-center">
+          <div className="cursor-pointer">
+            <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
           </div>
 
           <div className="flex specific:hidden items-center text-3xl">
@@ -51,10 +51,9 @@ function NavbarBefore() {
           </ul>
 
           <div className="hidden specific:flex">
-            <a href="/login" className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
-              Login
+            <a href="/login">
+              <button className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">Login</button>
             </a>
-            
             <NavLink to="/register">
               <button className="ml-1 text-md text-white bg-limegreen  hover:bg-green-500 focus:ring-1 focus:ring-green-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
                 Sign up
@@ -67,13 +66,15 @@ function NavbarBefore() {
       {/* SideBar */}
       <nav className="bg-gray-50 w-64 h-screen fixed top-0 left-0 z-50 -translate-x-full transition-transform duration-300 ease-in-out" ref={sideBar}>
         <div className="text-[2.2rem] mt-2 relative">
-          <button className="absolute top-2 right-4" onClick={clickButtonHamberger}>
+          <button className="absolute top-4 right-5" onClick={clickButtonHamberger}>
             <i className="fa-solid fa-xmark w-full" />
           </button>
         </div>
 
-				<div className="flex text-2xl cursor-pointer items-center mt-6">
-            <div className="font-bold ml-6">Boad Game</div>
+				<div className="flex text-2xl cursor-pointer items-center">
+            <div>
+              <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
+            </div>
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
@@ -104,8 +105,7 @@ const ItemMenu = ({ path }:ItemMenuProps) => {
   return (
     <NavLink to={`/${path.toLowerCase()}`}
       className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
-    >
-      {path}
+    >{path}
     </NavLink>
   )
 }
@@ -113,19 +113,16 @@ const ItemMenu = ({ path }:ItemMenuProps) => {
 // declare interface ItemSideBar
 interface ItemSideBarProps extends ItemMenuProps {
   index:number
-}
+} 
 
 const ItemSideBar = ({ path , index }:ItemSideBarProps) => {
   const Icon: string[] = ["fa-house", "fa-address-card", "fa-comment", "fa-user-group", "fa-map"]
   
   return (
     <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
-      <button className="flex items-center ml-4 w-full h-full">
-        <i className={`fa-solid ${Icon[index]}`}></i>
-        <NavLink to={`/${path.toLowerCase()}`} className="ml-3">
-          {path}
-        </NavLink>
-      </button>
+      <NavLink to={`/${path.toLowerCase()}`} className="flex items-center ml-4 w-full h-full">
+        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{path}
+      </NavLink>
     </li>
   )
 }

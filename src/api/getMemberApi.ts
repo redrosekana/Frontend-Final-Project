@@ -1,19 +1,26 @@
+// import library
 import axios, { AxiosError } from "axios"
 
+// declare url variable
 const url = import.meta.env.VITE_URL_DEV
 
+// declare interface for successResponseMember
 interface successResponseMember {
     message: string;
     displayName:string;
     username:string;
     email:string
 }
+
+// declare interface for successResponseFacebookMember
 interface successResponseFacebookMember {
     message: string;
     displayName:string;
     facebookId:string;
     facebookName:string
 }
+
+// declare error
 interface errorResponse {
     message: string;
 }

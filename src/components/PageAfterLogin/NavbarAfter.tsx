@@ -64,10 +64,10 @@ function NavbarAfter() {
   return (
     <React.Fragment>
       {profile ? <ScopeProfile LogoutButton={LogoutButton} /> : null}
-      <nav className="container max-w-[1400px] mx-auto w-full py-4 px-5">
+      <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between">
-          <div className="flex text-2xl cursor-pointer items-center">
-            <div className="font-bold">Boad Game</div>
+          <div className="cursor-pointer">
+            <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
           </div>
 
           <div className="flex specific:hidden items-center text-3xl">
@@ -94,14 +94,16 @@ function NavbarAfter() {
       {/* SideBar */}
       <div className="bg-gray-50 w-64 h-screen fixed top-0 left-0 z-50 -translate-x-full transition-transform duration-200 ease-in" ref={sideBar}>
         <div className="text-[2.2rem] mt-2 relative">
-          <button className="absolute top-2 right-4" onClick={clickButtonHamberger}>
+          <button className="absolute top-4 right-5" onClick={clickButtonHamberger}>
             <i className="fa-solid fa-xmark w-full" />
           </button>
         </div>
 
-				<div className="flex text-2xl cursor-pointer items-center mt-6">
-            <div className="font-bold ml-6">Boad Game</div>
+				<div className="flex text-2xl cursor-pointer items-center">
+          <div>
+            <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
           </div>
+        </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
           {Link.map((e, i) => {
@@ -152,12 +154,9 @@ const ItemSideBar = ({path,index}:ItemSideBarProps) => {
   
   return (
     <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
-      <button className="flex items-center ml-4 w-full h-full">
-        <i className={`fa-solid ${Icon[index]}`}></i>
-        <NavLink to={`/page/${path.toLowerCase()}`} className="ml-3">
-          {path}
-        </NavLink>
-      </button>
+      <NavLink to={`/page/${path.toLowerCase()}`} className="flex items-center ml-4 w-full h-full">
+        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{path}
+      </NavLink>
     </li>
   )
 }

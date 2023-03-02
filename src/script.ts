@@ -10,6 +10,7 @@ scriptFontawsome.src = `https://kit.fontawesome.com/${awesomekey}.js`
 scriptFontawsome.crossOrigin = "anonymous"
 
 headEl?.appendChild(scriptLongoMapEl)
+headEl?.appendChild(scriptFontawsome)
 
 export {}
 

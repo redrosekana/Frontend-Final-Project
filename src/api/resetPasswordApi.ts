@@ -1,19 +1,20 @@
 // import library
 import axios, { AxiosError } from "axios";
 
-// declare instance
+// declare url variable
 const url = import.meta.env.VITE_URL_DEV + "/password";
 
-// declare interface
+// declare interface for errorResponse
 interface errorResponse {
     message:string
 }
+
 interface bodyProps {
     password:string,
     token:string
 }
 
-export default async function UpdatePasswordApi(body:bodyProps) {
+export default async function ResetPasswordApi(body:bodyProps) {
     try {
         await axios({
             url:url,
