@@ -1,22 +1,147 @@
-function RecommendBefore() {
-  return (
-    <main>
-      <div className="px-5 mt-12 max-w-[1400px] mx-auto">
-        <h3 className="text-center text-3xl sm:text-4xl md:text-5xl font-semibold">Recommend Boardgame</h3>
-        <form className="flex items-center max-w-3xl w-full mx-auto mt-8">   
-            <div className="relative w-full h-12">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-                </div>
-                <input type="text" className="h-full bg-gray-50 border border-gray-400 text-gray-800 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2.5" placeholder="Search"/>
-            </div>
-            <button type="submit" className="p-2.5 ml-2 text-sm font-medium text-white bg-limegreen rounded-lg border border-green-500 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-green-300">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </button>
-        </form>
-      </div>
-    </main>
-  )
+// import library
+import { useEffect, useState } from "react"
+
+// import api
+import InformationBoardGameApi from "../../api/informationBoardGameApi"
+import RecommendGuestApi from "../../api/recommendGuestApi"
+
+// import controller
+import { createSwal } from "../../controller/createSwal"
+
+// import components
+import Reload from "../reload"
+
+// declare interface for ListBoardGameRecommend
+interface RecommendEntries {
+    id:string
+    name:string
+    minPlayers:number
+    maxPlayers:number
+    playingtime:number
+    yearpublished:number
+    description:string
+    image:string
 }
+
+function RecommendBefore() {
+    // ไว้เก็บข้อมูลบอร์ดเกมทั้งหมด เพื่อใช้ทำ search engine
+    const [information,setInformation] = useState<string[]>([])
+    // ไว้เก็บข้อมูลรายการบอร์ดเกมที่จะแนะนำ
+    const [recommend,setRecommend] = useState<RecommendEntries[]>([])
+    const [game, setGame] = useState<string>("")
+    const [reload,setReload] = useState<boolean>(false)
+    
+    // หลังจาก render ครั้งแรก ทำการดึงข้อมูลบอร์ดเกมทั้งหมดมาเก็บไว้
+    useEffect(() => {
+        InformationBoardGameApi().then(res => {
+            if (typeof res === "object") {
+                setInformation(res)
+            }else {
+                createSwal("เกิดข้อผิดพลาด", "มีข้อผิดพลาดของเซิฟเวอร์", "error", "#e10000").then(() => {})
+            }
+        })
+        
+        return () => {}
+    },[])
+    console.log(information)
+
+
+    // ฟังชันก์เอาไว้ใช้เป็น callback function ในการ filter ของ search engine
+    const checkConditionInput = (e:string, i:number) => {
+        if (!(game.search(/\\/ig) === -1)) return false
+        
+        if (game.includes(".") && i > 1000) return false
+        
+        if (!game) {
+            return false
+        }else {
+            const checkMatchString = new RegExp(game,"ig")
+            return checkMatchString.test(e)
+        }
+    }
+
+    // เมื่อเลือกเกมที่ต้องการ แล้วกดปุ่มจะทำฟังชันก์นี้เพื่อค้นหาเกมมาแนะนำ
+    const onSubmit = async (ev:React.FormEvent, game:string) => {
+        ev.preventDefault()
+
+        if (!game) {
+            createSwal("แจ้งเตือน", "โปรดใส่ชื่อบอร์ดเกม", "warning", "#ec9e18").then(() => {})
+        }
+
+        if (information.includes(game)) {
+            setGame("")
+            setReload(true)
+            setRecommend([])
+
+            const result = await RecommendGuestApi(game)
+            setReload(false)
+
+            if (result === "มีข้อผิดพลาดของเซิฟเวอร์" || result === "มีข้อผิดพลาดของบราวเซอร์") {
+                createSwal("เกิดข้อผิดพลาด", result, "error", "#e10000").then(() => {})
+            }else {
+                setRecommend(result as RecommendEntries[])
+            }
+        }else {
+            createSwal("แจ้งเตือน", "ไม่พบชื่อบอร์ดเกม", "warning", "#ec9e18")
+        }
+    }
+
+    return (
+        <>
+            {reload ? <Reload/> : null}
+            <main>
+                <div className="px-5 mt-12 max-w-[1400px] mx-auto">
+                    <h3 className="text-center text-3xl sm:text-4xl md:text-5xl font-semibold">Recommend Boardgame</h3>
+                    <form className="flex items-center max-w-3xl w-full mx-auto mt-8" onSubmit={(ev) => onSubmit(ev,game)}>   
+                        <div className="relative w-full h-12">
+                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg className="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
+                            </div>
+                            <input value={game} onInput={(e) => setGame(e.currentTarget.value)}  type="text" className="h-full bg-gray-50 border border-gray-400 text-gray-800 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-10 p-2.5" placeholder="Search"/>
+                        </div>
+                        <button type="submit" className="p-2.5 ml-2 text-sm font-medium text-white bg-limegreen rounded-lg border border-green-500 hover:bg-green-600 focus:ring-2 focus:outline-none focus:ring-green-300">
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </form>
+
+                    <div className={`flex flex-col gap-y-3 gap-x-4 max-w-3xl max-full mx-auto overflow-y-scroll max-h-[330px] mt-8 bg-white border border-gray-200 shadow-xl p-4 rounded-lg  ${game === "" ? "hidden" : "block"}`}>
+                        {information.filter(checkConditionInput).length === 0 ? <span className="text-center">ไม่พบชื่อบอร์ดเกม</span> : 
+                            information.filter(checkConditionInput).map((e,i) => {
+                                return <span onClick={() => setGame(e)} key={i} className="border border-gray-200 cursor-pointer rounded-md shadow-md text-center bg-slate-50 p-4 h-10 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200 transition duration-75 ease-in">{e}</span>
+                            })
+                        }
+                    </div>
+
+                    <div className="mt-12">
+                        {recommend.map((e,i) => <ListBoardGameRecommend key={i} {...e} index={i}/> )}
+                    </div>
+                </div>
+            </main>
+        </>
+    )
+}
+
+// declare interface for ListBoardGameRecommend
+interface ListBoardGameRecommendProps extends RecommendEntries {index:number}
+
+const ListBoardGameRecommend = ({id, name, minPlayers, maxPlayers, playingtime, yearpublished, description, image, index}:ListBoardGameRecommendProps) => {
+    return (
+        <div className="p-6 flex flex-col items-center md:flex-row md:items-start mb-4">
+            <div className="max-w-[270px] w-full h-[250px] rounded-2xl md:self-center md:h-[300px]">
+                <img src={image} alt="image" className="w-full h-full object-fill rounded-2xl md:h-full" />
+            </div>
+
+            <div className=" max-w-[400px] w-full mt-6 md:mt-2 md:ml-8 md:max-w-max xl:mt-4">
+                <p className="font-semibold text-3xl">{index+1}). {name}</p>
+                <p className="mt-1 font-normal text-xl text-gray-500">ปี {yearpublished}</p>
+                <p className="mt-4 text-lg">รายละเอียด {description.substring(0,200)} <a className="text-blue-700 underline ml-1" href={`https://boardgamegeek.com/boardgame/${id}`} target="_blank">ดูรายละเอียด</a></p>
+                <p className="mt-4 text-lg">จำนวนผู้เล่น {minPlayers === maxPlayers ? minPlayers : `${minPlayers}-${maxPlayers}`} คน</p>
+                <p className="text-lg">เวลาในการเล่น {playingtime} นาที</p>
+            </div>
+        </div>
+    )
+}
+
+
 
 export default RecommendBefore

@@ -7,6 +7,8 @@ import { createSwal } from "../../controller/createSwal"
 // import api
 import CalculateDistance from "../../api/calculateDistanceApi"
 
+import Reload from "../reload"
+
 // declare interface for SearchMap
 interface SearchMapProps {
 	setEntrieShops:React.Dispatch<React.SetStateAction<InformationEntrieShops[]>>
@@ -50,6 +52,8 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 	const [source,setSource] = useState<string | null>(null)
 	const [longitude,setLongitude] = useState<number | null>(null)
 	const [latitude,setLatitude] = useState<number | null>(null)
+
+	const [status,setStatus] = useState<boolean>(false)
 
 	useEffect(() => {
 		init()
@@ -162,6 +166,7 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 					return
 				})
 		}else {
+			setStatus(true)
 			for (let i=0;i<shopTmp.length;i++) {
 				const information:InformationEntrieShops | undefined | string = await CalculateDistance(source , shopTmp[i].nameShop , longitude , latitude , shopTmp[i].lon , shopTmp[i].lat)
 				
@@ -173,12 +178,14 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 					setEntrieShops(prev => [...prev,information as InformationEntrieShops])
 				}
 			}
+			setStatus(false)
 			setStatusPageMap(1)
 		}
 	}
 	
 	return (
 		<>
+			{status ? <Reload/> : null}
 			<main className='max-w-[1400px] mx-auto mt-8 p-5'>
 				<div className=''>
 					<h3 className='text-xl sm:text-3xl xl:text-5xl font-bold text-center'>ค้นหาร้านบอร์ดเกมใกล้เคียง</h3>
@@ -222,7 +229,7 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 								</div>
 								<input 
 									type="text" 
-									placeholder="ค้นหาสถานที่"id="default-search" 
+									placeholder="ค้นหาสถานที่"
 									ref={searchEl} 
 									onInput={suggestInput} 
 									className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500"
@@ -230,7 +237,7 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 								<button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-lg text-sm px-4 py-2 transition-colors duration-200 ease-in">ค้นหา</button>
 							</form>
 							
-							<div className='p-2'>
+							<div className='p-2 ml-2 mt-2'>
 								{listSuggest!.map((e,i) => {
 									return <LiSuggestItem key={i} detail={e.w} doSuggest={doSuggest}/>
 								})}

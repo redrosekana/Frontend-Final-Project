@@ -139,7 +139,7 @@ const ItemPopular = ({name, picture, year, index}:ItemPopularProps) => {
                 <img src={picture} alt="picture1" className='w-[300px] sm:w-[200px] sm:h-[200px] rounded-md object-fill' />
             </div>
             <div className='mt-6 w-full max-w-[350px] sm:mt-0 sm:ml-4 sm:flex-grow sm:max-w-full sm:w-auto'>
-                {index === 0 || index === 1 || index === 2 ? <div className='sm:ml-4 w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center cursor-pointer flashingAnimation'>มาแรง {index+1}</div> : null }
+                {index === 0 || index === 1 || index === 2 ? <div className='sm:ml-4 w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center flashingAnimation'>มาแรง {index+1}</div> : null }
                 <h4 className='sm:ml-4 text-2xl font-semibold'>
                     {index+1}. {name}
                 </h4>

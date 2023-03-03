@@ -195,3 +195,22 @@
         opacity: 1;
   }
 }
+
+/* สำหรับ custom scrollbar behavior */
+::-webkit-scrollbar {
+    width: 12px;
+}
+  
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+  
+::-webkit-scrollbar-thumb {
+    background-color: #b1b8ba;
+    height: 50px;
+    border-radius: 20px;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background-color: #808e91;
+}

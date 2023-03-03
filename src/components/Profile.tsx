@@ -1,5 +1,5 @@
 // import library
-import React , { useEffect,useRef } from "react"
+import React , { useEffect,useRef, useState } from "react"
 import { NavLink } from "react-router-dom"
 import avatar from "../assets/avatar.svg"
 import Cookies from "universal-cookie"
@@ -15,22 +15,30 @@ import { createSwal } from "../controller/createSwal"
 interface InformationDisplay {
    message: string;
    displayName:string;
-   username:string;
-   email:string
+   username?:string;
+   email?:string
+   facebookId?:string;
+   facebookName?:string
 }
+
+type Status = "facebook" | "member" | null
 
 function Profile() {
    const cookie = new Cookies();
    const navigate:NavigateFunction = useNavigate();
 
+   const [status,setStatus] = useState<Status>(null)
+
    const accessToken:string = cookie.get("accessToken")
    const refreshToken:string = cookie.get("refreshToken")
 
    const usernameEl = useRef<HTMLInputElement>(null)
-   const displayNameEl = useRef<HTMLInputElement>(null)
+   const displayNameMemberEl = useRef<HTMLInputElement>(null)
+   const displayNameFacebookEl = useRef<HTMLInputElement>(null)
    const emailEl = useRef<HTMLInputElement>(null)
-   const passwordEl = useRef<HTMLInputElement>(null)
-
+   const facebookIdEl = useRef<HTMLInputElement>(null)
+   const facebookNameEl = useRef<HTMLInputElement>(null)
+   
    useEffect(() => {
       GetMemberApi(accessToken,"/user").then((res) => {
          if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "accessToken ไม่มีสิทธิเข้าถึง"){
@@ -62,10 +70,20 @@ function Profile() {
                }
             })
          }else {
-            usernameEl.current!.value = (res as InformationDisplay).username
-            displayNameEl.current!.value = (res as InformationDisplay).displayName
-            emailEl.current!.value = (res as InformationDisplay).email
-            passwordEl.current!.value = "helloworldkanaloveapex"
+            const informationMember:InformationDisplay = res as InformationDisplay
+            
+            if (informationMember.username) {
+               console.log(informationMember.displayName)
+               usernameEl.current!.value = informationMember.username
+               displayNameMemberEl.current!.value = informationMember.displayName
+               emailEl.current!.value = informationMember.email as string
+               setStatus("member")
+            }else {
+               facebookIdEl.current!.value = informationMember.facebookId as string
+               displayNameFacebookEl.current!.value = informationMember.displayName
+               facebookNameEl.current!.value = informationMember.facebookName as string
+               setStatus("facebook")
+            }
          }
       })
       return () => {}
@@ -81,11 +99,18 @@ function Profile() {
                   <img src={avatar} alt="avatar" className="max-w-[300px] w-full" />
                </div>
 
-               <InlineProfile title="Username" type="text" refer={usernameEl} />
-               <InlineProfile title="DisplayName" type="text" refer={displayNameEl} />
-               <InlineProfile title="Email" type="text" refer={emailEl} />
-               <InlineProfile title="Password" type="password" refer={passwordEl} content="(ไม่ใช่รหัสผ่านจริง ระบบสุ่มขึ้นมาเพื่อความปลอดภัย)" />
-
+               <div className={`${status === "member" ? "block" : "hidden"} max-w-lg w-full`}>
+                  <InlineProfile title="Username" type="text" refer={usernameEl} />
+                  <InlineProfile title="DisplayName" type="text" refer={displayNameMemberEl} />
+                  <InlineProfile title="Email" type="text" refer={emailEl} />
+               </div>
+               <div className={`${status === "facebook" ? "block" : "hidden"} max-w-lg w-full`}>
+                  <InlineProfile title="FacebookId" type="text" refer={facebookIdEl} />
+                  <InlineProfile title="DisplayName" type="text" refer={displayNameFacebookEl} />
+                  <InlineProfile title="FacebookName" type="text" refer={facebookNameEl} />
+               </div>
+               
+               
                <div className=" flex flex-col gap-y-2 max-w-md w-full mb-4">
                   <label className="text-xl">รายการบอร์ดที่เคยประเมิน</label>
                   <ListBoardGame title="เกมยิงม้า" status={4}/>
@@ -113,7 +138,7 @@ interface InlineProfileProps {
 
 const InlineProfile = ({ title , type , refer , content=null }:InlineProfileProps) => {
    return (
-      <div className="flex flex-col gap-y-2 max-w-md w-full mb-4">
+      <div className="flex flex-col gap-y-2 max-w-md w-full mx-auto mb-4">
          <label className="text-xl">{title} {<span className="text-gray-400 text-base">{content}</span>}</label>
          <input type={type} disabled={true} ref={refer} className="max-w-lg w-full rounded-md border-gray-400 focus:ring-1 focus:ring-gray-500 focus:border-gray-400"/>
       </div>

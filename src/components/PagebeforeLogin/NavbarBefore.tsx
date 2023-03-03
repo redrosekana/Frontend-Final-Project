@@ -34,10 +34,13 @@ function NavbarBefore() {
       {/* Navbar */}
       <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between items-center">
-          <div className="cursor-pointer">
-            <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
+          <div className=" flex items-center cursor-pointer">
+            <div>
+              <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
+            </div>
+            <span className="font-bold text-2xl -translate-x-4">BGRMU</span>
           </div>
-
+          
           <div className="flex specific:hidden items-center text-3xl">
             <button ref={buttonHamberger} onClick={clickButtonHamberger}>
               <i className="fa-solid fa-bars"></i>
@@ -75,6 +78,7 @@ function NavbarBefore() {
             <div>
               <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
             </div>
+            <span className="font-bold text-xl -translate-x-4">BGRMU</span>
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
