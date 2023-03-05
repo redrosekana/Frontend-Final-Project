@@ -122,7 +122,7 @@ function RecommendBefore() {
                     {
                         currentData ? 
                             <div className="mt-16">
-                                <div className="font-semibold text-4xl">เกมส์ที่คุณค้นหา</div>
+                                <div className="font-semibold text-4xl">เกมที่คุณค้นหา</div>
                                 <ListBoardGameRecommend {...currentData}/>
                             </div> 
                         : null
@@ -131,7 +131,7 @@ function RecommendBefore() {
                     {
                         recommend.length !== 0 ? 
                             <div className="mt-16">
-                                <div className="font-semibold text-4xl">เกมส์ที่แนะนำ</div>
+                                <div className="font-semibold text-4xl">เกมที่แนะนำ</div>
                                 {recommend.map((e,i) => <ListBoardGameRecommend key={i} {...e} index={i}/> )}
                             </div> 
                         : null
