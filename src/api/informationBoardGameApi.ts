@@ -2,7 +2,7 @@
 import axios, { AxiosError } from "axios";
 
 // declare url variable
-const url = import.meta.env.VITE_URL_DEV + "/information";
+const url = import.meta.env.VITE_URL_DEV + "/boardgames";
 
 // declare interface for errorResponse
 interface errorResponse {

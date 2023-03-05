@@ -9,19 +9,24 @@ interface errorResponse {
     message: string
 }
 
-// declare interface for successResponse
 interface successResponse {
+    currentData:successResponseInside,
+    recommend:successResponseInside[]
+}
+
+// declare interface for successResponse
+interface successResponseInside {
     id:string
     name:string
-    minPlayers:number
-    maxPlayers:number
+    minplayers:number
+    maxplayers:number
     playingtime:number
     yearpublished:number
     description:string
     image:string
 }
 
-export default async function RecommendGuestApi(boardgameName:string):Promise<successResponse[] | undefined | string> {
+export default async function RecommendGuestApi(boardgameName:string):Promise<successResponse | undefined | string> {
     try {
         const result = await axios({
             url:url,

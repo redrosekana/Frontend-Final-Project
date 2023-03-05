@@ -97,18 +97,18 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 			// method ที่หาค่าลองติจูดและละติจูดตอนทำการคลิ๊กที่หมุดได้
 			let mouseLocation = map.location(window.longdo.LocationMode.Pointer)
 			
-				// เก็บค่า lon , lat ด้วยการ setState
-				setLongitude(mouseLocation.lon)
-				setLatitude(mouseLocation.lat)
-				
-				// แสดงข้อมูลที่อยู่ ณ ตำแหน่งนั้นให้ผู้ใช้งาน ในกรณีที่เป็นหมุด กับ เส้นทางสีน้ำเงิน
-				if (ev.data.address) {
-					displayAddress.current!.innerText = ev.data.address
-					setSource(ev.data.address)
-				}else if (ev.data.name_t) {
-					displayAddress.current!.innerText = ev.data.name_t
-					setSource(ev.data.name_t)
-				}
+			// เก็บค่า lon , lat ด้วยการ setState
+			setLongitude(mouseLocation.lon)
+			setLatitude(mouseLocation.lat)
+			
+			// แสดงข้อมูลที่อยู่ ณ ตำแหน่งนั้นให้ผู้ใช้งาน ในกรณีที่เป็นหมุด กับ เส้นทางสีน้ำเงิน
+			if (ev.data.address) {
+				displayAddress.current!.innerText = ev.data.address
+				setSource(ev.data.address)
+			}else if (ev.data.name_t) {
+				displayAddress.current!.innerText = ev.data.name_t
+				setSource(ev.data.name_t)
+			}
 		})
 
 		// เก็บค่าตัวแปรแผนที่เอาไว้ เพื่อใช้กับ method อื่นๆ

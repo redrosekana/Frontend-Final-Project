@@ -38,7 +38,7 @@ function HomeBefore() {
                             <button className='bg-orangey p-2 font-medium text-xl rounded-md text-white hover:bg-orange-500 transition-colors duration-150 ease-in'>
                                 <NavLink to="/recommend">ระบบแนะนำบอร์ดเกม</NavLink>
                             </button>
-                            <button className='border-2 border-black p-2 font-medium text-xl rounded-md ml-0 mt-3 telephone:ml-4 telephone:mt-0 hover:bg-slate-100 transition-colors duration-150 ease-in'>
+                            <button className='p-2 font-medium text-xl border-2 border-gray-800 rounded-md ml-0 mt-3 telephone:ml-4 telephone:mt-0 hover:bg-slate-100 transition-colors duration-150 ease-in'>
                                 <NavLink to="/party">ระบบค้นหาผู้เล่น</NavLink> 
                             </button>
                         </div>
@@ -50,8 +50,8 @@ function HomeBefore() {
                 </div>
 
                 <div className='mt-24'>
-                    <h3 className='font-bold text-2xl telephone:text-4xl mb-10'>บอร์ดเกมยอดนิยม</h3>
-                    {popularBoardGame.map((e:any,i:number) => {
+                    <h3 className='font-bold text-3xl telephone:text-4xl mb-12'>บอร์ดเกมยอดนิยม</h3>
+                    {popularBoardGame.map((e,i) => {
                         return <ItemPopular key={i} name={e.name} picture={e.picture} year={e.year} index={i} />
                     })}
                 </div>
@@ -71,18 +71,17 @@ interface ItemPopularProps {
 
 const ItemPopular = ({name, picture, year, index}:ItemPopularProps) => {
     return (
-        <div className="flex flex-col sm:flex-row items-center my-8 pb-5 border-b-2 border-b-gray-300">
-            <div>
-                <img src={picture} alt="picture1" className='w-[300px] sm:w-[200px] sm:h-[200px] rounded-md object-fill' />
+        <div className="flex flex-col md:flex-row items-center my-8 pb-5 border-b-2 border-b-gray-300 ">
+            <div className='max-w-[260px] w-full h-[240px] rounded-md'>
+                <img src={picture} alt="picture1" className='w-full h-full rounded-md object-fill' />
             </div>
-            <div className='mt-6 w-full max-w-[350px] sm:mt-0 sm:ml-4 sm:flex-grow sm:max-w-full sm:w-auto'>
-                {index === 0 || index === 1 || index === 2 ? <div className='sm:ml-4 w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center flashingAnimation'>มาแรง {index+1}</div> : null }
-                <h4 className='sm:ml-4 text-2xl font-semibold'>
+            <div className='mt-6 max-w-[350px] w-full sm:mt-0 sm:ml-8 sm:max-w-full sm:w-auto '>
+                {index === 0 || index === 1 || index === 2 ? <div className='w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center flashingAnimation'>มาแรง {index+1}</div> : null }
+                <h4 className='text-3xl font-semibold'>
                     {index+1}. {name}
                 </h4>
-                <p className='sm:ml-4 text-lg text-gray-400'>{year}</p>
-                <p className='sm:ml-4 text-lg mt-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
-                
+                <p className='text-xl font-normal text-gray-400 mt-1'>{year}</p>
+                <p className='text-xl mt-4'>Lorem ipsum dolor sit amet consectetur adipisicing elit</p>
             </div>
         </div>
     )

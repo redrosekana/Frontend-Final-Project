@@ -5,14 +5,15 @@
 html,body{
     box-sizing: border-box;
     font-family: 'Kanit', sans-serif;
+    font-family: 'Itim', cursive;
 }
 
 @layer components {
     .notActiveclassName{
-        @apply mx-4 text-xl font-medium hover:border-b-2 hover:border-black xl:mx-10 transition duration-150 ease-in
+        @apply mx-3 text-xl font-medium hover:border-b-2 hover:border-black xl:mx-10 transition duration-150 ease-in
     }
   
     .activeclassName{
-        @apply mx-4 text-xl font-medium border-b-2 border-black xl:mx-10 transition duration-150 ease-in
+        @apply mx-3 text-xl font-medium border-b-2 border-black xl:mx-10 transition duration-150 ease-in
     }
 }

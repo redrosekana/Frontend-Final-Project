@@ -96,13 +96,11 @@ function Register() {
                <InputTag nameLabel="รหัสผ่าน" type="password"  id="password" refEl={passwordEl}/>
                <InputTag nameLabel="ยืนยันรหัสผ่าน" type="password"  id="confirm_password" refEl={confirm_passwordEl}/>
 
-               <button type="button" onClick={() => navigate("/home")}
-                  className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center transition-colors duration-200 ease-in"
+               <button type="button" onClick={() => navigate("/home")} className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center transition-colors duration-200 ease-in"
                >
                   กลับหน้าหลัก
                </button>
-               <button type="submit"
-                  className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center ml-2 transition-colors duration-200 ease-in"
+               <button type="submit" className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center ml-2 transition-colors duration-200 ease-in"
                >
                   ยืนยัน
                </button>
@@ -127,7 +125,7 @@ const InputTag = ({nameLabel , type , id , refEl }:inputTagProps) => {
          <label htmlFor={id} className="block mb-2 text-base font-medium text-gray-900">
             {nameLabel} <span className=" text-red-700">*</span>
          </label>
-         <input type={type} id={id} ref={refEl} className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-blue-700 focus:border-blue-700 w-full p-3"/>
+         <input type={type} id={id} ref={refEl} className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-blue-700 focus:border-blue-700 w-full p-3"/>
       </div>
    )
 }

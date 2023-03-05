@@ -34,7 +34,7 @@ function AboutAfter() {
     useEffect(() => {
         window.scrollTo(0,0)
 
-        GetMemberApi(accessToken,"/user").then((res) => {
+        GetMemberApi(accessToken,"/member").then((res) => {
             if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "accessToken ไม่มีสิทธิเข้าถึง"){
                 createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
                     navigate("/home")
@@ -44,7 +44,7 @@ function AboutAfter() {
                     navigate("/login")
                 })
             }else if (res === "accessToken หมดอายุ"){
-                GetMemberApi(refreshToken,"/renew").then((res:any) => {
+                GetMemberApi(refreshToken,"/token").then((res:any) => {
                     if (res === "รูปแบบการส่งไม่ถูกต้อง" || res === "refreshToken ไม่มีสิทธิเข้าถึง"){
                         createSwal("เกิดข้อผิดพลาด", "โปรดทำการเข้าสู่ระบบก่อน", "error", "#e10000").then(() => {
                             navigate("/home")

@@ -35,7 +35,6 @@ export default async function GetMemberApi( token:string , path:string ):Promise
             timeout:20000
         })
         
-        // console.log(result.data)
         return result.data
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {

@@ -1,9 +1,10 @@
 // import library
-import React, { useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useRef, useEffect } from "react"
+import { NavLink } from "react-router-dom"
 
 // link ของ navbar
-const Link:string[] = ["Home", "About", "Recommend", "Party", "Map"];
+const LinkContent:string[] = ["หน้าแรก", "เกี่ยวกับ", "ระบบแนะนำ", "ปาร์ตี้", "แผนที่"]
+const Link:string[] = ["home", "about", "recommend", "party", "map"]
 
 function NavbarBefore() {
   const buttonHamberger = useRef<HTMLButtonElement>(null)
@@ -34,11 +35,11 @@ function NavbarBefore() {
       {/* Navbar */}
       <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between items-center">
-          <div className=" flex items-center cursor-pointer">
+          <div className="flex items-center cursor-pointer -translate-x-6">
             <div>
               <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
             </div>
-            <span className="font-bold text-2xl -translate-x-4">BGRMU</span>
+            <span className="font-bold text-2xl -translate-x-4">BGRC</span>
           </div>
           
           <div className="flex specific:hidden items-center text-3xl">
@@ -49,17 +50,17 @@ function NavbarBefore() {
 
           <ul className="hidden specific:flex items-center">
             {Link.map((e, i) => {
-              return <ItemMenu key={i} path={e} />
+              return <ItemMenu key={i} path={e} index={i} />
             })}
           </ul>
 
           <div className="hidden specific:flex">
             <a href="/login">
-              <button className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">Login</button>
+              <button className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">เข้าสู่ระบบ</button>
             </a>
             <NavLink to="/register">
               <button className="ml-1 text-md text-white bg-limegreen  hover:bg-green-500 focus:ring-1 focus:ring-green-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
-                Sign up
+                สมัครสมาชิก
               </button>
             </NavLink>
           </div>
@@ -78,7 +79,7 @@ function NavbarBefore() {
             <div>
               <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
             </div>
-            <span className="font-bold text-xl -translate-x-4">BGRMU</span>
+            <span className="font-bold text-xl -translate-x-4">BGRC</span>
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
@@ -89,10 +90,10 @@ function NavbarBefore() {
 
         <div className="flex flex-col items-center mt-10">
           <a href="/login" className="text-md flex justify-center bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in">
-            Login
+            เข้าสู่ระบบ
           </a>
           <button className="mt-2 text-md text-white bg-limegreen hover:bg-green-500 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in">
-            <NavLink to="/register">Sign up</NavLink>
+            <NavLink to="/register">สมัครสมาชิก</NavLink>
           </button>
         </div>
       </nav>
@@ -102,14 +103,15 @@ function NavbarBefore() {
 
 // declare interface ItemMenu
 interface ItemMenuProps {
-  path:string,
+  path:string
+  index:number
 }
 
-const ItemMenu = ({ path }:ItemMenuProps) => {
+const ItemMenu = ({ path, index }:ItemMenuProps) => {
   return (
     <NavLink to={`/${path.toLowerCase()}`}
       className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
-    >{path}
+    >{LinkContent[index]}
     </NavLink>
   )
 }
@@ -125,7 +127,7 @@ const ItemSideBar = ({ path , index }:ItemSideBarProps) => {
   return (
     <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
       <NavLink to={`/${path.toLowerCase()}`} className="flex items-center ml-4 w-full h-full">
-        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{path}
+        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{LinkContent[index]}
       </NavLink>
     </li>
   )

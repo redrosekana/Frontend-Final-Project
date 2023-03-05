@@ -10,17 +10,18 @@ import ScopeProfile from "../scopeProfile";
 import avatar from "../../assets/avatar.svg"
 
 // import controller
-import { createSwal } from "../../controller/createSwal";
+import { createSwal } from "../../controller/createSwal"
 
 // import context api
-import { Store } from "../../context/store";
+import { Store } from "../../context/store"
+
+// link ของ navbar
+const LinkContent:string[] = ["หน้าแรก", "เกี่ยวกับ", "ระบบแนะนำ", "ปาร์ตี้", "แผนที่"]
+const Link:string[] = ["home", "about", "recommend", "party", "map"]
 
 function NavbarAfter() {
   const navigate:NavigateFunction = useNavigate()
   const cookie = new Cookies()
-
-  // link ของ navbar
-  const Link:string[] = ["Home", "About", "Recommend", "Party", "Map"];
 
   const context = useContext(Store)
   
@@ -66,11 +67,11 @@ function NavbarAfter() {
       {profile ? <ScopeProfile LogoutButton={LogoutButton} /> : null}
       <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between">
-          <div className=" flex items-center cursor-pointer">
+          <div className=" flex items-center cursor-pointer -translate-x-6">
             <div>
               <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
             </div>
-            <span className="font-bold text-2xl -translate-x-4">BGRMU</span>
+            <span className="font-bold text-2xl -translate-x-4">BGRC</span>
           </div>
 
           <div className="flex specific:hidden items-center text-3xl">
@@ -81,7 +82,7 @@ function NavbarAfter() {
 
           <ul className="hidden specific:flex items-center">
             {Link.map((e, i) => {
-              return <ItemMenu key={i} path={e} />
+              return <ItemMenu key={i} path={e} index={i} />
             })}
           </ul>
 
@@ -106,7 +107,7 @@ function NavbarAfter() {
           <div>
             <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
           </div>
-          <span className="font-bold text-xl -translate-x-4">BGRMU</span>
+          <span className="font-bold text-xl -translate-x-4">BGRC</span>
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
@@ -118,14 +119,14 @@ function NavbarAfter() {
         <div className="flex flex-col items-center mt-10">
           <NavLink to="/profile">
             <button className="text-md bg-limegreen hover:bg-green-500 font-medium px-3 py-1.5 rounded-md text-white w-40 transition-colors duration-200 ease-in">
-              Profile
+              โปรไฟล์ผู้ใช้งาน
             </button>
           </NavLink>
           
           <button 
             onClick={LogoutButton}
             className="mt-3 text-md bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in">
-            Logout
+            ออกจากระบบ
           </button>
         </div>
       </div>
@@ -135,15 +136,16 @@ function NavbarAfter() {
 
 // declare interface ItemMenu
 interface ItemMenuProps {
-  path:string,
+  path:string
+  index:number
 }
 
-const ItemMenu = ({path}:ItemMenuProps) => {
+const ItemMenu = ({path, index}:ItemMenuProps) => {
   return (
     <NavLink to={`/page/${path.toLowerCase()}`}
       className={({ isActive }) => isActive ? "activeclassName" : "notActiveclassName"}
     >
-      {path}
+      {LinkContent[index]}
     </NavLink>
   )
 }
@@ -153,13 +155,13 @@ interface ItemSideBarProps extends ItemMenuProps {
   index:number
 }
 
-const ItemSideBar = ({path,index}:ItemSideBarProps) => {
+const ItemSideBar = ({path, index}:ItemSideBarProps) => {
   const Icon: string[] = ["fa-house", "fa-address-card", "fa-comment", "fa-user-group", "fa-map"]
   
   return (
     <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
       <NavLink to={`/page/${path.toLowerCase()}`} className="flex items-center ml-4 w-full h-full">
-        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{path}
+        <i className={`fa-solid ${Icon[index]} mr-4`}></i>{LinkContent[index]}
       </NavLink>
     </li>
   )
