@@ -23,6 +23,7 @@ export default async function RegisterApi( body: RegisterMember ): Promise<strin
          url: url,
          method: "post",
          data: body,
+         headers:{"content-type":"application/json"},
          timeout: 20000,
       })
 
@@ -39,7 +40,7 @@ export default async function RegisterApi( body: RegisterMember ): Promise<strin
          } else if (message === "username repeated") {
             return "ชื่อผู้ใช้งาน ถูกใช้งานแล้ว"
          } else if (message === "email repeated") {
-            return "อีเมลล์ ถูกใช้งานแล้ว"
+            return "ชื่ออีเมลล์ ถูกใช้งานแล้ว"
          } else if (message === "occurred error in server") {
             return "มีข้อผิดพลาดของเซิฟเวอร์"
          }

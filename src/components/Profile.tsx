@@ -5,17 +5,22 @@ import avatar from "../assets/avatar.svg"
 import Cookies from "universal-cookie"
 import { useNavigate , NavigateFunction } from "react-router-dom"
 
-import Swal from "sweetalert2"
-
+// import component react flowbite 
 import { Modal } from "flowbite-react"
+
+// import component
+import Reload from "./reload"
 
 // import api
 import GetMemberApi from "../api/getMemberApi"
+import UpdatePassword from "../api/updatePassword"
+import UpdateMember from "../api/updateMember"
 
 // import controller
 import { createSwal } from "../controller/createSwal"
+import { ValidateEmail } from "../controller/formatEmail"
 
-// declare inteface for display information user
+// declare interface for display information user
 interface InformationDisplay {
    message: string;
    displayName:string;
@@ -25,24 +30,43 @@ interface InformationDisplay {
    facebookName?:string
 }
 
+// declare interface for warning fields that user don't put
+interface WarningModal {
+   status:boolean
+   text:string
+}
+
+// declate interface for user that login either facebook or user
 type Status = "facebook" | "user" | null
 
 function Profile() {
-   const cookie = new Cookies();
-   const navigate:NavigateFunction = useNavigate();
+   const cookie = new Cookies()
+   const navigate:NavigateFunction = useNavigate()
+
+   const [reload,setReload] = useState<boolean>(false)
 
    // ตัวแปรไว้เช็คว่า member เป็น user หรือ facebook
    const [status,setStatus] = useState<Status>(null)
 
-   // const [warningPassword,setWarningPassword] = useState<boolean[]>([false,false,false])
+   // ตัวแปรไว้ทำการเช็คกรณี member ใส่ข้อมูลได้ไม่ถูกต้อง
+   const [warningOldPassword,setWarningOldPassword] = useState<WarningModal>({status:false,text:""})
+   const [warningNewPassword,setWarningNewPassword] = useState<WarningModal>({status:false,text:""})
+   const [warningConfirmNewPassword,setWarningConfirmNewPassword] = useState<WarningModal>({status:false,text:""})
+
+   // ตัวแปรไว้ทำการเช็คกรณี member ใส่ข้อมูลได้ไม่ถูกต้อง
+   const [warningDisplayNameUser,setWarningDisplayNameUser] = useState<WarningModal>({status:false,text:""})
+   const [warningEmail,setWarningEmail] = useState<WarningModal>({status:false,text:""})
+   const [warningDisplayNameFacebook,setWarningDisplayNameFacebook] = useState<WarningModal>({status:false,text:""})
 
    // ตัวแปรควบคุมการเปิดปิด modal
    const [modalPassword,setModalPassword] = useState<boolean>(false)
    const [modalInfomation,setModalInfomation] = useState<boolean>(false)
 
+   // token
    const accessToken:string = cookie.get("accessToken")
    const refreshToken:string = cookie.get("refreshToken")
 
+   // ค่าที่ผูกกับ element แสดงข้อมูลผ้ใช้
    const usernameEl = useRef<HTMLInputElement>(null)
    const displayNameUserEl = useRef<HTMLInputElement>(null)
    const displayNameFacebookEl = useRef<HTMLInputElement>(null)
@@ -50,15 +74,17 @@ function Profile() {
    const facebookIdEl = useRef<HTMLInputElement>(null)
    const facebookNameEl = useRef<HTMLInputElement>(null)
 
+   // ค่าที่ผูกข้อมูลที่เอาไว้แก้ไข password
    const passwordOldEl = useRef<HTMLInputElement>(null)
    const passwordNewEl = useRef<HTMLInputElement>(null)
    const confirmPasswordNewEl = useRef<HTMLInputElement>(null)
 
+   // ค่าที่ผูกข้อมูลที่เอาไว้แก้ไข information user
    const updateDisplayNameUserEl = useRef<HTMLInputElement>(null)
    const updateEmailEl = useRef<HTMLInputElement>(null)
 
+   // ค่าที่ผูกข้อมูลที่เอาไว้แก้ไข information facebook
    const updateDisplayNameFacebookEl = useRef<HTMLInputElement>(null)
-   
    
    useEffect(() => {
       GetMemberApi(accessToken,"/member").then((res) => {
@@ -91,6 +117,7 @@ function Profile() {
                }
             })
          }else {
+            // เก็บค่า information ไว้เพื่อทำการเช็คว่าเป็น user หรือ facebook
             const informationMember:InformationDisplay = res as InformationDisplay
             
             if (informationMember.username) {
@@ -101,15 +128,23 @@ function Profile() {
                updateDisplayNameUserEl.current!.value = informationMember.displayName
                updateEmailEl.current!.value = informationMember.email as string
 
+               // เก็บค่าเก่าไว้กรณีผู้ใช้งานกดยกเลิก modal จะได้เอาค่าเดิมมาแสดงต่อ
                updateDisplayNameUserEl.current!.defaultValue = informationMember.displayName
                updateEmailEl.current!.defaultValue = informationMember.email as string
+               
+               // เก็บด้วยว่าเป็น user
                setStatus("user")
             }else {
                facebookIdEl.current!.value = informationMember.facebookId as string
                displayNameFacebookEl.current!.value = informationMember.displayName
                facebookNameEl.current!.value = informationMember.facebookName as string
+
+               updateDisplayNameFacebookEl.current!.value = informationMember.displayName
                
-               displayNameFacebookEl.current!.value = informationMember.displayName
+               // เก็บค่าเก่าไว้กรณีผู้ใช้งานกดยกเลิก modal จะได้เอาค่าเดิมมาแสดงต่อ
+               updateDisplayNameFacebookEl.current!.defaultValue = informationMember.displayName
+               
+               // เก็บด้วยว่าเป็น facebook
                setStatus("facebook")
             }
          }
@@ -118,67 +153,263 @@ function Profile() {
   }, [])
 
 
-   // ฟังชันก์ในการควบคุมเปิดปิด modal
-   const onOpenPassword = () => setModalPassword(prev => !prev)
-   const onClosePassword = () => {
+   // ฟังชันก์เอาไว้รีเซ็ตทุกอย่างเมื่อปิด modal password
+   const resetChannelPassword = () => {
       passwordOldEl.current!.value = ""
       passwordNewEl.current!.value = ""
       confirmPasswordNewEl.current!.value = ""
-      // setWarningPassword([false,false,false])
-      setModalPassword(false)
+      setWarningOldPassword({status:false,text:""})
+      setWarningNewPassword({status:false,text:""})
+      setWarningConfirmNewPassword({status:false,text:""})
    }
 
-   const onOpenInformation = () => setModalInfomation(prev => !prev)
-   const onCloseInformation = () => {
+   // ฟังชันก์เอาไว้รีเซ็ตทุกอย่างเมื่อปิด modal information
+   const resetChannelInformation = () => {
       updateDisplayNameUserEl.current!.value = updateDisplayNameUserEl.current!.defaultValue
       updateEmailEl.current!.value = updateEmailEl.current!.defaultValue
       updateDisplayNameFacebookEl.current!.value = updateDisplayNameFacebookEl.current!.defaultValue
+      setWarningDisplayNameUser({status:false,text:""})
+      setWarningEmail({status:false,text:""})
+      setWarningDisplayNameFacebook({status:false,text:""})
+   }
+
+   // ฟังชันก์ในการควบคุมการเปิด modal password
+   const onOpenPassword = () => setModalPassword(prev => !prev)
+
+   // ฟังชันก์ในการควบคุมการปิด modal password
+   const onClosePassword = () => {
+      resetChannelPassword()
+      setModalPassword(false)
+   }
+
+   // ฟังชันก์ในการควบคุมการเปิด modal information
+   const onOpenInformation = () => setModalInfomation(prev => !prev)
+
+   // ฟังชันก์ในการควบคุมการเปิด modal information
+   const onCloseInformation = () => {
+      resetChannelInformation()
       setModalInfomation(false)
    }
 
-   const clickUpdatePassword = () => {
-      // const listWarning:boolean[] = [false,false,false]
-      // if (!passwordOldEl.current?.value) listWarning[0] = true
-      // if (!passwordNewEl.current?.value) listWarning[1] = true
-      // if (!confirmPasswordNewEl.current?.value) listWarning[2] = true
-      // setWarningPassword(listWarning)
+   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนรหัสผ่าน
+   const clickUpdatePassword = async () => {
+      let checkStatus = 0
 
-      if (!passwordOldEl.current?.value || !passwordNewEl.current?.value || !confirmPasswordNewEl.current?.value) {
-         createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
+      // เช็คว่าได้ใส่ค่าไหม
+      if (!passwordOldEl.current?.value){
+         setWarningOldPassword({status:true,text:"กรอกข้อมูลให้ครบ"})
+         checkStatus = 1
+      }else {
+         setWarningOldPassword({status:false,text:""})
+      }
+
+      // เช็คว่าได้ใส่ค่าไหม
+      if (!passwordNewEl.current?.value){
+         setWarningNewPassword({status:true,text:"กรอกข้อมูลให้ครบ"})
+         checkStatus = 1 
+      }else {
+         setWarningNewPassword({status:false,text:""})
+      }
+
+      // เช็คว่าได้ใส่ค่าไหม
+      if (!confirmPasswordNewEl.current?.value){
+         setWarningConfirmNewPassword({status:true,text:"กรอกข้อมูลให้ครบ"})
+         checkStatus = 1
+      }else {
+         setWarningConfirmNewPassword({status:false,text:""})
+      }
+
+      // ถ้าไม่ใส่แสดง warning แจ้งเตือนแล้ว return
+      if (checkStatus) return
+
+      // ถ้ารหัสผ่านไม่ตรงกันก็ warning แจ้งเตือน
+      if (passwordNewEl.current?.value !== confirmPasswordNewEl.current?.value) {
+         setWarningNewPassword({status:true,text:"รหัสผ่านไม่ตรงกัน"})
+         setWarningConfirmNewPassword({status:true,text:"รหัสผ่านไม่ตรงกัน"})
          return
       }
 
-      if (passwordNewEl.current?.value !== confirmPasswordNewEl.current?.value) {
-         createSwal("แจ้งเตือน", "รหัสผ่านใหม่ไม่ตรงกัน", "warning", "#ec9e18")
+      // ถ้ารหัสผ่านไม่ได้มีการเปลี่ยนแปลงให้ปิด modal จากนั้น return แล้วแจ้งเตือน
+      if (passwordOldEl.current?.value === passwordNewEl.current?.value) {
+         resetChannelPassword()
+         setModalPassword(false)
+         createSwal("แจ้งเตือน", `รหัสผ่านไม่ได้เปลี่ยนแปลง`, "warning", "#ec9e18")
          return
+      }
+
+      // ปิด modal ทำการส่งค่าหา server 
+      setModalPassword(false)
+      setReload(true)
+      const result_one = await UpdatePassword(passwordOldEl.current!.value, passwordNewEl.current!.value, accessToken)
+      setReload(false)
+
+      if (result_one === "รูปแบบการส่งไม่ถูกต้อง" 
+      || result_one === "accessToken ไม่มีสิทธิเข้าถึง"){
+         createSwal("เกิดข้อผิดพลาด", "โปรดกระทำการให้ถูกต้อง", "error", "#e10000").then(() => {
+            resetChannelPassword()
+         })
+      }else if (result_one === "มีข้อผิดพลาดของเซิฟเวอร์" 
+      || result_one === "มีข้อผิดพลาดของบราวเซอร์"
+      || result_one === "accessToken หมดอายุ"){
+         createSwal("เกิดข้อผิดพลาด", `${result_one} โปรดทำการใหม่อีกครั้ง`, "error", "#e10000").then(() => {
+            resetChannelPassword()
+            window.location.reload()
+         })
+      }else if (result_one === "ต้องการรหัสผ่านที่จะเปลี่ยน"
+      || result_one === "รหัสผ่านเดิมไม่ถูกต้อง") {
+         createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+            resetChannelPassword()
+         })
+      }else {
+         createSwal("แก้ไขสำเร็จ", "โปรดทำการเข้าสู่ระบบอีกครั้ง", "success", "#06b400").then(() => {
+            cookie.remove("accessToken",{path:"/"})
+            cookie.remove("refreshToken",{path:"/"})
+            window.location.href = "/login"
+         })
       }
    }
 
-   const clickUpdateInformation = (status:Status) => {
+   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนแปลงข้อมูล
+   const clickUpdateInformation = async (status:Status) => {
+      let checkStatus = 0
+
+      // เช็คว่าเป็น user หรือ facebook
       if (status === "user") {
-         if (!updateDisplayNameUserEl.current?.value || !updateEmailEl.current?.value) {
-            createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
-            return
+         // เช็คว่าได้ใส่ค่าไหม
+         if (!updateDisplayNameUserEl.current?.value) {
+            setWarningDisplayNameUser({status:true,text:"กรอกข้อมูลให้ครบ"})
+            checkStatus = 1
+         }else {
+            setWarningDisplayNameUser({status:false,text:""})
          }
 
+         // เช็คว่าได้ใส่ค่าไหม
+         if (!updateEmailEl.current?.value) {
+            setWarningEmail({status:true,text:"กรอกข้อมูลให้ครบ"})
+            checkStatus = 1
+         }else {
+            setWarningEmail({status:false,text:""})
+         }
+
+         // เช็คว่าอีเมลล์ถูกรูปแบบไหม
+         if (!ValidateEmail(updateEmailEl.current!.value)) {
+            setWarningEmail({status:true,text:"รูปแบบอีเมลล์ไม่ถูกต้อง"})
+            checkStatus = 1
+         }else {
+            setWarningEmail({status:false,text:""})
+         }
+
+         // ถ้าไม่ถูกต้องและไม่ใส่ค่าก็แสดง warning แจ้งเตือนแล้ว return
+         if (checkStatus) return
+
+         // ถ้าข้อมูลไม่ได้มีการเปลี่ยนแปลงให้ปิด modal จากนั้น return แล้วแจ้งเตือน
          if (updateDisplayNameUserEl.current?.value === updateDisplayNameUserEl.current?.defaultValue
          && updateEmailEl.current?.value === updateEmailEl.current?.defaultValue) {
-            createSwal("แจ้งเตือน", "ข้อมูลไม่มีการเปลี่ยนแปลง", "warning", "#ec9e18").then(() => {
-               setModalInfomation(false)
-               return
-            })
+            setModalInfomation(false)
+            createSwal("แจ้งเตือน", "ข้อมูลไม่มีการเปลี่ยนแปลง", "warning", "#ec9e18")
+            return
          }
 
+         // เตรียมข้อมูลเพื่อส่งไปหา server
+         const body = {}
+
+         // ส่งค่าที่ต้องการเปลี่ยนแปลงเท่านั้น
+         if (updateDisplayNameUserEl.current?.value !== updateDisplayNameUserEl.current?.defaultValue){
+            Object.assign(body,{displayNameUser:updateDisplayNameUserEl.current?.value})
+         }
+
+         // ส่งค่าที่ต้องการเปลี่ยนแปลงเท่านั้น
+         if (updateEmailEl.current?.value !== updateEmailEl.current?.defaultValue) {
+            Object.assign(body,{email:updateEmailEl.current?.value})
+         }
+         
+         setModalInfomation(false)
+         setReload(true)
+         const result_one = await UpdateMember(body,accessToken)
+         setReload(false)
+
+         if (result_one === "รูปแบบการส่งไม่ถูกต้อง" 
+         || result_one === "accessToken ไม่มีสิทธิเข้าถึง"){
+            createSwal("เกิดข้อผิดพลาด", "โปรดกระทำการให้ถูกต้อง", "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else if (result_one === "มีข้อผิดพลาดของเซิฟเวอร์" 
+         || result_one === "มีข้อผิดพลาดของบราวเซอร์"
+         || result_one === "accessToken หมดอายุ"){
+            createSwal("เกิดข้อผิดพลาด", `${result_one} โปรดทำการใหม่อีกครั้ง`, "error", "#e10000").then(() => {
+               window.location.reload()
+            })
+         }else if (result_one === "ต้องการข้อมูลอย่างน้อย 1 ฟิลด์"){
+            createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else if (result_one === "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว") {
+            createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else if (result_one === "ชื่ออีเมลล์ ถูกใช้งานแล้ว") {
+            createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else {
+            createSwal("แก้ไขสำเร็จ", "โปรดทำการเข้าสู่ระบบอีกครั้ง", "success", "#06b400").then(() => {
+               cookie.remove("accessToken",{path:"/"})
+               cookie.remove("refreshToken",{path:"/"})
+               window.location.href = "/login"
+            })
+         }
       }else {
          if (!updateDisplayNameFacebookEl.current?.value) {
-            createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
+            setWarningDisplayNameFacebook({status:true,text:"กรอกข้อมูลให้ครบ"})
+            checkStatus = 1
             return
+         }
+
+         if (checkStatus) return
+
+         const body = {}
+
+         if (updateDisplayNameFacebookEl.current?.value !== updateDisplayNameFacebookEl.current?.defaultValue){
+            Object.assign(body,{displayNameFacebook:updateDisplayNameFacebookEl.current?.value})
+         }
+
+         setModalInfomation(false)
+         setReload(true)
+         const result_one = await UpdateMember(body,accessToken)
+         setReload(false)
+
+         if (result_one === "รูปแบบการส่งไม่ถูกต้อง" 
+         || result_one === "accessToken ไม่มีสิทธิเข้าถึง"){
+            createSwal("เกิดข้อผิดพลาด", "โปรดกระทำการให้ถูกต้อง", "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else if (result_one === "มีข้อผิดพลาดของเซิฟเวอร์" 
+         || result_one === "มีข้อผิดพลาดของบราวเซอร์"
+         || result_one === "accessToken หมดอายุ"){
+            createSwal("เกิดข้อผิดพลาด", `${result_one} โปรดทำการใหม่อีกครั้ง`, "error", "#e10000").then(() => {
+               window.location.reload()
+            })
+         }else if (result_one === "ต้องการข้อมูลอย่างน้อย 1 ฟิลด์"){
+            createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else if (result_one === "ชื่อแสดงในเว็บไซต์ ถูกใช้งานแล้ว") {
+            createSwal("แก้ไขไม่สำเร็จ", result_one, "error", "#e10000").then(() => {
+               resetChannelInformation()
+            })
+         }else {
+            createSwal("แก้ไขสำเร็จ", "โปรดทำการเข้าสู่ระบบอีกครั้ง", "success", "#06b400").then(() => {
+               cookie.remove("accessToken",{path:"/"})
+               cookie.remove("refreshToken",{path:"/"})
+               window.location.href = "/login"
+            })
          }
       }
    }
 
    return (
       <main>
+         {reload ? <Reload/>  : null}
          <div className="max-w-[1400px] w-full mx-auto p-6">
             <h3 className="text-3xl lg:text-4xl font-bold text-center">ข้อมูลและประวัติผู้ใช้งาน</h3>
 
@@ -188,16 +419,15 @@ function Profile() {
                </div>
 
                <div className={`${status === "user" ? "block" : "hidden"} max-w-lg w-full`}>
-                  <InlineProfile title="Username" type="text" refer={usernameEl} />
-                  <InlineProfile title="DisplayName" type="text" refer={displayNameUserEl} />
-                  <InlineProfile title="Email" type="text" refer={emailEl} />
+                  <InlineProfile title="ชื่อผู้ใช้งาน" type="text" refer={usernameEl} />
+                  <InlineProfile title="ชื่อที่แสดงในเว็บไซต์" type="text" refer={displayNameUserEl} />
+                  <InlineProfile title="อีเมลล์" type="text" refer={emailEl} />
                </div>
                <div className={`${status === "facebook" ? "block" : "hidden"} max-w-lg w-full`}>
-                  <InlineProfile title="FacebookId" type="text" refer={facebookIdEl} />
-                  <InlineProfile title="DisplayName" type="text" refer={displayNameFacebookEl} />
-                  <InlineProfile title="FacebookName" type="text" refer={facebookNameEl} />
+                  <InlineProfile title="ไอดีเฟสบุ๊ค" type="text" refer={facebookIdEl} />
+                  <InlineProfile title="ชื่อที่แสดงในเว็บไซต์" type="text" refer={displayNameFacebookEl} />
+                  <InlineProfile title="ชื่อเฟสบุ๊ค" type="text" refer={facebookNameEl} />
                </div>
-               
                
                <div className=" flex flex-col gap-y-2 max-w-md w-full mb-4">
                   <label className="text-xl">รายการบอร์ดที่เคยประเมิน</label>
@@ -208,19 +438,19 @@ function Profile() {
             </div>
             <div className="mt-8 flex flex-col gap-y-2 items-center telephone:flex-row justify-center gap-x-4">
                <NavLink to="/page/home" className="w-full telephone:w-[130px]"><Buttont title="ย้อนกลับ" color="bg-redrose" hover="bg-red-800" shadow="red-400"/></NavLink>
-               <Buttont onClick={onOpenPassword} title="เปลี่ยนรหัสผ่าน" color="bg-limegreen" hover="bg-green-500" shadow="green-400"/>
+               {status === "user" ? <Buttont onClick={onOpenPassword} title="เปลี่ยนรหัสผ่าน" color="bg-limegreen" hover="bg-green-500" shadow="green-400"/> : null}
                <Buttont onClick={onOpenInformation} title="แก้ไขข้อมูล" color="bg-yellow-400" hover="bg-yellow-500" shadow="yellow-400"/>
             </div>
 
             <Modal show={modalPassword} onClose={onClosePassword}>
                <Modal.Header>
-                  <h3 className="text-2xl">เปลี่ยนรหัสผ่าน</h3>
+                  <div className="text-2xl">เปลี่ยนรหัสผ่าน</div>
                </Modal.Header>
                <Modal.Body>
                   <form>
-                     <InputElement type="password" title="รหัสผ่านเดิม" refer={passwordOldEl}/>
-                     <InputElement type="password" title="รหัสผ่านใหม่" refer={passwordNewEl}/>
-                     <InputElement type="password" title="ยืนยันรหัสผ่านใหม่" refer={confirmPasswordNewEl}/>
+                     <InputElement type="password" title="รหัสผ่านเดิม" refer={passwordOldEl} warning={warningOldPassword}/>
+                     <InputElement type="password" title="รหัสผ่านใหม่" refer={passwordNewEl} warning={warningNewPassword}/>
+                     <InputElement type="password" title="ยืนยันรหัสผ่านใหม่" refer={confirmPasswordNewEl} warning={warningConfirmNewPassword}/>
                   </form>
                </Modal.Body>
                <Modal.Footer>
@@ -231,17 +461,17 @@ function Profile() {
 
             <Modal show={modalInfomation} onClose={onCloseInformation}>
                <Modal.Header>
-                  <h3 className="text-2xl">แก้ไขข้อมูลผู้ใช้งาน</h3>
+                  <div className="text-2xl">แก้ไขข้อมูลผู้ใช้งาน</div>
                </Modal.Header>
                <Modal.Body>
                   <form>
                      <div className={`${status === "user" ? "block" : "hidden"}`}>
-                        <InputElement type="text" title="ชื่อเล่น" refer={updateDisplayNameUserEl}/>
-                        <InputElement type="text" title="อีเมลล์" refer={updateEmailEl}/>
+                        <InputElement type="text" title="ชื่อเล่น" refer={updateDisplayNameUserEl} warning={warningDisplayNameUser}/>
+                        <InputElement type="text" title="อีเมลล์" refer={updateEmailEl} warning={warningEmail}/>
                      </div>
 
                      <div className={`${status === "facebook" ? "block" : "hidden"}`}>
-                        <InputElement type="text" title="ชื่อเล่น" refer={updateDisplayNameFacebookEl}/>
+                        <InputElement type="text" title="ชื่อเล่น" refer={updateDisplayNameFacebookEl} warning={warningDisplayNameFacebook}/>
                      </div>
                   </form>
                </Modal.Body>
@@ -311,7 +541,7 @@ const Buttont = ({ title, color, hover, shadow, onClick }:ButtonProps) => {
 }
 
 interface InputElementProps extends InlineProfileProps {
-   warning?:boolean
+   warning?:WarningModal
 }
 
 const InputElement = ({title, type, refer, warning}:InputElementProps) => {
@@ -319,7 +549,7 @@ const InputElement = ({title, type, refer, warning}:InputElementProps) => {
       <div className="mb-3">
          <label className="block mb-2 text-lg font-medium text-gray-900">{title}</label>
          <input ref={refer} type={type} className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-blue-700 focus:border-blue-700 w-full p-3"/>
-         <div className="text-red-800 mt-1">{warning ? "ยังไม่ได้กรอกข้อมูลฟิลนี้" : null}</div>
+         <div className="text-red-800 mt-1">{warning?.status ? warning.text : null}</div>
       </div>
    )
 }

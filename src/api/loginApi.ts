@@ -30,6 +30,7 @@ export default async function LoginApi( body: LoginMember ): Promise<string | un
          url: url,
          method: "post",
          data: body,
+         headers:{"content-type":"application/json"},
          timeout: 20000,
       })
 

@@ -2,43 +2,23 @@
 import axios, { AxiosError } from "axios"
 
 // declare url variable
-const url = import.meta.env.VITE_URL_DEV
+const url = import.meta.env.VITE_URL_DEV + "/auth/password"
 
-// declare interface for successResponseMember
-interface successResponseMember {
-    message: string
-    displayName:string
-    username:string
-    email:string
+// declare interface for success
+interface successResponse {
+    message: string;
 }
-
-// declare interface for successResponseFacebookMember
-interface successResponseFacebookMember {
-    message: string
-    displayName:string
-    facebookId:string
-    facebookName:string
-}
-
-// declare interface for renewToken
-interface successResponseRenewToken {
-    message: string
-    accessToken:string
-    refreshToken:string
-}
-
 // declare interface for error
-interface errorResponse {
-    message: string
-}
+interface errorResponse extends successResponse {}
 
-export default async function GetMemberApi( token:string , path:string ):Promise<string | undefined | successResponseMember | successResponseFacebookMember | successResponseRenewToken> {
+export default async function UpdatePassword(oldPassword:string, newPassword:string, token:string):Promise<string | undefined> {
     try {
         const patternToken:string = `Bearer ${token}`
         const result = await axios({
-            url:`${url}${path}`,
-            method:"get",
-            headers:{Authorization:patternToken},
+            url:`${url}`,
+            method:"post",
+            data:{oldPassword,newPassword},
+            headers:{Authorization:patternToken,"content-types":"application/json"},
             timeout:20000
         })
         
@@ -46,18 +26,17 @@ export default async function GetMemberApi( token:string , path:string ):Promise
     }catch(err: unknown | AxiosError) {
         if (axios.isAxiosError(err)) {
             const message = (err.response?.data as errorResponse).message
-            console.log(message)
-
+           
             if (message === "must pass Bearer in front of token or haven't token"){
                 return "รูปแบบการส่งไม่ถูกต้อง"
             }else if (message === "expired accessToken") {
                 return "accessToken หมดอายุ"
-            }else if (message === "expired refreshToken") {
-                return "refreshToken หมดอายุ"
             }else if (message === "unauthorization accessToken"){
                 return "accessToken ไม่มีสิทธิเข้าถึง"
-            }else if (message === "unauthorization refreshToken"){
-                return "refreshToken ไม่มีสิทธิเข้าถึง"
+            }else if (message === "need password that will change"){
+                return "ต้องการรหัสผ่านที่จะเปลี่ยน"
+            }else if (message === "old password invalid"){
+                return "รหัสผ่านเดิมไม่ถูกต้อง"
             }else if (message === "occurred error in server") {
                 return "มีข้อผิดพลาดของเซิฟเวอร์"
             }     
