@@ -30,6 +30,11 @@ function NavbarBefore() {
 		sideBar.current?.classList.toggle("-translate-x-full")
   }
 
+  // ฟังชันก์สำหรับหน้าจอขนาดเล็ก กดแล้วปิด sidebar อัตโนมัต
+  const autoDisplaySideBarClickButton = () => {
+    sideBar.current?.classList.add("-translate-x-full")   
+  }
+
   return (
     <React.Fragment>
       {/* Navbar */}
@@ -84,7 +89,7 @@ function NavbarBefore() {
 
         <ul className="flex flex-col items-center px-3 mt-10">
           {Link.map((e, i) => {
-            return <ItemSideBar key={i} path={e} index={i} />
+            return <ItemSideBar key={i} path={e} index={i} onclick={autoDisplaySideBarClickButton} />
           })}
         </ul>
 
@@ -119,13 +124,14 @@ const ItemMenu = ({ path, index }:ItemMenuProps) => {
 // declare interface ItemSideBar
 interface ItemSideBarProps extends ItemMenuProps {
   index:number
+  onclick:() =>void
 } 
 
-const ItemSideBar = ({ path , index }:ItemSideBarProps) => {
+const ItemSideBar = ({ path , index , onclick }:ItemSideBarProps) => {
   const Icon: string[] = ["fa-house", "fa-address-card", "fa-comment", "fa-user-group", "fa-map"]
   
   return (
-    <li className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
+    <li onClick={onclick}  className="w-full text-xl my-2 text-gray-700 font-medium rounded-lg px-1 py-1.5 hover:bg-gray-100 duration-100 transition-colors">
       <NavLink to={`/${path.toLowerCase()}`} className="flex items-center ml-4 w-full h-full">
         <i className={`fa-solid ${Icon[index]} mr-4`}></i>{LinkContent[index]}
       </NavLink>

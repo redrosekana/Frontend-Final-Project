@@ -1,7 +1,7 @@
 function Footer() {
     return (
         <main className="mt-16 lg:mt-40 bg-slate-100 px-5 py-8">
-            <h3 className="text-3xl lg:text-4xl text-center font-bold mt-6">Board Game Recommu</h3>
+            <h3 className="text-3xl lg:text-4xl text-center font-bold mt-6">Board Game RecCommu</h3>
             <div className="text-center mt-4 lg:text-xl">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi inventore quos et illum quaerat optio, saepe minima beatae
             </div>
@@ -16,11 +16,11 @@ function Footer() {
             </div>
 
             <div className="flex flex-col items-center gap-y-4 mt-6 lg:flex-row lg:justify-around">
-                <div className="">
-                    <img src="/skeleton.svg" alt="skeleton" className="w-[60px]" />
+                <div>
+                    <img src="/Logo.png" alt="skeleton" className="w-24 h-24" />
                 </div>
 
-                <div className="text-lg lg:text-xl lg:translate-x-14">&copy; 2023 BoardGame Reccommu. All Rights Reserved. </div>
+                <div className="text-center text-lg lg:text-xl lg:translate-x-14">&copy; 2023 BoardGame RecCommu. All Rights Reserved. </div>
 
                 <div className="flex gap-4">
                     <a href="https://www.facebook.com/nkana.jung" target="_blank"><img src="/facebook.svg" alt="facebook" className="w-[50px] cursor-pointer"/></a>

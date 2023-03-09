@@ -16,8 +16,6 @@ interface InformationEntrieProps {
 // สร้างตัวแปรเก็บ map
 let map:any = ""
 export default function DisplayEntrieMap(props:InformationEntrieProps) {
-   console.log(props)
-
    // อ้างอิงไปยัง element ที่จะแสดงแผนที่
    const mapEl = useRef<HTMLDivElement>(null)
   
@@ -72,7 +70,7 @@ export default function DisplayEntrieMap(props:InformationEntrieProps) {
             <div id="map" ref={mapEl} className="w-full h-full rounded-2xl overflow-hidden"></div>
          </div>
 
-         <div className="p-2 mt-4 lg:text-xl">
+         <div className="p-2 mt-8 lg:text-xl">
             <p> <span className="font-semibold">สถานที่ปัจจุบัน :</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<mark className="bg-green-200">{props.source}</mark></p>
             <p className="mt-2"><span className="font-semibold">สถานที่ปลายทาง :</span>&nbsp;<mark className=" bg-orange-200">{props.destination}</mark></p>
             <p className="mt-2"><span className="font-semibold">ระยะการเดินทาง :</span>&nbsp;&nbsp;<mark className=" bg-blue-200">{(props.distance / 1000).toFixed(1)}</mark> กม.</p>

@@ -47,6 +47,9 @@ function MapAfter() {
     const accessToken: string = cookie.get("accessToken")
     const refreshToken:string = cookie.get("refreshToken")
 
+    // ตัวแปรไว้เช็คตอนเข้าหน้าแรกว่าเข้าถูกวิธีหรือไม่
+    const [approvePage,setApprovePage] = useState<boolean>(false)
+
     // ไว้เก็บรายการข้อมูล ไว้แสดงผลเมื่อคำนวณระยะทาง
     const [entrieShops,setEntrieShops] = useState<InformationEntrieShops[]>([])
     const [entrieShop,setEntrieShop] = useState<InformationEntrieShop | null>(null)
@@ -88,6 +91,7 @@ function MapAfter() {
                 })
             }else {
                 context?.setDisplayName((res as StoreInterface).displayName)
+                setApprovePage(true)
             }
         })
         return () => {}
@@ -109,27 +113,31 @@ function MapAfter() {
         setStatusPageMap(2)
     }
 
-    if (statusPageMap === 1) {
-        return (
-            <main className='max-w-[1400px] mx-auto mt-4 p-5'>
-                <div className='text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-8'>ร้านบอร์ดเกมใกล้เคียง</div>
-                {/* ทำการ sort ข้อมูลตามระยะทางที่สั้นที่สุด */}
-                {entrieShops.sort((a,b) => a.distance - b.distance).map((e,i) => <DisplayEntrieMaps key={i} {...e} clickEntrieMap={clickEntrieMap}/>)}
-                <div className='mt-10'>
-                    <button 
-                        className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
-                        onClick={() => {
-                            setStatusPageMap(0)
-                            setEntrieShops([])
-                        }}>ย้อนกลับ
-                    </button>
-                </div>
-            </main>
-        )
-    }else if (statusPageMap === 2 && entrieShop) {
-        return <DisplayEntrieMap {...entrieShop} setStatusPageMap={setStatusPageMap}/>
-    }else{
-        return <SearchMap setEntrieShops={setEntrieShops} setStatusPageMap={setStatusPageMap} />
+    if (approvePage) {
+        if (statusPageMap === 1) {
+            return (
+                <main className='max-w-[1400px] mx-auto mt-4 p-5'>
+                    <div className='text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-8'>ร้านบอร์ดเกมใกล้เคียง</div>
+                    {/* ทำการ sort ข้อมูลตามระยะทางที่สั้นที่สุด */}
+                    {entrieShops.sort((a,b) => a.distance - b.distance).map((e,i) => <DisplayEntrieMaps key={i} {...e} clickEntrieMap={clickEntrieMap}/>)}
+                    <div className='mt-10'>
+                        <button 
+                            className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
+                            onClick={() => {
+                                setStatusPageMap(0)
+                                setEntrieShops([])
+                            }}>ย้อนกลับ
+                        </button>
+                    </div>
+                </main>
+            )
+        }else if (statusPageMap === 2 && entrieShop) {
+            return <DisplayEntrieMap {...entrieShop} setStatusPageMap={setStatusPageMap}/>
+        }else{
+            return <SearchMap setEntrieShops={setEntrieShops} setStatusPageMap={setStatusPageMap} />
+        }
+    }else {
+        return <div className="border border-black fixed top-0 left-0 right-0 bottom-0 bg-white"></div>
     }
 }
 

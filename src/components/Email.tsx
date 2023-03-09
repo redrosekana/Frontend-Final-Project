@@ -75,7 +75,7 @@ function Email() {
             กรอกอีเมลล์ของคุณ <span className='text-red-700'>*</span>
           </label>
           <input className='mt-3 bg-slate-50 border border-gray-300 rounded-md focus:ring-1 focus:outline-none focus:ring-blue-700 focus:border-blue-700 p-3' 
-            type="email" 
+            type="text" 
             ref={emailEl}
             id="reset-password"
          />

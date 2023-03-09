@@ -22,6 +22,7 @@ interface RecommendEntries {
     name:string
     minplayers:number
     maxplayers:number
+    minage:number
     playingtime:number
     yearpublished:number
     description:string
@@ -145,8 +146,8 @@ function RecommendBefore() {
 // declare interface for ListBoardGameRecommend
 interface ListBoardGameRecommendProps extends RecommendEntries {index?:number}
 
-const ListBoardGameRecommend = ({id, name, minplayers, maxplayers, playingtime, yearpublished, description, image, index}:ListBoardGameRecommendProps) => {
-    const strOptimize1 = description.substring(0,200).replace(/&.*;/ig," ")
+const ListBoardGameRecommend = ({id, name, minplayers, maxplayers, minage, playingtime, yearpublished, description, image, index}:ListBoardGameRecommendProps) => {
+    const strOptimize1 = description.substring(0,300).replace(/&.*;/ig," ")
     const lastIndex = strOptimize1.lastIndexOf(" ")
     const strOptimize2 = strOptimize1.substring(0,lastIndex)
 
@@ -156,7 +157,7 @@ const ListBoardGameRecommend = ({id, name, minplayers, maxplayers, playingtime, 
                 <img src={image} alt="image" className="w-full h-full object-fill rounded-2xl md:h-full" />
             </div>
 
-            <div className="max-w-[400px] w-full mt-6 md:mt-2 md:ml-8 md:max-w-max xl:mt-4">
+            <div className="max-w-[400px] w-full mt-6 md:mt-2 md:ml-8 md:max-w-max">
                 <p className="font-semibold text-3xl">{index !== undefined ? index+1 + ")." : null} {name}</p>
                 <p className="mt-1 font-normal text-xl text-gray-500">{yearpublished}</p>
                 <p className="mt-4 text-xl"><span className="font-semibold">รายละเอียด</span> {strOptimize2} <a className="text-blue-700 underline ml-1" href={`https://boardgamegeek.com/boardgame/${id}`} target="_blank">อ่านต่อ</a></p>
@@ -164,14 +165,17 @@ const ListBoardGameRecommend = ({id, name, minplayers, maxplayers, playingtime, 
                 <div className=" flex justify-center md:justify-start mt-4 gap-x-4">
                     <div className="text-lg  flex flex-col items-center px-2">
                         <img src="/person.png" alt="person" className="max-w-[60px] w-full h-[60px] " />
-                        <span className="font-semibold">จำนวนผู้เล่น</span> {minplayers === maxplayers ? minplayers : `${minplayers}-${maxplayers}`} คน
+                        <span className="text-center mt-1"> <span className="font-semibold">จำนวนผู้เล่น</span> {minplayers === maxplayers ? minplayers : `${minplayers}-${maxplayers}`} คน</span>
                     </div>
                     <div className="text-lg  flex flex-col items-center px-2">
-                    <img src="/time.png" alt="time" className="max-w-[60px] w-full h-[60px] " />
-                        <span className="font-semibold">เวลาในการเล่น</span> {playingtime} นาที
+                        <img src="/time.png" alt="time" className="max-w-[60px] w-full h-[60px] " />
+                        <span className="text-center mt-1"><span className="font-semibold">เวลาในการเล่น</span> {playingtime} นาที</span>
+                    </div>
+                    <div className="text-lg  flex flex-col items-center px-2">
+                        <img src="/age.png" alt="time" className="max-w-[60px] w-full h-[60px] " />
+                        <span className="text-center mt-1"><span className="font-semibold">อายุ</span> {minage} <span className="font-semibold">ปีขึ้นไป</span></span>
                     </div>
                 </div>
-                
             </div>
         </div>
     )

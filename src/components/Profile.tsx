@@ -421,7 +421,7 @@ function Profile() {
                <div className={`${status === "user" ? "block" : "hidden"} max-w-lg w-full`}>
                   <InlineProfile title="ชื่อผู้ใช้งาน" type="text" refer={usernameEl} />
                   <InlineProfile title="ชื่อที่แสดงในเว็บไซต์" type="text" refer={displayNameUserEl} />
-                  <InlineProfile title="อีเมลล์" type="text" refer={emailEl} />
+                  <InlineProfile title="อีเมล" type="text" refer={emailEl} />
                </div>
                <div className={`${status === "facebook" ? "block" : "hidden"} max-w-lg w-full`}>
                   <InlineProfile title="ไอดีเฟสบุ๊ค" type="text" refer={facebookIdEl} />
@@ -430,7 +430,7 @@ function Profile() {
                </div>
                
                <div className=" flex flex-col gap-y-2 max-w-md w-full mb-4">
-                  <label className="text-xl">รายการบอร์ดที่เคยประเมิน</label>
+                  <label className="text-xl">รายการบอร์ดเกมที่เคยประเมิน</label>
                   <ListBoardGame title="เกมยิงม้า" status={4}/>
                   <ListBoardGame title="เกมหั่นผักชี" status={2}/>
                   <ListBoardGame title="เกมอัศวินรัตติกาล" status={1}/>

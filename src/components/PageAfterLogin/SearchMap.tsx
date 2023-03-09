@@ -58,7 +58,7 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 	useEffect(() => {
 		init()
 		return () => {}
-  },[])
+  	},[])
 
 	// ฟังชันก์ในการสร้างแผนที่
 	const init = () => {
@@ -214,43 +214,43 @@ function SearchMap({ setEntrieShops , setStatusPageMap }:SearchMapProps) {
 					</div> 
 				</div>
 			</main>
-
+			{/*flex-shrink-0 sm:w-[56%] lg:w-[65%] xl:w-[65%] */}
 			<main className='max-w-[1400px] mx-auto mt-5 p-5 mb-5'>
 				<div className='text-xl md:text-3xl'>แผนที่</div>
 				<div className='mt-4 flex flex-col justify-center sm:flex-row sm:justify-start'>
-					<div className='flex-shrink-0 sm:w-[56%] lg:w-[65%] xl:w-[70%]'>
-							<div ref={mapEl} className="h-[400px] sm:h-[450px] rounded-2xl overflow-hidden"></div>
+					<div className='max-w-4xl w-full'>
+						<div ref={mapEl} className="w-full h-[400px] sm:h-[450px] rounded-2xl overflow-hidden"></div>
 					</div>
 
-					<div className='self-center sm:self-start w-full'>
-							<form className='relative mx-2 mt-4 sm:mt-0' onSubmit={(ev) => searchPlace(ev)}>   
-								<div className="absolute inset-y-0 left-0 flex items-center pl-3">
-									<svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-								</div>
-								<input 
-									type="text" 
-									placeholder="ค้นหาสถานที่"
-									ref={searchEl} 
-									onInput={suggestInput} 
-									className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500"
-								/>
-								<button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-lg text-sm px-4 py-2 transition-colors duration-200 ease-in">ค้นหา</button>
-							</form>
-							
-							<div className='p-2 ml-2 mt-2'>
-								{listSuggest!.map((e,i) => {
-									return <LiSuggestItem key={i} detail={e.w} doSuggest={doSuggest}/>
-								})}
+					<div className='self-center sm:self-start w-full sm:w-[550px]'>
+						<form className='relative mx-2 mt-4 sm:mt-0' onSubmit={(ev) => searchPlace(ev)}>   
+							<div className="absolute inset-y-0 left-0 flex items-center pl-3">
+								<svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
 							</div>
+							<input 
+								type="text" 
+								placeholder="ค้นหาสถานที่"
+								ref={searchEl} 
+								onInput={suggestInput} 
+								className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500"
+							/>
+							<button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-lg text-sm px-4 py-2 transition-colors duration-200 ease-in">ค้นหา</button>
+						</form>
+						
+						<div className='p-2 ml-2 mt-2'>
+							{listSuggest!.map((e,i) => {
+								return <LiSuggestItem key={i} detail={e.w} doSuggest={doSuggest}/>
+							})}
+						</div>
 
-							<div ref={resultEl} className="p-2"></div>
+						<div ref={resultEl} className="p-2"></div>
 					</div>
 				</div>
 
 				<div className='mt-8 flex justify-center'>
 					<div className='max-w-lg w-full'>
 							<label className='font-medium text-xl'>ที่อยู่ปัจจุบัน</label>
-							<div className="flex items-center justify-center text-center mt-2 border border-gray-700 h-[150px] text-lg rounded" ref={displayAddress}></div>
+							<div className="flex items-center justify-center text-center mt-2 border border-gray-500 h-[150px] text-lg rounded bg-slate-50" ref={displayAddress}></div>
 							<div className='text-end mt-3'>
 								<button onClick={() => calculateDistance(longitude , latitude , source)}
 									className="text-white bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-md text-base px-4 py-2 transition-colors duration-200 ease-in">

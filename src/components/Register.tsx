@@ -10,6 +10,7 @@ import Reload from "./reload"
 
 // import controller
 import { createSwal } from "../controller/createSwal"
+import { ValidateEmail } from "../controller/formatEmail"
 
 // declare interface
 interface RegisterMember {
@@ -42,6 +43,11 @@ function Register() {
       || !(passwordEl.current!.value)
       || !(confirm_passwordEl.current?.value)){
          createSwal("แจ้งเตือน", "โปรดกรอกข้อมูลให้ครบ", "warning", "#ec9e18")
+         return 
+      }
+
+      if (!ValidateEmail(emailEl.current?.value)) {
+         createSwal("แจ้งเตือน", "รูปแบบของอีเมลล์ไม่ถูกต้อง", "warning", "#ec9e18")
          return 
       }
 
@@ -92,7 +98,7 @@ function Register() {
 
                <InputTag nameLabel="ชื่อแสดงในเว็บไซต์" type="text"  id="displayName" refEl={displayNameEl}/>
                <InputTag nameLabel="ชื่อผู้ใช้งาน" type="text"  id="username" refEl={usernameEl}/>
-               <InputTag nameLabel="อีเมลล์" type="email"  id="email" refEl={emailEl}/>
+               <InputTag nameLabel="อีเมลล์" type="text"  id="email" refEl={emailEl}/>
                <InputTag nameLabel="รหัสผ่าน" type="password"  id="password" refEl={passwordEl}/>
                <InputTag nameLabel="ยืนยันรหัสผ่าน" type="password"  id="confirm_password" refEl={confirm_passwordEl}/>
 
