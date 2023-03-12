@@ -137,7 +137,7 @@ function MapAfter() {
             return <SearchMap setEntrieShops={setEntrieShops} setStatusPageMap={setStatusPageMap} />
         }
     }else {
-        return <div className="border border-black fixed top-0 left-0 right-0 bottom-0 bg-white"></div>
+        return <div className="fixed top-0 left-0 right-0 bottom-0 bg-white"></div>
     }
 }
 
