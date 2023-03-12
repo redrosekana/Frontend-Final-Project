@@ -9,6 +9,7 @@ interface responseSuccess {
     name:string
     picture:string
     year:string
+    id:string
 }
 
 export default async function PopularBoardgameApi():Promise<string | undefined | responseSuccess[]> {

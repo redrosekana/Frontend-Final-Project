@@ -14,7 +14,11 @@ interface ListBoardGameItem {
     name:string
     picture:string
     year:string
+    id:string
 }
+
+// declare variable from .env
+const web_boardgame = import.meta.env.VITE_WEBBORADGAME
 
 function HomeBefore() {
     // ไว้เก็บข้อมูลแสดงบอร์ดเกมยอดนิยม
@@ -27,7 +31,6 @@ function HomeBefore() {
     
     // หลังจาก render ก็ดึงข้อมูลบอร์ดเกมยอดนิยมมาแสดงผล
     useEffect(() => {
-
         if (accessToken && refreshToken) {
             navigate("/page/home")
         }else {
@@ -65,7 +68,7 @@ function HomeBefore() {
                     <h3 className='font-bold text-3xl telephone:text-4xl mb-12'>บอร์ดเกมยอดนิยม</h3>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-16'>
                         {popularBoardGame.map((e,i) => {
-                            return <ItemPopular key={i} name={e.name} picture={e.picture} year={e.year} index={i} />
+                            return <ItemPopular key={i} name={e.name} picture={e.picture} year={e.year} id={e.id} index={i} />
                         })}
                     </div>
                 </div>
@@ -80,14 +83,17 @@ interface ItemPopularProps {
     name:string
     picture:string
     year:string
+    id:string
     index:number
 }
 
-const ItemPopular = ({name, picture, year, index}:ItemPopularProps) => {
+const ItemPopular = ({name, picture, year, id, index}:ItemPopularProps) => {
     return (
         <div className="flex flex-col items-center">
-            <div className='max-w-[260px] w-full h-[240px] rounded-xl'>
-                <img src={picture} alt="picture1" className='w-full h-full rounded-xl object-cover' />
+            <div className='max-w-[270px] w-full h-[250px] rounded-xl'>
+                <a href={`${web_boardgame}/${id}`} target="_blank">
+                    <img src={picture} alt="picture1" className='w-full h-full rounded-xl object-fill cursor-pointer hover:scale-[1.03] transition-transform ease-in duration-75' />
+                </a>
             </div>
             <div className='max-w-[260px] w-full mt-5'>
                 {index === 0 || index === 1 || index === 2 ? <div className='w-[65px] h-[25px] inline-block rounded-full bg-orange-500 shadow shadow-orange-800 text-white mb-4 text-center flashingAnimation'>มาแรง {index+1}</div> : null }

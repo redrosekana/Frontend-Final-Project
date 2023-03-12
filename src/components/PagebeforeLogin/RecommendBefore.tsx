@@ -29,6 +29,9 @@ interface RecommendEntries {
     image:string
 }
 
+// declare variable from .env
+const web_boardgame = import.meta.env.VITE_WEBBORADGAME
+
 function RecommendBefore() {
     // ไว้เก็บข้อมูลบอร์ดเกมทั้งหมด เพื่อใช้ทำ search engine
     const [information,setInformation] = useState<string[]>([])
@@ -38,6 +41,7 @@ function RecommendBefore() {
     // ตัวแปรผูกกับ text input element
     const [game, setGame] = useState<string>("")
     const [reload,setReload] = useState<boolean>(false)
+    console.log(web_boardgame)
     
     // หลังจาก render ครั้งแรก ทำการดึงข้อมูลบอร์ดเกมทั้งหมดมาเก็บไว้
     useEffect(() => {
@@ -160,7 +164,7 @@ const ListBoardGameRecommend = ({id, name, minplayers, maxplayers, minage, playi
             <div className="max-w-[400px] w-full mt-6 md:mt-2 md:ml-8 md:max-w-max">
                 <p className="font-semibold text-3xl">{index !== undefined ? index+1 + ")." : null} {name}</p>
                 <p className="mt-1 font-normal text-xl text-gray-500">{yearpublished}</p>
-                <p className="mt-4 text-xl"><span className="font-semibold">รายละเอียด</span> {strOptimize2} <a className="text-blue-700 underline ml-1" href={`https://boardgamegeek.com/boardgame/${id}`} target="_blank">อ่านต่อ</a></p>
+                <p className="mt-4 text-xl"><span className="font-semibold">รายละเอียด</span> {strOptimize2} <a className="text-blue-700 underline ml-1" href={`${web_boardgame}/${id}`} target="_blank">อ่านต่อ</a></p>
                 
                 <div className=" flex justify-center md:justify-start mt-4 gap-x-4">
                     <div className="text-lg  flex flex-col items-center px-2">
