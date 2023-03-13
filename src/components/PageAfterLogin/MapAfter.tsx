@@ -81,6 +81,8 @@ function MapAfter() {
                         })
                     }else if (res === "refreshToken หมดอายุ"){
                         createSwal("ขาดการเชื่อมต่อ", `โปรดทำการเข้าสู่ระบบใหม่`, "warning", "#ec9e18").then(() => {
+                            cookie.remove("accessToken",{path:"/"})
+                            cookie.remove("refreshToken",{path:"/"})
                             navigate("/home")
                         })
                     }else if (res.message === "renew token success") {

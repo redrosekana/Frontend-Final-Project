@@ -41,7 +41,6 @@ function RecommendBefore() {
     // ตัวแปรผูกกับ text input element
     const [game, setGame] = useState<string>("")
     const [reload,setReload] = useState<boolean>(false)
-    console.log(web_boardgame)
     
     // หลังจาก render ครั้งแรก ทำการดึงข้อมูลบอร์ดเกมทั้งหมดมาเก็บไว้
     useEffect(() => {

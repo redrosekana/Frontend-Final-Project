@@ -28,17 +28,17 @@ function HomeBefore() {
     const cookie = new Cookies()
     const accessToken = cookie.get("accessToken")
     const refreshToken = cookie.get("refreshToken")
-    
+
     // หลังจาก render ก็ดึงข้อมูลบอร์ดเกมยอดนิยมมาแสดงผล
     useEffect(() => {
-        if (accessToken && refreshToken) {
-            navigate("/page/home")
-        }else {
+        if (!accessToken && !refreshToken) {
             PopularBoardgameApi().then((res) => {
                 if (!(typeof res === "string") && !(typeof res === "undefined")) {
                     setPopularBoardGame(res)
                 }
             })
+        }else {
+            navigate("/page/home")    
         }
     },[])
 

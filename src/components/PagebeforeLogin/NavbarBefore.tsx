@@ -1,6 +1,7 @@
 // import library
 import React, { useRef, useEffect } from "react"
 import { NavLink } from "react-router-dom"
+import { useNavigate, NavigateFunction } from "react-router-dom"
 
 // link ของ navbar
 const LinkContent:string[] = ["หน้าแรก", "เกี่ยวกับ", "ระบบแนะนำ", "ปาร์ตี้", "แผนที่"]
@@ -9,6 +10,8 @@ const Link:string[] = ["home", "about", "recommend", "party", "map"]
 function NavbarBefore() {
   const buttonHamberger = useRef<HTMLButtonElement>(null)
 	const sideBar = useRef<HTMLDivElement>(null)
+
+  const navigate:NavigateFunction = useNavigate()
 
   useEffect(() => {
     window.addEventListener("resize",autoDisplaySideBar)
@@ -40,7 +43,7 @@ function NavbarBefore() {
       {/* Navbar */}
       <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between items-center">
-          <div className="flex items-center cursor-pointer -translate-x-6">
+          <div className="flex items-center cursor-pointer -translate-x-6" onClick={() => navigate("/home")}>
             <div>
               <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
             </div>

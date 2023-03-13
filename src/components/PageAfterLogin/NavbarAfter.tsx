@@ -72,7 +72,7 @@ function NavbarAfter() {
       {profile ? <ScopeProfile LogoutButton={LogoutButton} /> : null}
       <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
         <div className="flex justify-between">
-          <div className=" flex items-center cursor-pointer -translate-x-6">
+          <div className=" flex items-center cursor-pointer -translate-x-6" onClick={() => navigate("/page/home")}>
             <div>
               <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
             </div>
