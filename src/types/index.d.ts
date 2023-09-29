@@ -1,7 +1,7 @@
 declare global {
-    interface Window {
-        longdo:any
-    }
+  interface Window {
+    longdo: any;
+  }
 }
 
-export = global
+export = global;
