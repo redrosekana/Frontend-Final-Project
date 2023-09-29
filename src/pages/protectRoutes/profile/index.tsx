@@ -99,16 +99,14 @@ function Profile() {
         password_old: passwordOld.trim(),
         password_new: passwordNew.trim(),
       };
+      setModalPassword(false);
       setReload(true);
       await axiosExtra("/auth/password", "post", body, true);
+      
       setReload(false);
-      setModalPassword(false);
-
       toastSuccess("เปลี่ยนรหัสผ่านเรียบร้อย");
     } catch (error) {
-      setModalPassword(false);
       setReload(false);
-
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
 

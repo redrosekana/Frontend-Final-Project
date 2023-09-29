@@ -39,7 +39,7 @@ function Login() {
         false
       );
       setReload(false);
-      toastSuccess(result.data.message);
+      toastSuccess("เข้าสู่ระบบสำเร็จ");
 
       cookie.set("accessToken", result.data.accessToken);
       cookie.set("refreshToken", result.data.refreshToken);
