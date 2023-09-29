@@ -1,73 +1,85 @@
 // import library
-import { useState } from "react"
-import { Route, Routes } from "react-router-dom"
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
 // import css
-import "./App.css"
+import "./App.css";
 
 // import components after login
-import PageAfter from "./components/PageAfterLogin/PageAfter"
-import HomeAfter from "./components/PageAfterLogin/HomeAfter"
-import AboutAfter from "./components/PageAfterLogin/AboutAfter"
-import RecommendAfter from "./components/PageAfterLogin/RecommendAfter"
-import MapAfter from "./components/PageAfterLogin/MapAfter"
-import PartyAfter from "./components/PageAfterLogin/PartyAfter"
-
-import Profile from "./components/Profile"
+import HomeProtect from "./pages/protectRoutes/home";
+import AboutProtect from "./pages/protectRoutes/about";
+import RecommendProtect from "./pages/protectRoutes/recommend";
+import MapAfter from "./pages/protectRoutes/map";
+import PartyProtect from "./pages/protectRoutes/party";
+import Profile from "./pages/protectRoutes/profile";
 
 // import components general
-import Login from "./components/Login"
-import Register from "./components/Register"
-import Email from "./components/Email"
-import ResetPassword from "./components/ResetPassword"
+import Login from "./pages/publicRoutes/login";
+import Register from "./pages/publicRoutes/register";
+import Email from "./pages/publicRoutes/email";
+import ResetPassword from "./pages/publicRoutes/reset-password";
 
 // import components before login
-import PageBefore from "./components/PagebeforeLogin/PageBefore"
-import HomeBefore from "./components/PagebeforeLogin/HomeBefore"
-import AboutBefore from "./components/PagebeforeLogin/AboutBefore"
-import RecommendBefore from "./components/PagebeforeLogin/RecommendBefore"
-import MapBefore from "./components/PagebeforeLogin/MapBefore"
-import PartyBefore from "./components/PagebeforeLogin/PartyBefore"
+import HomePublic from "./pages/publicRoutes/home";
+import RecommendPublic from "./pages/publicRoutes/recommend";
+import MainPublic from "./pages/publicRoutes/Main";
 
-// import context store
-import { Store } from "./context/store"
+import AlertMessage from "./pages/publicRoutes/AlertMessage";
+import MainProtect from "./pages/protectRoutes/Main";
 
 function App() {
-	// ตัวแปรแสดงชื่อเล่นบน navbar
-	const [displayName , setDisplayName] = useState<string>("")
+  return (
+    <>
+      <Routes>
+        {/* public */}
+        <Route path="/" element={<MainPublic />}>
+          <Route index element={<HomePublic />} />
+          <Route path="home" element={<HomePublic />} />
+          <Route path="about" element={<AboutProtect />} />
+          <Route path="recommend" element={<RecommendPublic />} />
+          <Route
+            path="party"
+            element={
+              <AlertMessage
+                title="แจ้งให้ทราบ"
+                text="ต้องการทำการสมัครสมาชิกและเข้าสู่ระบบก่อน"
+                icon="warning"
+                color="#ec9e18"
+              />
+            }
+          />
+          <Route
+            path="map"
+            element={
+              <AlertMessage
+                title="แจ้งให้ทราบ"
+                text="ต้องการทำการสมัครสมาชิกและเข้าสู่ระบบก่อน"
+                icon="warning"
+                color="#ec9e18"
+              />
+            }
+          />
+        </Route>
 
-	return (
-		<Store.Provider value={{displayName,setDisplayName}}>
-			<Routes>
-				{/* ส่วนหน้าที่ยังไม่ได้ login */}
-				<Route path="/" element={<PageBefore/>}>
-					<Route index element={<HomeBefore/>}/>
-					<Route path="home" element={<HomeBefore/>}/>
-					<Route path="about" element={<AboutBefore/>}/>
-					<Route path="recommend" element={<RecommendBefore/>}/>
-					<Route path="party" element={<MapBefore/>}/>
-					<Route path="map" element={<PartyBefore/>}/>
-				</Route>
-				
-				{/* general */}
-				<Route path="login" element={<Login />} />
-				<Route path="register" element={<Register />} />
-				<Route path="email" element={<Email/>} />
-				<Route path="resetPassword" element={<ResetPassword/>} />
-				<Route path="profile" element={<Profile/>}/>
-				
-				{/* ส่วนหน้าที่ login แล้ว */}
-				<Route path="page" element={<PageAfter />}>
-					<Route index element={<HomeAfter/>}/>
-					<Route path="home" element={<HomeAfter/>}/>
-					<Route path="about" element={<AboutAfter/>}/>
-					<Route path="recommend" element={<RecommendAfter/>}/>
-					<Route path="party" element={<PartyAfter/>}/>
-					<Route path="map" element={<MapAfter/>} />
-				</Route>
-			</Routes>
-		</Store.Provider>
-	)
+        {/* general */}
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="email" element={<Email />} />
+        <Route path="resetPassword" element={<ResetPassword />} />
+
+        {/* authentication that must protect */}
+        <Route path="page" element={<MainProtect />}>
+          <Route index element={<HomeProtect />} />
+          <Route path="home" element={<HomeProtect />} />
+          <Route path="about" element={<AboutProtect />} />
+          <Route path="recommend" element={<RecommendProtect />} />
+          <Route path="party" element={<PartyProtect />} />
+          <Route path="map" element={<MapAfter />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
+      </Routes>
+    </>
+  );
 }
 
 export default App;

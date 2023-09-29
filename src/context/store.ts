@@ -1,11 +1,12 @@
 // import library
-import React from "react"
-import { createContext } from "react"
+import { createContext } from "react";
 
 // declare interface
-export interface DisplayNameContextProps {
-    displayName: string
-    setDisplayName: React.Dispatch<React.SetStateAction<string>>
+export interface Context {
+  displayName: string;
+  username: string;
+  email: string;
+  provider: string;
 }
 
-export const Store = createContext<DisplayNameContextProps | null>(null)
+export const Store = createContext<Context | null>(null);
