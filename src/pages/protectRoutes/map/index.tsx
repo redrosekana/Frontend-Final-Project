@@ -91,7 +91,7 @@ function MapProtect() {
         </div>
       </main>
     );
-  } else if (stagePage === "displayDetailMap") {
+  } else {
     return (
       <>
         <DisplayDetailMap
