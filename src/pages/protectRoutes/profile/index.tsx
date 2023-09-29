@@ -102,7 +102,7 @@ function Profile() {
       setModalPassword(false);
       setReload(true);
       await axiosExtra("/auth/password", "post", body, true);
-      
+
       setReload(false);
       toastSuccess("เปลี่ยนรหัสผ่านเรียบร้อย");
     } catch (error) {
