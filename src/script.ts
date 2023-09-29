@@ -5,6 +5,9 @@ const headEl = document.querySelector("head");
 const scriptLongoMapEl = document.createElement("script");
 const scriptFontawsome = document.createElement("script");
 
+console.log(VITE_URL_APIKEY);
+console.log(VITE_URL_AWESOME);
+
 scriptLongoMapEl.src = `https://api.longdo.com/map/?key=${VITE_URL_APIKEY}`;
 scriptFontawsome.src = `https://kit.fontawesome.com/${VITE_URL_AWESOME}.js`;
 scriptFontawsome.crossOrigin = "anonymous";
