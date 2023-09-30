@@ -83,8 +83,6 @@ function Register() {
 
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
-        } else if (data.message === "displayName is repeated") {
-          toastError("ชื่อแสดงในเว็บไซต์ถูกใช้งานแล้ว");
         } else if (data.message === "username is repeated") {
           toastError("ชื่อผู้ใช้งานถูกใช้งานแล้ว");
         } else if (data.message === "email is repeated") {

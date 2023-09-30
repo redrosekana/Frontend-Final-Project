@@ -5,8 +5,14 @@ import { isAxiosError } from "axios";
 import Cookies from "universal-cookie";
 import { ToastContainer } from "react-toastify";
 
+// firebase
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../../config/firebase";
+import { FirebaseError } from "firebase/app";
+
 // components
 import Reload from "../../../components/reload";
+import GoogleButton from "./GoogleButton";
 
 // utils
 import { axiosExtra } from "../../../utils/axiosExtra";
@@ -67,6 +73,41 @@ function Login() {
     }
   };
 
+  const onLoginGoogle = async () => {
+    const googleProvider = new GoogleAuthProvider();
+    try {
+      const googleResult = await signInWithPopup(auth, googleProvider);
+      const credential = GoogleAuthProvider.credentialFromResult(googleResult);
+
+      const body = {
+        firebase_token: await googleResult.user.getIdToken(),
+        google_token: credential?.idToken,
+      };
+
+      setReload(true);
+      const result = await axiosExtra(
+        "/auth/login-google",
+        "post",
+        body,
+        false
+      );
+      setReload(false);
+      toastSuccess("เข้าสู่ระบบสำเร็จ");
+
+      cookie.set("accessToken", result.data.accessToken);
+      cookie.set("refreshToken", result.data.refreshToken);
+
+      setTimeout(() => {
+        navigate("/page/home");
+      }, 2500);
+    } catch (error) {
+      const credential = GoogleAuthProvider.credentialFromError(
+        error as FirebaseError
+      );
+      console.log(credential);
+    }
+  };
+
   return (
     <>
       {reload ? <Reload /> : null}
@@ -88,7 +129,7 @@ function Login() {
             ) : null}
           </div>
 
-          <div className="">
+          <div>
             <input
               type="password"
               className="mb-1 bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-1 focus:ring-blue-700 focus:border-blue-700 focus:outline-none w-full p-4"
@@ -105,21 +146,25 @@ function Login() {
             <NavLink to={"/email"}>ลืมรหัสผ่าน</NavLink>
           </div>
 
-          <NavLink to={"/home"}>
-            <button
-              type="button"
-              className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-full telephone:w-32 px-5 py-2 text-center transition-colors duration-200 ease-in"
-            >
-              กลับหน้าหลัก
-            </button>
-          </NavLink>
+          <div className="flex flex-col telephone:flex-row gap-x-2">
+            <NavLink to={"/home"}>
+              <button
+                type="button"
+                className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-full telephone:w-32 h-10 px-5 py-2 text-center transition-colors duration-200 ease-in"
+              >
+                กลับหน้าหลัก
+              </button>
+            </NavLink>
 
-          <button
-            type="submit"
-            className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-full telephone:w-28 px-5 py-2 text-center mt-3 telephone:ml-2 telephone:mt-0 transition-colors duration-200 ease-in"
-          >
-            เข้าสู่ระบบ
-          </button>
+            <GoogleButton onLoginGoogle={onLoginGoogle} />
+
+            <button
+              type="submit"
+              className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-full telephone:w-32 mt-2 telephone:mt-0 h-10 px-5 py-2 text-center transition-colors duration-200 ease-in"
+            >
+              เข้าสู่ระบบ
+            </button>
+          </div>
         </form>
         <ToastContainer />
       </main>

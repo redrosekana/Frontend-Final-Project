@@ -125,16 +125,25 @@ function Profile() {
 
   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนแปลงข้อมูล
   const clickUpdateInformation = async () => {
-    if (!displayName.trim() || !username.trim()) {
-      return;
+    if (context?.provider === "password") {
+      if (!displayName.trim() || !username.trim()) return;
+
+      if (
+        displayName.trim() === context?.displayName &&
+        username.trim() === context.username
+      ) {
+        setModalInformation(false);
+        return;
+      }
     }
 
-    if (
-      displayName.trim() === context?.displayName &&
-      username.trim() === context.username
-    ) {
-      setModalInformation(false);
-      return;
+    if (context?.provider === "google") {
+      if (!displayName.trim()) return;
+
+      if (displayName.trim() === context?.displayName) {
+        setModalInformation(false);
+        return;
+      }
     }
 
     try {
@@ -161,8 +170,6 @@ function Profile() {
 
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
-        } else if (data.message === "displayName is repeated") {
-          toastError("ชื่อที่แสดงในเว็บไซต์ถูกใช้งานแล้ว");
         } else if (data.message === "username is repeated") {
           toastError("ชื่อผู้ใช้งานถูกใช้งานแล้ว");
         } else {
@@ -203,11 +210,6 @@ function Profile() {
             </div>
           ) : (
             <div className="max-w-lg w-full">
-              <InputProfile
-                title="ชื่อผู้ใช้งาน"
-                type="text"
-                value={username}
-              />
               <InputProfile
                 title="ชื่อที่แสดงในเว็บไซต์"
                 type="text"
@@ -324,7 +326,17 @@ function Profile() {
                     onInput={setUsername}
                   />
                 </div>
-              ) : null}
+              ) : (
+                <div>
+                  <InputOnModalInformation
+                    type="text"
+                    title="ชื่อที่แสดงในเว็บไซต์"
+                    value={displayName}
+                    text="โปรดกรอกชื่อที่แสดงในเว็บไซต์"
+                    onInput={setDisplayName}
+                  />
+                </div>
+              )}
             </form>
           </Modal.Body>
           <Modal.Footer>
