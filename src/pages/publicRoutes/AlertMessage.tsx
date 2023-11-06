@@ -16,12 +16,7 @@ function AlertMessage({ title, text, icon, color }: AlertMessageProps) {
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
-    createSwal(
-      "แจ้งให้ทราบ",
-      "ต้องการทำการสมัครสมาชิกและเข้าสู่ระบบก่อน",
-      "warning",
-      "#ec9e18"
-    ).then(() => {
+    createSwal(title, text, icon, color).then(() => {
       navigate("/home");
     });
 

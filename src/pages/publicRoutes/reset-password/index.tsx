@@ -15,7 +15,7 @@ import { toastSuccess, toastError } from "../../../utils/toastExtra";
 import { ErrorResponse } from "../../../interfaces/axios.interface";
 
 // components
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 import { axiosExtra } from "../../../utils/axiosExtra";
 
 export default function ResetPassword() {

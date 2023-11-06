@@ -11,7 +11,7 @@ import { auth } from "../../../config/firebase";
 import { FirebaseError } from "firebase/app";
 
 // components
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 import GoogleButton from "./GoogleButton";
 
 // utils
@@ -52,7 +52,7 @@ function Login() {
 
       setTimeout(() => {
         navigate("/page/home");
-      }, 2500);
+      }, 2000);
     } catch (error) {
       setReload(false);
       if (isAxiosError(error)) {
@@ -99,7 +99,7 @@ function Login() {
 
       setTimeout(() => {
         navigate("/page/home");
-      }, 2500);
+      }, 2000);
     } catch (error) {
       const credential = GoogleAuthProvider.credentialFromError(
         error as FirebaseError

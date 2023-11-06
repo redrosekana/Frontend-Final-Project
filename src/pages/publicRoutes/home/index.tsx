@@ -7,7 +7,7 @@ import { axiosExtra } from "../../../utils/axiosExtra";
 
 // components
 import ItemListPopular from "./ItemListPopular";
-import Footer from "../../../components/footer";
+import Footer from "../../../components/Footer";
 
 interface ItemListPopularBoardgame {
   name: string;

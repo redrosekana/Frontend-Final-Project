@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DisplayEntriesMap from "./DisplayEntriesMap";
 import DisplayDetailMap from "./DisplayDetailMap";
 import SearchMap from "./SearchMap";
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 
 // interface
 import { InformationEntrieShop } from "../../../interfaces/informationEntrieShop.interface";

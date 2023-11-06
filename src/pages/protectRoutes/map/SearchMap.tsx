@@ -7,7 +7,7 @@ import { createSwal } from "../../../utils/createSwal";
 // component
 import SuggestItem from "./SuggestItem";
 import AnimationCarTranfer from "./AnimationCarTranfer";
-import ItemAdvice from "./ItemAdvice";
+import ItemAdvice from "../../../components/ItemAdvice";
 import { CalculateDistanceApi } from "../../../utils/calculateDistanceApi";
 
 // constants
@@ -186,7 +186,7 @@ function SearchMap({
   return (
     <>
       <main className="max-w-[1400px] mx-auto mt-8 p-5">
-        <div className="">
+        <div>
           <h3 className="text-xl sm:text-3xl xl:text-5xl font-bold text-center">
             ค้นหาร้านบอร์ดเกมใกล้เคียง
           </h3>

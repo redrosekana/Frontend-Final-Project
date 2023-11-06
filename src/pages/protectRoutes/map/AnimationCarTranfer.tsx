@@ -1,6 +1,6 @@
 const AnimationCarTranfer = () => {
   return (
-    <div className="container-wrapper mt-8 border border-1 border-black">
+    <div className="container-wrapper mt-8">
       <div className="loop-wrapper">
         <div className="mountain"></div>
         <div className="hill"></div>

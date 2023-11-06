@@ -8,7 +8,7 @@ import { isAxiosError } from "axios";
 import { ErrorResponse } from "../../../interfaces/axios.interface";
 
 // import component reload
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 import Input from "./Input";
 
 // utils

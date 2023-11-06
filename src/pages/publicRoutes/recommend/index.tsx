@@ -1,19 +1,18 @@
 // import library
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-
-import { axiosExtra } from "../../../utils/axiosExtra";
 import { isAxiosError } from "axios";
 
 // import controller
 import { createSwal } from "../../../utils/createSwal";
 
 // import components
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 import ItemBoardgameRecommend from "./ItemBoardgameRecommend";
 
 // utils
-import { toastError, toastSuccess } from "../../../utils/toastExtra";
+import { toastError } from "../../../utils/toastExtra";
+import { axiosExtra } from "../../../utils/axiosExtra";
 
 // interface
 import { ErrorResponse } from "../../../interfaces/axios.interface";
@@ -65,7 +64,7 @@ function RecommendPublic() {
     if (!boardgameSearch) {
       return false;
     } else {
-      return boardgame.includes(boardgameSearch);
+      return new RegExp(boardgameSearch, "ig").test(boardgame);
     }
   };
 
@@ -92,6 +91,7 @@ function RecommendPublic() {
       const body = { boardgame_name: boardgameSearch };
       setReload(true);
       const result = await axiosExtra("/boardgames/guest", "post", body, false);
+
       setBoardgameSearch("");
       setBoardgameCurrent(result.data.data.boardgameCurrentResult);
       setBoardgameRecommend(result.data.data.boardgameEntriesResult);
@@ -102,7 +102,6 @@ function RecommendPublic() {
 
       if (isAxiosError(error)) {
         const data = error.response?.data as ErrorResponse;
-        console.log(data);
         toastError("เกิดข้อผิดพลาดในการทำรายการ");
       } else {
         console.log(error);

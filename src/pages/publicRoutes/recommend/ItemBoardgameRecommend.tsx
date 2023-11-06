@@ -25,10 +25,10 @@ const ItemBoardgameRecommend = ({
 }: ItemBoardgameRecommendProps) => {
   const { VITE_WEBBORADGAME } = import.meta.env;
 
-  let descriptionOptimize = description.replace(/\&.*\;/gi, "");
-  descriptionOptimize = descriptionOptimize.slice(0, 200);
+  let descriptionOptimize = description.slice(0, 250);
   let orderBackspace = descriptionOptimize.lastIndexOf(" ");
   descriptionOptimize = descriptionOptimize.slice(0, orderBackspace);
+  descriptionOptimize = descriptionOptimize.replace(/\&.*\;/gi, "");
 
   return (
     <div className="p-6 flex flex-col items-center md:flex-row md:items-start mb-4">

@@ -1,9 +1,9 @@
 // import library
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 
 // components
-import Footer from "../../../components/footer";
+import Footer from "../../../components/Footer";
 import ItemListPopular from "./ItemListPopular";
 
 // utils

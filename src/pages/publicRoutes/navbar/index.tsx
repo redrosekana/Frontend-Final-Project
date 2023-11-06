@@ -36,7 +36,7 @@ function NavbarPublic() {
     sideBar.current?.classList.toggle("-translate-x-full");
   };
 
-  // ฟังชันก์สำหรับหน้าจอขนาดเล็ก กดแล้วปิด sidebar อัตโนมัต
+  // ฟังชันก์สำหรับหน้าจอขนาดเล็ก กดแล้วปิด sidebar อัตโนมัติ
   const autoDisplaySideBarClickButton = () => {
     sideBar.current?.classList.add("-translate-x-full");
   };

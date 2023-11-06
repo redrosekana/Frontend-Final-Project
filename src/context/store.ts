@@ -1,12 +1,10 @@
 // import library
-import { createContext } from "react";
+import React, { createContext } from "react";
 
 // declare interface
 export interface Context {
-  displayName: string;
-  username: string;
-  email: string;
-  provider: string;
+  isScopeProfile: boolean;
+  setIsScopeProfile: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Store = createContext<Context | null>(null);

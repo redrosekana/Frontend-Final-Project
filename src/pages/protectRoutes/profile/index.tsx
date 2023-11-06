@@ -1,5 +1,5 @@
 // import library
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
@@ -8,8 +8,11 @@ import { Modal } from "flowbite-react";
 // assets
 import avatar from "../../../assets/avatar.svg";
 
+import type { RootState } from "../../../store/store";
+import { useAppSelector } from "../../../store/hook";
+
 // component
-import Reload from "../../../components/reload";
+import Reload from "../../../components/Reload";
 import Button from "./Button";
 import InputProfile from "./InputProfile";
 import BoardgameListEvaluted from "./BoardgameListUsedEvalute";
@@ -27,7 +30,7 @@ import { toastError, toastSuccess } from "../../../utils/toastExtra";
 import { ErrorResponse } from "../../../interfaces/axios.interface";
 
 function Profile() {
-  const context = useContext(Store);
+  const selector = useAppSelector((state: RootState) => state.users);
   const [reload, setReload] = useState<boolean>(false);
 
   // ตัวแปรควบคุมการเปิดปิด modal
@@ -35,10 +38,10 @@ function Profile() {
   const [modalInformation, setModalInformation] = useState<boolean>(false);
 
   const [displayName, setDisplayName] = useState<string>(
-    context?.displayName as string
+    selector.displayName as string
   );
-  const [username, setUsername] = useState<string>(context?.username as string);
-  const [email, setEmail] = useState<string>(context?.email as string);
+  const [username, setUsername] = useState<string>(selector.username as string);
+  const [email, setEmail] = useState<string>(selector.email as string);
   const [passwordOld, setPasswordOld] = useState<string>("");
   const [passwordNew, setPasswordNew] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -66,8 +69,8 @@ function Profile() {
   }, [modalPassword]);
 
   useEffect(() => {
-    setDisplayName(context?.displayName as string);
-    setUsername(context?.username as string);
+    setDisplayName(selector.displayName as string);
+    setUsername(selector.username as string);
   }, [modalInformation]);
 
   useEffect(() => {
@@ -125,22 +128,22 @@ function Profile() {
 
   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนแปลงข้อมูล
   const clickUpdateInformation = async () => {
-    if (context?.provider === "password") {
+    if (selector.provider === "password") {
       if (!displayName.trim() || !username.trim()) return;
 
       if (
-        displayName.trim() === context?.displayName &&
-        username.trim() === context.username
+        displayName.trim() === selector.displayName &&
+        username.trim() === selector.username
       ) {
         setModalInformation(false);
         return;
       }
     }
 
-    if (context?.provider === "google") {
+    if (selector.provider === "google") {
       if (!displayName.trim()) return;
 
-      if (displayName.trim() === context?.displayName) {
+      if (displayName.trim() === selector.displayName) {
         setModalInformation(false);
         return;
       }
@@ -194,7 +197,7 @@ function Profile() {
             <img src={avatar} alt="avatar" className="max-w-[300px] w-full" />
           </div>
 
-          {context?.provider === "password" ? (
+          {selector.provider === "password" ? (
             <div className="max-w-lg w-full">
               <InputProfile
                 title="ชื่อผู้ใช้งาน"
@@ -236,7 +239,7 @@ function Profile() {
               shadow="red-400"
             />
           </NavLink>
-          {context?.provider === "password" ? (
+          {selector.provider === "password" ? (
             <Button
               onClick={openPasswordButton}
               title="เปลี่ยนรหัสผ่าน"
@@ -309,7 +312,7 @@ function Profile() {
           </Modal.Header>
           <Modal.Body>
             <form>
-              {context?.provider === "password" ? (
+              {selector.provider === "password" ? (
                 <div>
                   <InputOnModalInformation
                     type="text"
