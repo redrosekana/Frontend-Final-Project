@@ -2,6 +2,7 @@ export interface UserState {
   displayName?: string;
   username?: string;
   email?: string;
+  urlAvatar?: string;
   provider?: string;
   ownerParty?: MemberParty;
   memberParty?: OwnerParty;
@@ -14,8 +15,10 @@ interface MemberParty {
   category: string;
   duration: number;
   place: string;
+  description: string;
   countMember: number;
   owner: Owner;
+  member: Member[];
 }
 
 interface OwnerParty {
@@ -25,11 +28,17 @@ interface OwnerParty {
   category: string;
   duration: number;
   place: string;
+  description: string;
   countMember: number;
   owner: Owner;
+  member: Member[];
 }
 
 interface Owner {
+  _id: string;
   displayName: string;
   email: string;
+  urlAvatar: string;
 }
+
+interface Member extends Owner {}

@@ -11,11 +11,14 @@ export const userSlice = createSlice({
       state.displayName = action.payload.displayName;
       state.username = action.payload.username;
       state.email = action.payload.email;
+      state.urlAvatar = action.payload.urlAvatar;
       state.provider = action.payload.provider;
       state.memberParty = action.payload.memberParty;
       state.ownerParty = action.payload.ownerParty;
     },
-    logoutRedux() {},
+    logoutRedux() {
+      return initialState;
+    },
   },
 });
 

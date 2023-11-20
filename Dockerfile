@@ -1,7 +1,7 @@
 ARG NODE_VERSION=18.16.0
-
 FROM node:${NODE_VERSION}-alpine as builder
 WORKDIR /usr/src/app
+
 COPY package*.json .
 RUN npm install
 COPY . .
