@@ -55,7 +55,7 @@ function Router() {
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="email" element={<Email />} />
-      <Route path="resetPassword" element={<ResetPassword />} />
+      <Route path="reset-password" element={<ResetPassword />} />
 
       {/* authentication routes */}
       <Route path="page" element={<ProtectRoute />}>
