@@ -7,10 +7,11 @@ import DisplayDetailMap from "./components/DisplayDetailMap";
 import SearchMap from "./components/SearchMap";
 import Reload from "../../../components/Reload";
 
-// interface
-import { InformationEntrieShop } from "../../../types/informationEntrieShopTypes";
+// types
+import { StagePage } from "./types/MapTypes";
 
-type StagePage = "searchMap" | "entriesMap" | "displayDetailMap";
+// global types
+import { InformationEntrieShop } from "../../../types/informationEntrieShopTypes";
 
 function MapProtect() {
   // ไว้เก็บรายการข้อมูล ไว้แสดงผลเมื่อคำนวณระยะทาง
@@ -29,30 +30,7 @@ function MapProtect() {
   }, []);
 
   // ฟังชันก์เมื่อมีการกดเพื่อดูระยะทางในแผนที่แต่ละร้านบอร์ดเกม
-  const clickDetailMap = (
-    distance: number,
-    sourceAddress: string,
-    destinationAddress: string,
-    sourceLongitude: number,
-    sourceLatitude: number,
-    destinationLongitude: number,
-    destinationLatitude: number,
-    destinationProvince: string,
-    destinationTel: string,
-    destinationContact: string
-  ) => {
-    const information = {
-      distance,
-      sourceAddress,
-      destinationAddress,
-      sourceLongitude,
-      sourceLatitude,
-      destinationLongitude,
-      destinationLatitude,
-      destinationProvince,
-      destinationTel,
-      destinationContact,
-    };
+  const clickDetailMap = (information: InformationEntrieShop) => {
     setEntrieShop(information);
     setStagePage("displayDetailMap");
   };
@@ -81,8 +59,8 @@ function MapProtect() {
             .map((entrie, index) => (
               <DisplayEntriesMap
                 key={index}
-                {...entrie}
                 clickDetailMap={clickDetailMap}
+                {...entrie}
               />
             ))}
         </div>

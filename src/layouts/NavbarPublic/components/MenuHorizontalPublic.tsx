@@ -4,9 +4,9 @@ import { NavLink } from "react-router-dom";
 import { LinkThaiContent } from "../../../data/LinkEntries";
 
 // types
-import { MenuHorizontalProps } from "../types/MenuHorizontal";
+import { MenuHorizontalPublicProps } from "../types/MenuHorizontalPublicTypes";
 
-const MenuHorizontal = ({ path, index }: MenuHorizontalProps) => {
+const MenuHorizontalPublic = ({ path, index }: MenuHorizontalPublicProps) => {
   return (
     <NavLink
       to={`/${path.toLowerCase()}`}
@@ -19,4 +19,4 @@ const MenuHorizontal = ({ path, index }: MenuHorizontalProps) => {
   );
 };
 
-export default MenuHorizontal;
+export default MenuHorizontalPublic;

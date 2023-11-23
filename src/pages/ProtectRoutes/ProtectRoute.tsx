@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { isAxiosError } from "axios";
 import {
   Outlet,
   Navigate,
@@ -7,14 +8,13 @@ import {
   useLocation,
   Location,
 } from "react-router-dom";
-import { isAxiosError } from "axios";
-import Cookies from "universal-cookie";
 
 // types
 import { ErrorResponse } from "../../types/ErrorResponseTypes";
 
 // hooks
 import useAxios from "../../hooks/useAxios";
+import useCookie from "../../hooks/useCookie";
 
 // utils
 import { axiosRenewToken } from "../../utils/axiosRenewToken";
@@ -30,13 +30,13 @@ import { loginRedux } from "../../store/userSlice";
 import NavbarProtect from "../../layouts/NavbarProtect/NavbarProtect";
 
 const ProtectRoute = () => {
-  const cookies = new Cookies();
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
-
   const dispatch = useAppDispatch();
 
   const [isScopeProfile, setIsScopeProfile] = useState<boolean>(false);
+  const [accessToken, setAccessToken] = useCookie("accessToken", null);
+  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
 
   // for check authentication
   const [permit, setPermit] = useState<boolean | string>("none");
@@ -49,6 +49,7 @@ const ProtectRoute = () => {
   useEffect(() => {
     useAxios("/auth/detail-user", "get", false, true)
       .then((result) => {
+        console.log(result);
         dispatch(
           loginRedux({
             displayName: result.data.data.displayName,
@@ -74,19 +75,17 @@ const ProtectRoute = () => {
                 false,
                 true
               );
-              cookies.set("accessToken", resultRenewToken.data.accessToken);
-              cookies.set("refreshToken", resultRenewToken.data.refreshToken);
+              setAccessToken(resultRenewToken.data.accessToken);
+              setRefreshToken(resultRenewToken.data.refreshToken);
               window.location.reload();
             } catch (error) {
               setExpireToken(true);
               console.log(error);
             }
           } else {
-            console.log(error);
             navigate("/login");
           }
         } else {
-          console.log(error);
           navigate("/login");
         }
       });

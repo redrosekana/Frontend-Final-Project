@@ -1,15 +1,19 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Cookies from "universal-cookie";
+
+// hooks
+import useCookie from "../../hooks/useCookie";
 
 // Layouts
 import NavbarPublic from "./Navbar/Navbar";
 
 const PublicRoute = () => {
+  const [accessToken, setAccessToken] = useCookie("accessToken", null);
+  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
+
   useEffect(() => {
-    const cookies = new Cookies();
-    cookies.remove("accessToken");
-    cookies.remove("refreshToken");
+    setAccessToken(null);
+    setRefreshToken(null);
   }, []);
 
   return (

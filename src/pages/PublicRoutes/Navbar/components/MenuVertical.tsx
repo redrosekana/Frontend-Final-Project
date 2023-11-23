@@ -1,12 +1,9 @@
 import { NavLink } from "react-router-dom";
 
-// constants
-import { LinkThaiContent, LinkIcon } from "../../../../data/LinkEntries";
+// types
+import { MenuVerticalProps } from "../types/MenuVerticalTypes";
 
-// components
-import { MenuVerticalProps } from "../types/MenuVertical";
-
-const MenuVertical = ({ path, index, onclick }: MenuVerticalProps) => {
+const MenuVertical = ({ path, name, icon, onclick }: MenuVerticalProps) => {
   return (
     <li
       onClick={onclick}
@@ -16,8 +13,8 @@ const MenuVertical = ({ path, index, onclick }: MenuVerticalProps) => {
         to={`/${path.toLowerCase()}`}
         className="flex items-center ml-4 w-full h-full"
       >
-        <i className={`fa-solid ${LinkIcon[index]} mr-4`}></i>
-        {LinkThaiContent[index]}
+        <i className={`fa-solid ${icon} mr-4`}></i>
+        {name}
       </NavLink>
     </li>
   );

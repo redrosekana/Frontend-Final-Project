@@ -1,9 +1,8 @@
-// import library
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, NavigateFunction, NavLink } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
-import Cookies from "universal-cookie";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 // firebase
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -15,32 +14,41 @@ import Reload from "../../../components/Reload";
 
 // components
 import GoogleButton from "./components/GoogleButton";
-import LoginTextInput from "./components/TextInput";
+import LoginTextInput from "./components/LoginTextInput";
+
+// global types
+import { ErrorResponse } from "../../../types/ErrorResponseTypes";
+
+// types
+import { FormLogin } from "./types/LoginTypes";
+
+// hooks
+import useAxios from "../../../hooks/useAxios";
+import useCookie from "../../../hooks/useCookie";
 
 // utils
-import { axiosExtra } from "../../../utils/axiosExtra";
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
 
-// interface
-import { ErrorResponse } from "../../../types/ErrorResponseTypes";
-import useAxios from "../../../hooks/useAxios";
-
 function Login() {
-  const cookie = new Cookies();
   const navigate: NavigateFunction = useNavigate();
 
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [accessToken, setAccessToken] = useCookie("accessToken", null);
+  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
   const [reload, setReload] = useState<boolean>(false);
 
-  const onSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    setIsSubmit(true);
-    if (!username.trim() || !password.trim()) return;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormLogin>();
 
+  const onSubmit: SubmitHandler<FormLogin> = async (data: FormLogin) => {
     try {
-      const body = { username: username.trim(), password: password.trim() };
+      const body = {
+        username: data.username.trim(),
+        password: data.password.trim(),
+      };
+
       setReload(true);
       const result = await useAxios(
         "/auth/login-password",
@@ -50,19 +58,18 @@ function Login() {
       );
 
       setReload(false);
+      setAccessToken(result.data.accessToken);
+      setRefreshToken(result.data.refreshToken);
       toastSuccess("เข้าสู่ระบบสำเร็จ");
-
-      cookie.set("accessToken", result.data.accessToken);
-      cookie.set("refreshToken", result.data.refreshToken);
 
       setTimeout(() => {
         navigate("/page/home");
       }, 2000);
     } catch (error) {
       setReload(false);
+
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "there is no username in the system") {
@@ -73,7 +80,6 @@ function Login() {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
       } else {
-        console.log(error);
         toastError("เกิดข้อผิดพลาดในการทำรายการ");
       }
     }
@@ -92,11 +98,11 @@ function Login() {
 
       setReload(true);
       const result = await useAxios("/auth/login-google", "post", body, false);
-      setReload(false);
-      toastSuccess("เข้าสู่ระบบสำเร็จ");
 
-      cookie.set("accessToken", result.data.accessToken);
-      cookie.set("refreshToken", result.data.refreshToken);
+      setReload(false);
+      setAccessToken(result.data.accessToken);
+      setRefreshToken(result.data.refreshToken);
+      toastSuccess("เข้าสู่ระบบสำเร็จ");
 
       setTimeout(() => {
         navigate("/page/home");
@@ -114,7 +120,10 @@ function Login() {
     <>
       {reload ? <Reload /> : null}
       <main className="container max-w-7xl w-full min-h-screen mx-auto flex justify-center items-center">
-        <form className="max-w-2xl w-full p-5" onSubmit={(ev) => onSubmit(ev)}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="max-w-2xl w-full p-5"
+        >
           <h1 className="font-bold text-center mb-10 text-3xl telephone:text-4xl sm:text-5xl lg:text-6xl">
             Board Game Recommu
           </h1>
@@ -122,10 +131,11 @@ function Login() {
             <LoginTextInput
               type="text"
               placeholder="ชื่อผู้ใช้งาน (username)"
-              value={username}
-              onInput={(ev) => setUsername(ev.currentTarget.value)}
+              name="username"
+              register={register}
+              required
             />
-            {isSubmit && !username ? (
+            {errors.username?.type === "required" ? (
               <span className="text-red-700 ml-1">โปรดกรอกชื่อผู้ใช้งาน</span>
             ) : null}
           </div>
@@ -134,11 +144,12 @@ function Login() {
             <LoginTextInput
               type="password"
               placeholder="รหัสผ่าน (password)"
-              value={password}
-              onInput={(ev) => setPassword(ev.currentTarget.value)}
+              name="password"
+              register={register}
+              required
             />
 
-            {isSubmit && !password ? (
+            {errors.password?.type === "required" ? (
               <span className="text-red-700 ml-1">โปรดกรอกรหัสผ่าน</span>
             ) : null}
           </div>

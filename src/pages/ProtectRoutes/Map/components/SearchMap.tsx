@@ -1,28 +1,22 @@
-// import library
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Papa from "papaparse";
 
 // utils
 import { createSwal } from "../../../../utils/createSwal";
+import { CalculateDistanceApi } from "../../../../utils/calculateDistanceApi";
+import { VITE_BASE } from "../../../../utils/getEnv";
 
 // component
 import SuggestItem from "./SuggestItem";
 import AnimationCarTranfer from "./AnimationCarTranfer";
 import ItemAdvice from "../../../../components/ItemAdvice";
-import { CalculateDistanceApi } from "../../../../utils/calculateDistanceApi";
+
+// global types
+import { InformationEntrieShopOnlySearchItemPage } from "../types/SearchMapType";
 
 // types
-import { InformationEntrieShop } from "../../../../types/informationEntrieShopTypes";
-
-type StagePage = "searchMap" | "entriesMap" | "displayDetailMap";
-
-// declare interface for SearchMap
-interface SearchMapProps {
-  setEntrieShops: React.Dispatch<React.SetStateAction<InformationEntrieShop[]>>;
-  setStagePage: React.Dispatch<React.SetStateAction<StagePage>>;
-  setReload: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { SearchMapProps } from "../types/SearchMapType";
 
 // ตัวแปรเก็บ map
 let map: any = "";
@@ -41,7 +35,7 @@ function SearchMap({
   const [suggestList, setSuggestList] = useState<{ w: string }[]>([]);
 
   const [information, setInformation] = useState({
-    address: "",
+    sourceAddress: "",
     longitude: "",
     latitude: "",
   });
@@ -88,13 +82,13 @@ function SearchMap({
       // แสดงข้อมูลที่อยู่ ณ ตำแหน่งนั้นให้ผู้ใช้งาน ในกรณีที่เป็นหมุด กับ เส้นทางสีน้ำเงิน
       if (ev.data.address) {
         setInformation({
-          address: ev.data.address,
+          sourceAddress: ev.data.address,
           longitude: mouseLocation.lon,
           latitude: mouseLocation.lat,
         });
       } else if (ev.data.name_t) {
         setInformation({
-          address: ev.data.name_t,
+          sourceAddress: ev.data.name_t,
           longitude: mouseLocation.lon,
           latitude: mouseLocation.lat,
         });
@@ -135,7 +129,7 @@ function SearchMap({
   };
 
   // ฟังชันก์เมื่อกดคำในช่องคำแนะนำ
-  function doSuggest(value: any) {
+  function doSuggest(value: string) {
     searchEl.current!.value = value;
 
     // คำสั่งในการค้นหา แล้วทำการแสดงหมุด ณ สถานที่นั้น
@@ -148,6 +142,7 @@ function SearchMap({
     setSuggestList([]);
   }
 
+  // function that use to convert latitude and longtitude to meters
   function haversine(lat1: number, lon1: number, lat2: number, lon2: number) {
     const R = 6371000; // Radius of the Earth in meters
     const dLat = toRadians(lat2 - lat1);
@@ -166,34 +161,16 @@ function SearchMap({
     return distance;
   }
 
+  // function that use convert degree to radian
   function toRadians(degrees: number) {
     return degrees * (Math.PI / 180);
   }
 
-  type Tem = {
-    name: string;
-    lon: string;
-    lat: string;
-    distance?: number;
-  };
-
   // ฟังชันก์คำนวณระยะทางร้านบอร์ดเกมกับระยะทางปัจจุบัน
   const calculateDistance = async () => {
     try {
-      const BASEURL = import.meta.env.VITE_BASEURL;
-
-      const result = await axios.get(`${BASEURL}/board_game_cafe.csv`);
+      const result = await axios.get(`${VITE_BASE}/board_game_cafe.csv`);
       const text = Papa.parse(result.data);
-
-      // let tmp: Tem[] = [
-      //   { name: "โรงเรียนประชานิเวศน์", lon: "100.546725", lat: "13.843971" },
-      //   {
-      //     name: "มหาวิทยาลัยเกษตรศาสตร์",
-      //     lon: "100.566246",
-      //     lat: "13.84563",
-      //   },
-      //   { name: "โรงเรียนหอวัง", lon: "100.560721", lat: "13.818849" },
-      // ];
 
       let boardGameShops = [];
       for (let i = 0; i < text.data.length; i++) {
@@ -209,8 +186,8 @@ function SearchMap({
         boardGameShops.push(target);
       }
 
-      const { address, longitude, latitude } = information;
-      if (!address || !longitude || !latitude) {
+      const { sourceAddress, longitude, latitude } = information;
+      if (!sourceAddress || !longitude || !latitude) {
         createSwal(
           "แจ้งเตือน",
           `โปรดทำการเลือกที่อยู่ปัจจุบัน`,
@@ -238,18 +215,19 @@ function SearchMap({
         .filter((_, index: number) => index < 9);
 
       for (let i = 0; i < boardGameShops.length; i++) {
-        const result = await CalculateDistanceApi(
-          address,
-          boardGameShops[i].name,
-          parseFloat(latitude),
-          parseFloat(longitude),
-          parseFloat(boardGameShops[i].lat),
-          parseFloat(boardGameShops[i].lon),
-          boardGameShops[i].province,
-          boardGameShops[i].tel,
-          boardGameShops[i].contact
-        );
+        const body: InformationEntrieShopOnlySearchItemPage = {
+          sourceAddress: sourceAddress,
+          destinationAddress: boardGameShops[i].name,
+          sourceLatitude: parseFloat(latitude),
+          sourceLongitude: parseFloat(longitude),
+          destinationLatitude: parseFloat(boardGameShops[i].lat),
+          destinationLongitude: parseFloat(boardGameShops[i].lon),
+          destinationProvince: boardGameShops[i].province,
+          destinationTel: boardGameShops[i].tel,
+          destinationContact: boardGameShops[i].contact,
+        };
 
+        const result = await CalculateDistanceApi(body);
         setEntrieShops((prev: any) => {
           return [...prev, result];
         });
@@ -353,7 +331,7 @@ function SearchMap({
           <div className="max-w-lg w-full">
             <label className="font-medium text-xl">ที่อยู่ปัจจุบัน</label>
             <div className="flex items-center justify-center text-center mt-2 border border-gray-500 h-[150px] text-lg rounded bg-slate-50">
-              {information.address}
+              {information.sourceAddress}
             </div>
             <div className="text-end mt-3">
               <button

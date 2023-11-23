@@ -1,7 +1,5 @@
-// import library
 import Swal from "sweetalert2";
 
-// declare type
 type IconSwal = "error" | "success" | "question" | "success" | "warning";
 
 const createSwal = (

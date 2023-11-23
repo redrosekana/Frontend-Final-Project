@@ -1,11 +1,14 @@
-// import library
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { isAxiosError } from "axios";
+import { useForm, SubmitHandler } from "react-hook-form";
 
-// interface
+// global types
 import { ErrorResponse } from "../../../types/ErrorResponseTypes";
+
+// types
+import { FormRegister } from "./types/RegisterTypes";
 
 // global components
 import Reload from "../../../components/Reload";
@@ -14,7 +17,6 @@ import Reload from "../../../components/Reload";
 import RegisterInput from "./components/RegisterInput";
 
 // utils
-import { validateEmail } from "../../../utils/validateEmail";
 import { toastError, toastSuccess } from "../../../utils/toastExtra";
 
 // hooks
@@ -22,69 +24,35 @@ import useAxios from "../../../hooks/useAxios";
 
 function Register() {
   const navigate: NavigateFunction = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormRegister>();
 
-  const [displayName, setDisplayName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConformPassword] = useState<string>("");
-
-  // check validate
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
-  const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
-  const [invalidConfirmPassword, setInvalidConfirmPassword] =
-    useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (validateEmail(email)) setInvalidEmail(false);
-    if (password === confirmPassword) setInvalidConfirmPassword(false);
-  }, [email, password, confirmPassword]);
-
-  // ฟังชันก์เมื่อกดปุ่มยืนยัน
-  const submitBtn = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    setIsSubmit(true);
-
-    if (
-      !displayName.trim() ||
-      !username.trim() ||
-      !email.trim() ||
-      !password.trim() ||
-      !confirmPassword.trim()
-    ) {
-      return;
-    }
-
-    if (!validateEmail(email.trim())) {
-      setInvalidEmail(true);
-      return;
-    }
-
-    if (password.trim() !== confirmPassword.trim()) {
-      setInvalidConfirmPassword(true);
-      return;
-    }
-
+  const onSubmit: SubmitHandler<FormRegister> = async (data: FormRegister) => {
     try {
       const body = {
-        displayName: displayName.trim(),
-        username: username.trim(),
-        email: email.trim(),
-        password: password.trim(),
+        displayName: data.displayName.trim(),
+        username: data.username.trim(),
+        email: data.email.trim(),
+        password: data.password.trim(),
       };
 
       setReload(true);
       await useAxios("/auth/register", "post", body, false);
-      setReload(false);
 
+      setReload(false);
       toastSuccess("ลงทะเบียนสำเร็จ");
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       setReload(false);
+
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "displayName is repeated") {
@@ -97,7 +65,7 @@ function Register() {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
       } else {
-        console.log(error);
+        toastError("เกิดข้อผิดพลาดในการทำรายการ");
       }
     }
   };
@@ -108,7 +76,7 @@ function Register() {
       <main className="container max-w-7xl mx-auto">
         <form
           className="max-w-xl mx-auto mt-5 py-8 p-5 sm:px-0"
-          onSubmit={(ev) => submitBtn(ev)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <h1 className="text-[1.6rem] font-bold text-center mb-10 telephone:text-[2rem] sm:text-[2.8rem]">
             แบบฟอร์มสมัครเข้าสู่ระบบ
@@ -117,10 +85,12 @@ function Register() {
           <RegisterInput
             label="ชื่อแสดงในเว็บไซต์"
             type="text"
-            value={displayName}
-            onInput={setDisplayName}
+            name="displayName"
+            register={register}
+            required
+            pattern={/.*/gi}
           />
-          {isSubmit && !displayName ? (
+          {errors.displayName?.type === "required" ? (
             <span className=" block mb-2 text-red-700">
               โปรดกรอกชื่อแสดงในเว็บไซต์
             </span>
@@ -129,25 +99,30 @@ function Register() {
           <RegisterInput
             label="ชื่อผู้ใช้งาน"
             type="text"
-            value={username}
-            onInput={setUsername}
+            name="username"
+            register={register}
+            required
+            pattern={/.*/gi}
           />
-          {isSubmit && !username ? (
+          {errors.username?.type === "required" ? (
             <span className=" block mb-2 text-red-700">
               โปรดกรอกชื่อผู้ใช้งาน
             </span>
           ) : null}
 
           <RegisterInput
-            label="อีเมลล์"
+            label="อีเมล"
             type="text"
-            value={email}
-            onInput={setEmail}
+            name="email"
+            register={register}
+            required
+            pattern={/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/gi}
           />
-          {isSubmit && !email ? (
+
+          {errors.email?.type === "required" ? (
             <span className=" block mb-2 text-red-700">โปรดกรอกอีเมลล์</span>
           ) : null}
-          {isSubmit && invalidEmail ? (
+          {errors.email?.type === "pattern" ? (
             <span className=" block mb-2 text-red-700">
               รูปแบบของอีเมลล์ไม่ถูกต้อง
             </span>
@@ -156,23 +131,28 @@ function Register() {
           <RegisterInput
             label="รหัสผ่าน"
             type="password"
-            value={password}
-            onInput={setPassword}
+            name="password"
+            register={register}
+            required
+            pattern={/.*/gi}
           />
-          {isSubmit && !password ? (
+          {errors.password?.type === "required" ? (
             <span className=" block mb-2 text-red-700">โปรดกรอกรหัสผ่าน</span>
           ) : null}
 
           <RegisterInput
             label="ยืนยันรหัสผ่าน"
             type="password"
-            value={confirmPassword}
-            onInput={setConformPassword}
+            name="confirmPassword"
+            register={register}
+            required
+            pattern={/.*/gi}
+            validate={(value) => getValues("password") === value}
           />
-          {isSubmit && !confirmPassword ? (
+          {errors.confirmPassword?.type === "required" ? (
             <span className=" block mb-2 text-red-700">โปรดยืนยันรหัสผ่าน</span>
           ) : null}
-          {isSubmit && invalidConfirmPassword ? (
+          {errors.confirmPassword?.type === "validate" ? (
             <span className=" block mb-2 text-red-700">
               โปรดใส่รหัสผ่านให้ตรงกัน
             </span>

@@ -1,9 +1,10 @@
-// import library
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-// components
+// global components
 import Footer from "../../../components/Footer";
+
+// components
 import ItemListPopular from "./components/ItemListPopular";
 
 // hooks

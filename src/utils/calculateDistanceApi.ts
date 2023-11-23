@@ -1,27 +1,32 @@
-// import library
 import axios from "axios";
 
-// env variable
-const VITE_URL_APIKEY: string = import.meta.env.VITE_URL_APIKEY;
+// utils
+import { VITE_URL_APIKEY } from "./getEnv";
 
-async function CalculateDistanceApi(
-  sourceAddress: string,
-  destinationAddress: string,
-  sourceLatitude: number,
-  sourceLongitude: number,
-  destinationLatitude: number,
-  destinationLongitude: number,
-  destinationProvince: string,
-  destinationTel: string,
-  destinationContact: string
-) {
+// types
+import { InformationEntrieShopOnlySearchItemPage } from "../pages/ProtectRoutes/Map/types/SearchMapType";
+
+// global types
+import { InformationEntrieShop } from "../types/informationEntrieShopTypes";
+
+async function CalculateDistanceApi({
+  sourceAddress,
+  destinationAddress,
+  sourceLatitude,
+  sourceLongitude,
+  destinationLatitude,
+  destinationLongitude,
+  destinationProvince,
+  destinationTel,
+  destinationContact,
+}: InformationEntrieShopOnlySearchItemPage): Promise<InformationEntrieShop> {
   try {
-    const url = `https://api.longdo.com/RouteService/json/route/guide?flon=${sourceLongitude}&flat=${sourceLatitude}&tlon=${destinationLongitude}&tlat=${destinationLatitude}&mode=d&type=127&restrict=0&locale=th&key=${VITE_URL_APIKEY}&maxresult=1`;
+    const url: string = `https://api.longdo.com/RouteService/json/route/guide?flon=${sourceLongitude}&flat=${sourceLatitude}&tlon=${destinationLongitude}&tlat=${destinationLatitude}&mode=d&type=127&restrict=0&locale=th&key=${VITE_URL_APIKEY}&maxresult=1`;
     const result = await axios.get(url, {
       timeout: 30000,
     });
 
-    const data = {
+    return {
       distance: result.data.data[0].distance,
       sourceAddress: sourceAddress,
       destinationAddress: destinationAddress,
@@ -33,10 +38,8 @@ async function CalculateDistanceApi(
       destinationTel: destinationTel,
       destinationContact: destinationContact,
     };
-
-    return data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 }
 

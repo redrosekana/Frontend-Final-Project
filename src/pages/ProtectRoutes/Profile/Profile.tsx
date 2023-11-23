@@ -1,37 +1,43 @@
-// import library
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
-import { Modal } from "flowbite-react";
 
+// redux
 import type { RootState } from "../../../store/store";
 import { useAppSelector } from "../../../store/hook";
 
-// component
+// global components
 import Reload from "../../../components/Reload";
-import Button from "./components/Button";
+
+// components
+import ButtonProfilePage from "./components/ButtonProfilePage";
 import InputProfile from "./components/InputProfile";
 import BoardgameListEvaluted from "./components/BoardgameListUsedEvalute";
-import InputOnModalPassword from "./components/InputOnModalPassword";
-import InputOnModalInformation from "./components/InputOnModalInformation";
+import ModalAvatar from "./components/ModalAvatar";
+import ModalPassword from "./components/ModalPassword";
+import ModalInformation from "./components/ModalInformation";
 
 // utils
 import { toastError, toastSuccess } from "../../../utils/toastExtra";
 
-// types
+// global types
 import { ErrorResponse } from "../../../types/ErrorResponseTypes";
 
+// types
+import { FormatCheckConfirmPassword } from "./types/ProfileTypes";
+
+// hooks
 import useAxios from "../../../hooks/useAxios";
 
 function Profile() {
   const selector = useAppSelector((state: RootState) => state.users);
-  const [reload, setReload] = useState<boolean>(false);
 
   // ตัวแปรควบคุมการเปิดปิด modal
-  const [modalPassword, setModalPassword] = useState<boolean>(false);
-  const [modalInformation, setModalInformation] = useState<boolean>(false);
-  const [modalAvatar, setModalAvatar] = useState<boolean>(false);
+  const [showModalPassword, setShowModalPassword] = useState<boolean>(false);
+  const [showModalInformation, setShowModalInformation] =
+    useState<boolean>(false);
+  const [showModalAvatar, setShowModalAvatar] = useState<boolean>(false);
 
   const [displayName, setDisplayName] = useState<string>(
     selector.displayName as string
@@ -39,75 +45,77 @@ function Profile() {
   const [username, setUsername] = useState<string>(selector.username as string);
   const [email, setEmail] = useState<string>(selector.email as string);
   const [avatar, setAvatar] = useState<string>(selector.urlAvatar as string);
-  const [passwordOld, setPasswordOld] = useState<string>("");
-  const [passwordNew, setPasswordNew] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const [isUpdateSubmit, setIsUpdateSubmit] = useState<boolean>(false);
-  const [invalidConfirmPassword, setInvalidConfirmPassword] = useState({
-    text: "รหัสผ่านไม่ตรงกัน",
-    status: false,
-  });
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+  const [isSubmitChangePassword, setIsSubmitChangePassword] =
+    useState<boolean>(false);
+  const [checkConfirmPassword, setCheckConfirmPassword] =
+    useState<FormatCheckConfirmPassword>({
+      text: "รหัสผ่านไม่ตรงกัน",
+      status: false,
+    });
+
+  const [reload, setReload] = useState<boolean>(false);
 
   // ฟังชันก์ในการควบคุมการเปิดปิด modal password
-  const openPasswordButton = () => setModalPassword((prev) => !prev);
-  const closePasswordButton = () => setModalPassword((prev) => !prev);
+  const onOpenPasswordButton = () => setShowModalPassword(true);
+  const onClosePasswordButton = () => setShowModalPassword(false);
 
   // ฟังชันก์ในการควบคุมการเปิดปิด modal information
-  const openInformationButton = () => setModalInformation((prev) => !prev);
-  const closeInformationButton = () => setModalInformation((prev) => !prev);
+  const onOpenInformationButton = () => setShowModalInformation(true);
+  const onCloseInformationButton = () => setShowModalInformation(false);
 
   // ฟังชันก์ในการควบคุมการเปิดปิด avatar information
-  const openAvatarButton = () => setModalAvatar((prev) => !prev);
-  const closeAvatarButton = () => setModalAvatar((prev) => !prev);
+  const openAvatarButton = () => setShowModalAvatar(true);
+  const closeAvatarButton = () => setShowModalAvatar(false);
 
   useEffect(() => {
-    setPasswordOld("");
-    setPasswordNew("");
-    setConfirmPassword("");
-    setInvalidConfirmPassword({ text: "รหัสผ่านไม่ตรงกัน", status: false });
-    setIsUpdateSubmit(false);
-  }, [modalPassword]);
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+    setCheckConfirmPassword((prev) => ({ ...prev, status: false }));
+    setIsSubmitChangePassword(false);
+  }, [showModalPassword]);
+
+  useEffect(() => {
+    if (newPassword === confirmNewPassword)
+      setCheckConfirmPassword((prev) => ({ ...prev, status: false }));
+  }, [newPassword, confirmNewPassword]);
 
   useEffect(() => {
     setDisplayName(selector.displayName as string);
     setUsername(selector.username as string);
-  }, [modalInformation]);
+  }, [showModalInformation]);
 
   useEffect(() => {
     setAvatar(selector.urlAvatar as string);
-  }, [modalAvatar]);
-
-  useEffect(() => {
-    if (passwordNew.trim() === confirmPassword.trim()) {
-      setInvalidConfirmPassword({
-        text: "รหัสผ่านไม่ตรงกัน",
-        status: false,
-      });
-    }
-  }, [passwordNew, confirmPassword]);
+  }, [showModalAvatar]);
 
   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนรหัสผ่าน
-  const clickUpdatePassword = async () => {
-    setIsUpdateSubmit(true);
-    if (!passwordOld.trim() || !passwordNew.trim() || !confirmPassword.trim()) {
+  const onChangePassword = async () => {
+    setIsSubmitChangePassword(true);
+
+    if (
+      !oldPassword.trim() ||
+      !newPassword.trim() ||
+      !confirmNewPassword.trim()
+    ) {
       return;
     }
-
-    if (passwordNew.trim() !== confirmPassword.trim()) {
-      setInvalidConfirmPassword({
-        text: "รหัสผ่านไม่ตรงกัน",
-        status: true,
-      });
+    if (newPassword.trim() !== confirmNewPassword.trim()) {
+      setCheckConfirmPassword((prev) => ({ ...prev, status: true }));
       return;
     }
 
     try {
       const body = {
-        password_old: passwordOld.trim(),
-        password_new: passwordNew.trim(),
+        password_old: oldPassword.trim(),
+        password_new: newPassword.trim(),
       };
-      setModalPassword(false);
+
+      setShowModalPassword(false);
       setReload(true);
       await useAxios("/auth/password", "post", body, true);
 
@@ -115,9 +123,9 @@ function Profile() {
       toastSuccess("เปลี่ยนรหัสผ่านเรียบร้อย");
     } catch (error) {
       setReload(false);
+
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "invalid old password") {
@@ -126,13 +134,13 @@ function Profile() {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
       } else {
-        console.log(error);
+        toastError("เกิดข้อผิดพลาดในการทำรายการ");
       }
     }
   };
 
   // ฟังชันก์ทำงานเมื่อกดยืนยันการเปลี่ยนแปลงข้อมูล
-  const clickUpdateInformation = async () => {
+  const onChangeInformation = async () => {
     if (selector.provider === "password") {
       if (!displayName.trim() || !username.trim()) return;
 
@@ -140,20 +148,18 @@ function Profile() {
         displayName.trim() === selector.displayName &&
         username.trim() === selector.username
       ) {
-        setModalInformation(false);
+        setShowModalInformation(false);
         return;
       }
     }
 
     if (selector.provider === "google") {
       if (!displayName.trim()) return;
-
       if (displayName.trim() === selector.displayName) {
-        setModalInformation(false);
+        setShowModalInformation(false);
         return;
       }
     }
-
     try {
       const body = {
         displayName,
@@ -162,20 +168,19 @@ function Profile() {
 
       setReload(true);
       await useAxios("/users", "patch", body, true);
-      setReload(false);
 
-      setModalInformation(false);
+      setReload(false);
+      setShowModalInformation(false);
       toastSuccess("อัพเดทข้อมูลผู้ใช้งานเรียบร้อย");
       setTimeout(() => {
         window.location.reload();
-      }, 2500);
+      }, 2000);
     } catch (error) {
-      setModalInformation(false);
+      setShowModalInformation(false);
       setReload(false);
 
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "displayName is repeated") {
@@ -186,7 +191,7 @@ function Profile() {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
       } else {
-        console.log(error);
+        toastError("เกิดข้อผิดพลาดในการทำรายการ");
       }
     }
   };
@@ -198,7 +203,7 @@ function Profile() {
         url: avatar,
       };
 
-      setModalAvatar(false);
+      setShowModalAvatar(false);
       setReload(true);
       await useAxios("/users/avatar", "patch", body, true);
 
@@ -274,7 +279,7 @@ function Profile() {
 
         <div className="mt-8 flex flex-col gap-y-2 items-center telephone:flex-row justify-center gap-x-4">
           <NavLink to="/page/home" className="w-full telephone:w-[130px]">
-            <Button
+            <ButtonProfilePage
               title="ย้อนกลับ"
               color="bg-redrose"
               hover="bg-red-800"
@@ -282,16 +287,16 @@ function Profile() {
             />
           </NavLink>
           {selector.provider === "password" ? (
-            <Button
-              onClick={openPasswordButton}
+            <ButtonProfilePage
+              onClick={onOpenPasswordButton}
               title="เปลี่ยนรหัสผ่าน"
               color="bg-limegreen"
               hover="bg-green-500"
               shadow="green-400"
             />
           ) : null}
-          <Button
-            onClick={openInformationButton}
+          <ButtonProfilePage
+            onClick={onOpenInformationButton}
             title="แก้ไขข้อมูล"
             color="bg-yellow-400"
             hover="bg-yellow-500"
@@ -299,160 +304,38 @@ function Profile() {
           />
         </div>
 
-        <Modal show={modalAvatar} onClose={() => closeAvatarButton()}>
-          <Modal.Header>
-            <div>เลือก Avatar ที่ต้องการ</div>
-          </Modal.Header>
+        <ModalAvatar
+          showModal={showModalAvatar}
+          avatar={avatar}
+          onClose={closeAvatarButton}
+          setAvatar={setAvatar}
+          clickUpdateAvtar={clickUpdateAvtar}
+          closeAvatarButton={closeAvatarButton}
+        />
 
-          <Modal.Body>
-            <div className="flex justify-center -mt-5">
-              <div className="max-w-[230px]">
-                <img src={avatar} alt="avatar" className="w-full" />
-              </div>
-            </div>
+        <ModalPassword
+          showModal={showModalPassword}
+          onClose={onClosePasswordButton}
+          onChangePassword={onChangePassword}
+          form={{
+            oldPassword,
+            newPassword,
+            confirmNewPassword,
+            setOldPassword,
+            setNewPassword,
+            setConfirmNewPassword,
+          }}
+          isSubmit={isSubmitChangePassword}
+          checkConfirmPassword={checkConfirmPassword}
+        />
 
-            <div className="mt-5 grid grid-cols-6 lg:grid-cols-12 gap-2">
-              {new Array(60)
-                .fill(0)
-                .map((_, index) => index + 1)
-                .map((num, index) => {
-                  return (
-                    <div key={index} className="flex justify-center">
-                      <div
-                        className="max-w-[45px] cursor-pointer"
-                        onClick={() =>
-                          setAvatar(
-                            `https://storage.googleapis.com/boardgame-recommu/avatar-maker/avatar-${num}.svg`
-                          )
-                        }
-                      >
-                        <img
-                          src={`https://storage.googleapis.com/boardgame-recommu/avatar-maker/avatar-${num}.svg`}
-                          alt="avatar"
-                          className="w-full"
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-end">
-            <button
-              onClick={() => clickUpdateAvtar()}
-              className="w-20 rounded-md text-white bg-limegreen hover:bg-green-500 focus:ring-1 focus:border-green-400 focus:outline-none focus:ring-green-400 p-2 transition duration-150 ease-in"
-            >
-              ยืนยัน
-            </button>
-            <button
-              onClick={() => closeAvatarButton()}
-              className="w-20 rounded-md text-white bg-redrose hover:bg-red-800 focus:ring-1 focus:border-red-600 focus:outline-none focus:ring-red-600 p-2 transition duration-150 ease-in"
-            >
-              ยกเลิก
-            </button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={modalPassword} onClose={() => closePasswordButton()}>
-          <Modal.Header>
-            <div className="text-2xl">เปลี่ยนรหัสผ่าน</div>
-          </Modal.Header>
-          <Modal.Body>
-            <form>
-              <InputOnModalPassword
-                type="password"
-                title="รหัสผ่านเดิม"
-                value={passwordOld}
-                onInput={setPasswordOld}
-                isSubmit={isUpdateSubmit}
-                text="โปรดกรอกรหัสผ่านเดิม"
-              />
-              <InputOnModalPassword
-                type="password"
-                title="รหัสผ่านใหม่"
-                value={passwordNew}
-                onInput={setPasswordNew}
-                isSubmit={isUpdateSubmit}
-                text="โปรดกรอกรหัสผ่านใหม่"
-              />
-              <InputOnModalPassword
-                type="password"
-                title="ยืนยันรหัสผ่านใหม่"
-                value={confirmPassword}
-                onInput={setConfirmPassword}
-                isSubmit={isUpdateSubmit}
-                text="โปรดยืนยันรหัสผ่าน"
-                invalidConfirmPassword={invalidConfirmPassword}
-              />
-            </form>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-end">
-            <button
-              onClick={clickUpdatePassword}
-              className="w-20 rounded-md text-white bg-limegreen hover:bg-green-500 focus:ring-1 focus:border-green-400 focus:outline-none focus:ring-green-400 p-2 transition duration-150 ease-in"
-            >
-              ยืนยัน
-            </button>
-            <button
-              onClick={() => closePasswordButton()}
-              className="w-20 rounded-md text-white bg-redrose hover:bg-red-800 focus:ring-1 focus:border-red-600 focus:outline-none focus:ring-red-600 p-2 transition duration-150 ease-in"
-            >
-              ยกเลิก
-            </button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={modalInformation} onClose={() => closeInformationButton()}>
-          <Modal.Header>
-            <div className="text-2xl">แก้ไขข้อมูลผู้ใช้งาน</div>
-          </Modal.Header>
-          <Modal.Body>
-            <form>
-              {selector.provider === "password" ? (
-                <div>
-                  <InputOnModalInformation
-                    type="text"
-                    title="ชื่อที่แสดงในเว็บไซต์"
-                    value={displayName}
-                    text="โปรดกรอกชื่อที่แสดงในเว็บไซต์"
-                    onInput={setDisplayName}
-                  />
-                  <InputOnModalInformation
-                    type="text"
-                    title="ชื่อผู้ใช้งาน"
-                    value={username}
-                    text="โปรดกรอกชื่อผู้ใช้งาน"
-                    onInput={setUsername}
-                  />
-                </div>
-              ) : (
-                <div>
-                  <InputOnModalInformation
-                    type="text"
-                    title="ชื่อที่แสดงในเว็บไซต์"
-                    value={displayName}
-                    text="โปรดกรอกชื่อที่แสดงในเว็บไซต์"
-                    onInput={setDisplayName}
-                  />
-                </div>
-              )}
-            </form>
-          </Modal.Body>
-          <Modal.Footer className="flex justify-end">
-            <button
-              onClick={() => clickUpdateInformation()}
-              className="w-20 rounded-md text-white bg-limegreen hover:bg-green-500 focus:ring-1 focus:border-green-400 focus:outline-none focus:ring-green-400 p-2 transition duration-150 ease-in"
-            >
-              ยืนยัน
-            </button>
-            <button
-              onClick={() => closeInformationButton()}
-              className="w-20 rounded-md text-white bg-redrose hover:bg-red-800 focus:ring-1 focus:border-red-600 focus:outline-none focus:ring-red-600 p-2 transition duration-150 ease-in"
-            >
-              ยกเลิก
-            </button>
-          </Modal.Footer>
-        </Modal>
+        <ModalInformation
+          showModal={showModalInformation}
+          onClose={onCloseInformationButton}
+          provider={selector?.provider as string}
+          form={{ displayName, username, setDisplayName, setUsername }}
+          onChangeInformation={onChangeInformation}
+        />
       </div>
       <ToastContainer />
     </main>

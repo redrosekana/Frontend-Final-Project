@@ -1,15 +1,17 @@
-// import library
 import React, { useRef, useEffect, useContext } from "react";
 import { NavLink, useNavigate, NavigateFunction } from "react-router-dom";
-import Cookies from "universal-cookie";
 
-// import components
+// components
 import ScopeProfile from "../../pages/ProtectRoutes/Profile/components/scopeProfile";
 import MenuHorizontal from "./components/MenuHorizontal";
 import MenuVertical from "./components/MenuVertical";
 
-// constants
-import { LinkEngContent } from "../../data/LinkEntries";
+// data
+import {
+  LinkEngContent,
+  LinkThaiContent,
+  LinkIcon,
+} from "../../data/LinkEntries";
 
 // utils
 import { createSwal } from "../../utils/createSwal";
@@ -22,9 +24,11 @@ import { logoutRedux } from "../../store/userSlice";
 // context
 import { Store } from "../../context/store";
 
+// hooks
+import useCookie from "../../hooks/useCookie";
+
 function NavbarProtect() {
   const navigate: NavigateFunction = useNavigate();
-  const cookie = new Cookies();
 
   const selector = useAppSelector((state: RootState) => state.users);
   const dispatch = useAppDispatch();
@@ -32,6 +36,9 @@ function NavbarProtect() {
 
   const buttonHamberger = useRef<HTMLButtonElement>(null);
   const sideBar = useRef<HTMLDivElement>(null);
+
+  const [accessToken, setAccessToken] = useCookie("accessToken", null);
+  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
 
   useEffect(() => {
     window.addEventListener("resize", autoDisplaySideBar);
@@ -68,8 +75,8 @@ function NavbarProtect() {
       true
     ).then((value: any) => {
       if (value.isConfirmed) {
-        cookie.remove("accessToken");
-        cookie.remove("refreshToken");
+        setAccessToken(null);
+        setRefreshToken(null);
         dispatch(logoutRedux());
         navigate("/");
       }
@@ -101,7 +108,13 @@ function NavbarProtect() {
 
           <ul className="hidden specific:flex items-center">
             {LinkEngContent.map((link: string, index: number) => {
-              return <MenuHorizontal key={index} path={link} index={index} />;
+              return (
+                <MenuHorizontal
+                  key={index}
+                  path={link}
+                  name={LinkThaiContent[index]}
+                />
+              );
             })}
           </ul>
 
@@ -146,7 +159,8 @@ function NavbarProtect() {
               <MenuVertical
                 key={index}
                 path={link}
-                index={index}
+                name={LinkThaiContent[index]}
+                icon={LinkIcon[index]}
                 onclick={autoDisplaySideBarClickButton}
               />
             );

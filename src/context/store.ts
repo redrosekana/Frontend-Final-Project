@@ -1,10 +1,6 @@
-// import library
-import React, { createContext } from "react";
+import { createContext } from "react";
 
-// declare interface
-export interface Context {
-  isScopeProfile: boolean;
-  setIsScopeProfile: React.Dispatch<React.SetStateAction<boolean>>;
-}
+// types
+import { ContextType } from "../types/ContextTypes";
 
-export const Store = createContext<Context | null>(null);
+export const Store = createContext<ContextType | null>(null);

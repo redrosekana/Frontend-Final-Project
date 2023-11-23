@@ -1,14 +1,9 @@
 import { NavLink } from "react-router-dom";
 
-// constants
-import { LinkThaiContent } from "../../../data/LinkEntries";
+// types
+import { MenuHorizontalProps } from "../types/MenuHorizontalProtectTypes";
 
-interface MenuHorizontalProps {
-  path: string;
-  index: number;
-}
-
-const MenuHorizontal = ({ path, index }: MenuHorizontalProps) => {
+const MenuHorizontalProtect = ({ path, name }: MenuHorizontalProps) => {
   return (
     <NavLink
       to={`/page/${path.toLowerCase()}`}
@@ -16,9 +11,9 @@ const MenuHorizontal = ({ path, index }: MenuHorizontalProps) => {
         isActive ? "activeclassName" : "notActiveclassName"
       }
     >
-      {LinkThaiContent[index]}
+      {name}
     </NavLink>
   );
 };
 
-export default MenuHorizontal;
+export default MenuHorizontalProtect;

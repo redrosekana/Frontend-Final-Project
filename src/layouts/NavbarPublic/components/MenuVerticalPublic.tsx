@@ -4,9 +4,13 @@ import { NavLink } from "react-router-dom";
 import { LinkThaiContent, LinkIcon } from "../../../data/LinkEntries";
 
 // components
-import { MenuVerticalProps } from "../types/MenuVertical";
+import { MenuVerticalPublicProps } from "../types/MenuVerticalPublicTypes";
 
-const MenuVertical = ({ path, index, onclick }: MenuVerticalProps) => {
+const MenuVerticalPublic = ({
+  path,
+  index,
+  onclick,
+}: MenuVerticalPublicProps) => {
   return (
     <li
       onClick={onclick}
@@ -23,4 +27,4 @@ const MenuVertical = ({ path, index, onclick }: MenuVerticalProps) => {
   );
 };
 
-export default MenuVertical;
+export default MenuVerticalPublic;

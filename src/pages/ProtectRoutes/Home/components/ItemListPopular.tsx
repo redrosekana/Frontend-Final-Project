@@ -1,4 +1,8 @@
+// types
 import { ItemListPopularProps } from "../types/ItemListPopularTypes";
+
+// utils
+import { VITE_WEBBORADGAME } from "../../../../utils/getEnv";
 
 const ItemListPopular = ({
   name,
@@ -7,7 +11,6 @@ const ItemListPopular = ({
   id,
   index,
 }: ItemListPopularProps) => {
-  const { VITE_WEBBORADGAME } = import.meta.env;
   return (
     <div className="flex flex-col items-center">
       <div className="max-w-[270px] w-full h-[250px] rounded-xl">

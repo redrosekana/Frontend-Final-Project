@@ -1,8 +1,7 @@
-// import library
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { isAxiosError } from "axios";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {
   useLocation,
   Location,
@@ -12,64 +11,59 @@ import {
 
 // utils
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
+
+// global types
 import { ErrorResponse } from "../../../types/ErrorResponseTypes";
+
+// types
+import { FormResetPassword } from "./types/ResetPasswordTypes";
 
 // global components
 import Reload from "../../../components/Reload";
+
+// components
+import ResetPasswordInput from "./components/ResetPasswordInput";
 
 // hooks
 import useAxios from "../../../hooks/useAxios";
 
 export default function ResetPassword() {
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [reload, setReload] = useState<boolean>(false);
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
-  const [invalidConfirmPassword, setInvalidConfirmPassword] =
-    useState<boolean>(false);
-
   const location: Location = useLocation();
   const navigate: NavigateFunction = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<FormResetPassword>();
 
-  useEffect(() => {
-    if (password === confirmPassword) setInvalidConfirmPassword(false);
-  }, [password, confirmPassword]);
+  const [reload, setReload] = useState<boolean>(false);
 
-  const onSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    setIsSubmit(true);
-
+  const onSubmit: SubmitHandler<FormResetPassword> = async (
+    data: FormResetPassword
+  ) => {
     const { search } = location;
     const params: URLSearchParams = new URLSearchParams(search);
     const token: string | null = params.get("token");
 
-    if (!password.trim() || !confirmPassword.trim()) {
-      return;
-    }
-
-    if (password.trim() !== confirmPassword.trim()) {
-      setInvalidConfirmPassword(true);
-      return;
-    }
-
     try {
-      const body = { token, password_new: password.trim() };
+      const body = { token, password_new: data.password.trim() };
+
       setReload(true);
       await useAxios("/email-verify", "post", body, false);
-      setReload(false);
 
-      toastSuccess("เปลี่ยนรหัสผ่านสำเร็จแล้ว");
+      setReload(false);
+      toastSuccess("เปลี่ยนรหัสผ่านเรียบร้อยแล้ว");
       setTimeout(() => {
         navigate("/login");
-      }, 2500);
+      }, 2000);
     } catch (error) {
       setReload(false);
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-        console.log(data);
         toastError("เกิดข้อผิดพลาดในการทำรายการ โปรดทำรายการอีกครั้ง");
       } else {
-        console.log(error);
+        toastError("เกิดข้อผิดพลาดในการทำรายการ โปรดทำรายการอีกครั้ง");
       }
     }
   };
@@ -83,21 +77,20 @@ export default function ResetPassword() {
             Board Game RecCommu
           </h3>
         </div>
-        <form className="flex flex-col" onSubmit={(ev) => onSubmit(ev)}>
+        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <label
             htmlFor="new-password"
             className="mb-1 text-base font-medium text-gray-900"
           >
             รหัสผ่านใหม่ <span className="text-red-700">*</span>
           </label>
-          <input
-            className='className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"'
-            value={password}
+          <ResetPasswordInput
             type="password"
-            id="new-password"
-            onInput={(ev) => setPassword(ev.currentTarget.value)}
+            name="password"
+            register={register}
+            required
           />
-          {isSubmit && !password ? (
+          {errors.password?.type === "required" ? (
             <span className="mt-1 text-red-700">โปรดกรอกรหัสผ่านใหม่</span>
           ) : null}
 
@@ -107,17 +100,17 @@ export default function ResetPassword() {
           >
             ยืนยันรหัสผ่านใหม่ <span className="text-red-700">*</span>
           </label>
-          <input
-            className='className="bg-slate-50  border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-gray-400 focus:border-gray-400 w-full p-3"'
-            value={confirmPassword}
+          <ResetPasswordInput
             type="password"
-            id="check-password"
-            onInput={(ev) => setConfirmPassword(ev.currentTarget.value)}
+            name="confirmPassword"
+            register={register}
+            required
+            validate={(value) => value === getValues("password")}
           />
-          {isSubmit && !confirmPassword ? (
+          {errors.confirmPassword?.type === "required" ? (
             <span className="mt-1 text-red-700">โปรดยืนยันรหัสผ่าน</span>
           ) : null}
-          {isSubmit && invalidConfirmPassword ? (
+          {errors.confirmPassword?.type === "validate" ? (
             <span className="mt-1 text-red-700">รหัสผ่านไม่ตรงกัน</span>
           ) : null}
 

@@ -1,3 +1,4 @@
+// types
 import { ItemProps } from "../types/ItemTypes";
 
 const ItemAbout = ({ order, img, title, content }: ItemProps) => {
@@ -36,4 +37,4 @@ const ItemAbout = ({ order, img, title, content }: ItemProps) => {
   );
 };
 
-export default ItemAbout ;
+export default ItemAbout;

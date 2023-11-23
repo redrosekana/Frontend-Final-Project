@@ -1,4 +1,3 @@
-// library
 import { useEffect, useState } from "react";
 import { Pagination } from "flowbite-react";
 
@@ -9,7 +8,7 @@ import useAxios from "../../../../hooks/useAxios";
 import type { RootState } from "../../../../store/store";
 import { useAppSelector } from "../../../../store/hook";
 
-// interface
+// types
 import { PartyItem } from "../types/FindPartyTypes";
 
 // component

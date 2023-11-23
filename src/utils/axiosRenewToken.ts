@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const baseURL = import.meta.env.VITE_URL_DEV;
+const baseURL = import.meta.env.VITE_URL_BACKEND;
 export const axiosRenewToken = (
   url: string,
   method: "get" | "post" | "patch" | "put" | "delete",

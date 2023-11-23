@@ -1,4 +1,4 @@
-import { GoogleButtonProps } from "../types/GoogleButton";
+import { GoogleButtonProps } from "../types/GoogleButtonTypes";
 
 const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
   return (

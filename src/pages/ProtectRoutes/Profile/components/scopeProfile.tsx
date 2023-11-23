@@ -1,5 +1,6 @@
-// import library
 import { NavLink } from "react-router-dom";
+
+// types
 import { ScopeProfileProps } from "../types/ScopeProfileTypes";
 
 export default function ScopeProfile({ LogoutButton }: ScopeProfileProps) {

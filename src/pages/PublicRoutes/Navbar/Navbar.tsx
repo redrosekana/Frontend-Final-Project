@@ -1,10 +1,13 @@
-// import library
 import React, { useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 
-// constants
-import { LinkEngContent } from "../../../data/LinkEntries";
+// data
+import {
+  LinkEngContent,
+  LinkThaiContent,
+  LinkIcon,
+} from "../../../data/LinkEntries";
 
 // component
 import MenuHorizontal from "./components/MenuHorizontal";
@@ -13,7 +16,6 @@ import MenuVertical from "./components/MenuVertical";
 function NavbarPublic() {
   const buttonHamberger = useRef<HTMLButtonElement>(null);
   const sideBar = useRef<HTMLDivElement>(null);
-
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
@@ -64,7 +66,13 @@ function NavbarPublic() {
 
           <ul className="hidden specific:flex items-center">
             {LinkEngContent.map((link: string, index: number) => {
-              return <MenuHorizontal key={index} path={link} index={index} />;
+              return (
+                <MenuHorizontal
+                  key={index}
+                  path={link}
+                  name={LinkThaiContent[index]}
+                />
+              );
             })}
           </ul>
 
@@ -110,7 +118,8 @@ function NavbarPublic() {
               <MenuVertical
                 key={index}
                 path={link}
-                index={index}
+                name={LinkThaiContent[index]}
+                icon={LinkIcon[index]}
                 onclick={autoDisplaySideBarClickButton}
               />
             );

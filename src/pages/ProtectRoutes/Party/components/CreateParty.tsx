@@ -1,4 +1,3 @@
-// library
 import { useState, useEffect } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
@@ -8,11 +7,12 @@ import axios from "axios";
 
 // utils
 import { toastSuccess, toastError } from "../../../../utils/toastExtra";
+import { VITE_BASE } from "../../../../utils/getEnv";
 
 // hooks
 import useAxios from "../../../../hooks/useAxios";
 
-// component
+// global component
 import Reload from "../../../../components/Reload";
 
 // interface
@@ -42,9 +42,7 @@ const CreateParty = () => {
 
   const convertCsv = async () => {
     try {
-      const BASEURL = import.meta.env.VITE_BASEURL;
-
-      const result = await axios.get(`${BASEURL}/category.csv`);
+      const result = await axios.get(`${VITE_BASE}/category.csv`);
       const text = Papa.parse(result.data);
 
       let categories = [];

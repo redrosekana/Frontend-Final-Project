@@ -1,5 +1,6 @@
 export interface MenuVerticalProps {
   path: string;
-  index: number;
+  name: string;
+  icon: string;
   onclick: () => void;
 }

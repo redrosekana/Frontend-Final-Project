@@ -1,13 +1,16 @@
+import React from "react";
+
+// types
 import { InputOnModalPasswordProps } from "../types/InputOnModalPasswordTypes";
 
 const InputOnModalPassword = ({
   title,
   type,
-  value,
   text,
+  value,
   isSubmit,
   onInput,
-  invalidConfirmPassword,
+  checkConfirmPassword,
 }: InputOnModalPasswordProps) => {
   return (
     <div className="mb-3">
@@ -15,16 +18,18 @@ const InputOnModalPassword = ({
         {title}
       </label>
       <input
-        value={value}
         type={type}
-        onInput={(ev) => onInput(ev.currentTarget.value)}
+        value={value}
+        onInput={(ev: React.FormEvent<HTMLInputElement>) =>
+          onInput(ev.currentTarget.value)
+        }
         className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-blue-700 focus:border-blue-700 w-full p-3"
       />
       {isSubmit && !value ? (
         <div className="text-red-800 mt-1">{text}</div>
       ) : null}
-      {isSubmit && invalidConfirmPassword?.status ? (
-        <div className="text-red-800 mt-1">{invalidConfirmPassword?.text}</div>
+      {isSubmit && checkConfirmPassword?.status ? (
+        <div className="text-red-800 mt-1">{checkConfirmPassword?.text}</div>
       ) : null}
     </div>
   );

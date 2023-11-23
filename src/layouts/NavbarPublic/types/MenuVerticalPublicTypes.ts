@@ -1,4 +1,4 @@
-export interface MenuVerticalProps {
+export interface MenuVerticalPublicProps {
   path: string;
   index: number;
   onclick: () => void;

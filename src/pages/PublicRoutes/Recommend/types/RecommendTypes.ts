@@ -9,3 +9,7 @@ export interface RecommendEntries {
   description: string;
   image: string;
 }
+
+export interface FormSearchBoardgameRecommend {
+  search: string;
+}

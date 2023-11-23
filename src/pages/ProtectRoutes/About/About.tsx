@@ -1,8 +1,9 @@
-// import library
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 
-// import components
+// global components
 import Footer from "../../../components/Footer";
+
+// components
 import ItemAbout from "./components/Item";
 
 function AboutProtect() {

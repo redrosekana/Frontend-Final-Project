@@ -3,12 +3,12 @@ import React, { useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 
-// constants
+// data
 import { LinkEngContent } from "../../data/LinkEntries";
 
 // component
-import MenuHorizontal from "./components/MenuHorizontal";
-import MenuVertical from "./components/MenuVertical";
+import MenuHorizontalPublic from "./components/MenuHorizontalPublic";
+import MenuVerticalPublic from "./components/MenuVerticalPublic";
 
 function NavbarPublic() {
   const buttonHamberger = useRef<HTMLButtonElement>(null);
@@ -64,7 +64,9 @@ function NavbarPublic() {
 
           <ul className="hidden specific:flex items-center">
             {LinkEngContent.map((link: string, index: number) => {
-              return <MenuHorizontal key={index} path={link} index={index} />;
+              return (
+                <MenuHorizontalPublic key={index} path={link} index={index} />
+              );
             })}
           </ul>
 
@@ -107,7 +109,7 @@ function NavbarPublic() {
         <ul className="flex flex-col items-center px-3 mt-10">
           {LinkEngContent.map((link, index) => {
             return (
-              <MenuVertical
+              <MenuVerticalPublic
                 key={index}
                 path={link}
                 index={index}

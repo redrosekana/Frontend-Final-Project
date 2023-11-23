@@ -1,25 +1,11 @@
-// import library
 import { useRef, useEffect } from "react";
 
-type StagePage = "searchMap" | "entriesMap" | "displayDetailMap";
-
-interface InformationEntrieProps {
-  distance: number;
-  sourceAddress: string;
-  destinationAddress: string;
-  sourceLongitude: number;
-  sourceLatitude: number;
-  destinationLongitude: number;
-  destinationLatitude: number;
-  destinationProvince: string;
-  destinationTel: string;
-  destinationContact: string;
-  setStagePage: React.Dispatch<React.SetStateAction<StagePage>>;
-}
+// types
+import { DisplayDetailMapProps } from "../types/DisplayDetailMapTypes";
 
 // สร้างตัวแปรเก็บ map
 let map: any = "";
-export default function DisplayDetailMap(props: InformationEntrieProps) {
+export default function DisplayDetailMap(props: DisplayDetailMapProps) {
   // อ้างอิงไปยัง element ที่จะแสดงแผนที่
   const mapEl = useRef<HTMLDivElement>(null);
 

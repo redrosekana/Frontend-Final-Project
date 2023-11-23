@@ -1,65 +1,59 @@
-// import library
-import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate, NavigateFunction } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 // utils
-import { validateEmail } from "../../../utils/validateEmail";
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
-
-// types
-import { ErrorResponse } from "../../../types/ErrorResponseTypes";
-import useAxios from "../../../hooks/useAxios";
 
 // global components
 import Reload from "../../../components/Reload";
-import TextInput from "../Login/components/TextInput";
+
+// components
+import SendEmailInput from "./components/SendEmailInput";
+
+// global types
+import { ErrorResponse } from "../../../types/ErrorResponseTypes";
+
+// types
+import { FormSendEmail } from "./types/EmailTypes";
+
+// hooks
+import useAxios from "../../../hooks/useAxios";
 
 function Email() {
-  const [email, setEmail] = useState<string>("");
-  const [invalidEmail, setInvalidEmail] = useState<boolean>(false);
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const navigate: NavigateFunction = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormSendEmail>();
+
   const [reload, setReload] = useState<boolean>(false);
 
-  const navigate: NavigateFunction = useNavigate();
-
-  useEffect(() => {
-    if (validateEmail(email)) setInvalidEmail(false);
-  }, [email]);
-
-  const onSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    setIsSubmit(true);
-
-    if (!email.trim()) {
-      return;
-    }
-
-    if (!validateEmail(email.trim())) {
-      setInvalidEmail(true);
-      return;
-    }
-
+  const onSubmit: SubmitHandler<FormSendEmail> = async (
+    data: FormSendEmail
+  ) => {
     try {
       setReload(true);
 
-      const body = { email };
+      const body = { email: data.email.trim() };
       await useAxios("/email", "post", body, false);
-      setReload(false);
 
+      setReload(false);
       toastSuccess(
-        "ลิงค์เปลี่ยนรหัสผ่านส่งไปที่อีเมลล์เรียบร้อย โปรดตรวจสอบอีเมลล์ของท่าน"
+        "ลิงค์เปลี่ยนรหัสผ่านส่งไปที่อีเมลเรียบร้อย โปรดตรวจสอบอีเมล"
       );
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } catch (error) {
       setReload(false);
+
       if (isAxiosError(error)) {
         const data: ErrorResponse = error.response?.data;
-
+        console.log(data);
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "invalid format email") {
@@ -70,7 +64,6 @@ function Email() {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
       } else {
-        console.log(error);
         toastError("เกิดข้อผิดพลาดในการทำรายการ");
       }
     }
@@ -87,7 +80,7 @@ function Email() {
 
         <form
           className="flex flex-col max-w-2xl w-full mx-auto"
-          onSubmit={(ev) => onSubmit(ev)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <label
             htmlFor="reset-password"
@@ -95,16 +88,20 @@ function Email() {
           >
             กรอกอีเมลล์ของคุณ <span className="text-red-700">*</span>
           </label>
-          <TextInput
+          <SendEmailInput
             type="text"
-            value={email}
-            onInput={(ev) => setEmail(ev.currentTarget.value)}
+            placeholder="อีเมล (email)"
+            name="email"
+            register={register}
+            required
+            pattern={/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
           />
-          {isSubmit && !email ? (
+
+          {errors.email?.type === "required" ? (
             <span className=" text-red-700 mt-1">โปรดกรอกอีเมลล์</span>
           ) : null}
 
-          {isSubmit && invalidEmail ? (
+          {errors.email?.type === "pattern" ? (
             <span className=" text-red-700 mt-1">รูปแบบอีเมลล์ไม่ถูกต้อง</span>
           ) : null}
 

@@ -1,4 +1,8 @@
+// types
 import { ItemBoardgameRecommendProps } from "../types/ItemBoardgameRecommendTypes";
+
+// utils
+import { VITE_WEBBORADGAME } from "../../../../utils/getEnv";
 
 const ItemBoardgameRecommend = ({
   id,
@@ -12,8 +16,6 @@ const ItemBoardgameRecommend = ({
   image,
   index,
 }: ItemBoardgameRecommendProps) => {
-  const { VITE_WEBBORADGAME } = import.meta.env;
-
   let descriptionOptimize = description.slice(0, 250);
   let orderBackspace = descriptionOptimize.lastIndexOf(" ");
   descriptionOptimize = descriptionOptimize.slice(0, orderBackspace);

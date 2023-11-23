@@ -1,16 +1,11 @@
-// import library
 import { useEffect } from "react";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 
-// import utils
+// utils
 import { createSwal } from "../../../utils/createSwal";
 
-interface AlertMessageProps {
-  title: string;
-  text: string;
-  icon: "error" | "success" | "question" | "success" | "warning";
-  color: string;
-}
+// types
+import { AlertMessageProps } from "../types/AlertMessageTypes";
 
 function AlertMessage({ title, text, icon, color }: AlertMessageProps) {
   const navigate: NavigateFunction = useNavigate();
@@ -19,8 +14,6 @@ function AlertMessage({ title, text, icon, color }: AlertMessageProps) {
     createSwal(title, text, icon, color).then(() => {
       navigate("/home");
     });
-
-    return () => {};
   }, []);
 
   return (

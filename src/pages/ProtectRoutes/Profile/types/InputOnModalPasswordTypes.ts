@@ -1,9 +1,12 @@
+// types
+import { FormatCheckConfirmPassword } from "./ProfileTypes";
+
 export interface InputOnModalPasswordProps {
-  title: string;
   type: string;
-  value: string;
+  title: string;
   text: string;
+  value: string;
   isSubmit: boolean;
   onInput: React.Dispatch<React.SetStateAction<string>>;
-  invalidConfirmPassword?: { text: string; status: boolean };
+  checkConfirmPassword?: FormatCheckConfirmPassword;
 }

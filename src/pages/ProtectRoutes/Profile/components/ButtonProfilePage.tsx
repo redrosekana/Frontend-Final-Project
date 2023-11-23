@@ -1,6 +1,12 @@
 import { ButtonProps } from "../types/ButtonTypes";
 
-const Button = ({ title, color, hover, shadow, onClick }: ButtonProps) => {
+const ButtonProfilePage = ({
+  title,
+  color,
+  hover,
+  shadow,
+  onClick,
+}: ButtonProps) => {
   return (
     <button
       onClick={onClick}
@@ -11,4 +17,4 @@ const Button = ({ title, color, hover, shadow, onClick }: ButtonProps) => {
   );
 };
 
-export default Button;
+export default ButtonProfilePage;

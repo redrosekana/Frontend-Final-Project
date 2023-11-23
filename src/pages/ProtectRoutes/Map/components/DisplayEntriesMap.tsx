@@ -1,29 +1,7 @@
-interface DisplayEntrieMapsProps {
-  distance: number;
-  sourceAddress: string;
-  destinationAddress: string;
-  sourceLongitude: number;
-  sourceLatitude: number;
-  destinationLongitude: number;
-  destinationLatitude: number;
-  destinationProvince: string;
-  destinationTel: string;
-  destinationContact: string;
-  clickDetailMap: (
-    distance: number,
-    sourceAddress: string,
-    destinationAddress: string,
-    sourceLongitude: number,
-    sourceLatitude: number,
-    destinationLongitude: number,
-    destinationLatitude: number,
-    destinationProvince: string,
-    destinationTel: string,
-    destinationContact: string
-  ) => void;
-}
+// types
+import { DisplayEntriesMapProps } from "../types/DisplayEntriesMapTypes";
 
-function DisplayEntriesMap(props: DisplayEntrieMapsProps) {
+function DisplayEntriesMap(props: DisplayEntriesMapProps) {
   return (
     <div className="relative border max-w-[400px] h-[160px] rounded border-gray-300 shadow-xl w-full mx-auto py-1 px-4">
       <div className="text-base md:text-xl font-semibold mt-2">
@@ -41,18 +19,18 @@ function DisplayEntriesMap(props: DisplayEntrieMapsProps) {
         </span>
         <button
           onClick={() =>
-            props.clickDetailMap(
-              props.distance,
-              props.sourceAddress,
-              props.destinationAddress,
-              props.sourceLongitude,
-              props.sourceLatitude,
-              props.destinationLongitude,
-              props.destinationLatitude,
-              props.destinationProvince,
-              props.destinationTel,
-              props.destinationContact
-            )
+            props.clickDetailMap({
+              distance: props.distance,
+              sourceAddress: props.sourceAddress,
+              destinationAddress: props.destinationAddress,
+              sourceLongitude: props.sourceLongitude,
+              sourceLatitude: props.sourceLatitude,
+              destinationLongitude: props.destinationLongitude,
+              destinationLatitude: props.destinationLatitude,
+              destinationProvince: props.destinationProvince,
+              destinationTel: props.destinationTel,
+              destinationContact: props.destinationContact,
+            })
           }
           className="mr-3 bg-orangey px-2 py-1 font-medium text-base rounded-lg text-white hover:bg-orange-500 transition-colors duration-150 ease-in"
         >

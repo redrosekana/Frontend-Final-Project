@@ -1,7 +1,5 @@
-interface SuggestItemProps {
-  address: string;
-  doSuggest: (detail: string) => void;
-}
+// types
+import { SuggestItemProps } from "../types/SuggestItemTypes";
 
 const SuggestItem = ({ address, doSuggest }: SuggestItemProps) => {
   return (
