@@ -1,3 +1,4 @@
+// types
 import { GoogleButtonProps } from "../types/GoogleButtonTypes";
 
 const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
@@ -8,10 +9,7 @@ const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
       type="button"
     >
       <div className="w-8 h-8 bg-white flex justify-center items-center telephone:absolute telephone:top-1 telephone:left-1 rounded">
-        <img
-          className="google-icon"
-          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-        />
+        <img className="google-icon" src="/google-icons.png" />
       </div>
       <div className="text-white telephone:ml-7">google</div>
     </button>

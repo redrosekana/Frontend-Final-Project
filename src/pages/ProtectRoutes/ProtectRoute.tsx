@@ -15,9 +15,7 @@ import { ErrorResponse } from "../../types/ErrorResponseTypes";
 // hooks
 import useAxios from "../../hooks/useAxios";
 import useCookie from "../../hooks/useCookie";
-
-// utils
-import { axiosRenewToken } from "../../utils/axiosRenewToken";
+import useAxiosRenewToken from "../../hooks/useAxiosRenewToken";
 
 // context
 import { Store } from "../../context/store";
@@ -59,6 +57,7 @@ const ProtectRoute = () => {
             provider: result.data.data.provider,
             ownerParty: result.data.data.ownerParty,
             memberParty: result.data.data.memberParty,
+            scoreEntries: result.data.data.scoring.scoreEntries,
           })
         );
         setPermit(true);
@@ -69,7 +68,7 @@ const ProtectRoute = () => {
           const data: ErrorResponse = error.response?.data;
           if (data.message === "token expired") {
             try {
-              const resultRenewToken = await axiosRenewToken(
+              const resultRenewToken = await useAxiosRenewToken(
                 "/auth/new-token",
                 "get",
                 false,

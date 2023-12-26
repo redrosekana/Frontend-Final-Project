@@ -37,34 +37,20 @@ const CreateParty = () => {
   const [options, setOptions] = useState<any[]>([]);
 
   useEffect(() => {
-    convertCsv();
+    getBoardgames();
   }, []);
 
-  const convertCsv = async () => {
+  const getBoardgames = async () => {
     try {
-      const result = await axios.get(`${VITE_BASE}/category.csv`);
-      const text = Papa.parse(result.data);
+      const result = await useAxios("/boardgames", "get", false, true);
 
-      let categories = [];
-      for (let i = 0; i < text.data.length; i++) {
-        if (i === 0 || i === text.data.length - 1) continue;
-
-        const target: any = {};
-        const header = [...(text.data[0] as string)];
-
-        for (let j = 0; j < header.length; j++) {
-          target[header[j]] = (text.data[i] as any[])[j];
-        }
-
-        categories.push(target);
-      }
-
-      categories = categories.map((category) => ({
-        label: category.cat_th,
-        value: category.cat_th,
+      let boardgames = result.data.data;
+      boardgames = boardgames.map((boardgame: any) => ({
+        label: boardgame.game,
+        value: boardgame.game,
       }));
 
-      setOptions(categories);
+      setOptions(boardgames);
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +197,7 @@ const CreateParty = () => {
         </div>
 
         <div className="p-1 flex flex-col flex-grow">
-          <label className="text-lg">ประเภทบอร์ดเกม</label>
+          <label className="text-lg">บอร์ดเกมที่ต้องการเล่น</label>
           <Controller
             name="category"
             control={control}

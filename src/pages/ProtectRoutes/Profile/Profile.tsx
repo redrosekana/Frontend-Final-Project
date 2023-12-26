@@ -33,6 +33,8 @@ import useAxios from "../../../hooks/useAxios";
 function Profile() {
   const selector = useAppSelector((state: RootState) => state.users);
 
+  console.log(selector);
+
   // ตัวแปรควบคุมการเปิดปิด modal
   const [showModalPassword, setShowModalPassword] = useState<boolean>(false);
   const [showModalInformation, setShowModalInformation] =
@@ -271,9 +273,22 @@ function Profile() {
 
           <div className=" flex flex-col gap-y-2 max-w-md w-full mb-4">
             <label className="text-xl">รายการบอร์ดเกมที่เคยประเมิน</label>
-            <BoardgameListEvaluted title="เกมยิงม้า" status={4} />
-            <BoardgameListEvaluted title="เกมหั่นผักชี" status={2} />
-            <BoardgameListEvaluted title="เกมอัศวินรัตติกาล" status={1} />
+
+            {selector.scoreEntries?.length === 0 ? (
+              <div className="text-center text-lg">
+                คุณยังไม่เคยให้คะแนนบอร์ดเกม :(
+              </div>
+            ) : (
+              selector.scoreEntries?.map((entrie, index) => {
+                return (
+                  <BoardgameListEvaluted
+                    key={index}
+                    name={entrie.name}
+                    score={entrie.score}
+                  />
+                );
+              })
+            )}
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const baseURL = import.meta.env.VITE_URL_BACKEND;
+const backendUrl = import.meta.env.VITE_URL_BACKEND;
 
 const useAxios = async (
   path: string,
@@ -15,7 +15,7 @@ const useAxios = async (
     const formatToken = "Bearer " + token;
 
     return await axios({
-      url: `${baseURL}${path}`,
+      url: `${backendUrl}${path}`,
       method: method,
       data: attachBody ? attachBody : undefined,
       headers: {

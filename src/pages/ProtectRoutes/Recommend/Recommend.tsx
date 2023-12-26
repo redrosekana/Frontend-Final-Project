@@ -1,11 +1,7 @@
-function RecommendProtect() {
-  return (
-    <main>
-      <div className="px-5 mt-20 max-w-[1400px] mx-auto">
-        <h3 className="text-center text-3xl">Coming Soon !!!</h3>
-      </div>
-    </main>
-  );
-}
+import { Outlet } from "react-router-dom";
+
+const RecommendProtect = () => {
+  return <Outlet />;
+};
 
 export default RecommendProtect;

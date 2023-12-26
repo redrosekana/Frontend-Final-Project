@@ -9,6 +9,9 @@ import ProtectRoute from "./pages/ProtectRoutes/ProtectRoute";
 import HomeProtect from "./pages/ProtectRoutes/Home/Home";
 import AboutProtect from "./pages/ProtectRoutes/About/About";
 import RecommendProtect from "./pages/ProtectRoutes/Recommend/Recommend";
+import Recommend1 from "./pages/ProtectRoutes/Recommend/RecommendOne";
+import Recommend2 from "./pages/ProtectRoutes/Recommend/RecommendTwo";
+import Recommend3 from "./pages/ProtectRoutes/Recommend/RecommendThree";
 import PartyProtect from "./pages/ProtectRoutes/Party/Party";
 import MapProtect from "./pages/ProtectRoutes/Map/Map";
 import Profile from "./pages/ProtectRoutes/Profile/Profile";
@@ -62,7 +65,14 @@ function Router() {
         <Route index element={<HomeProtect />} />
         <Route path="home" element={<HomeProtect />} />
         <Route path="about" element={<AboutProtect />} />
-        <Route path="recommend" element={<RecommendProtect />} />
+
+        <Route path="recommend" element={<RecommendProtect />}>
+          <Route index element={<Recommend1 />} />
+          <Route path="1" element={<Recommend1 />} />
+          <Route path="2" element={<Recommend2 />} />
+          <Route path="3" element={<Recommend3 />} />
+        </Route>
+
         <Route path="party" element={<PartyProtect />} />
         <Route path="map" element={<MapProtect />} />
         <Route path="profile" element={<Profile />} />

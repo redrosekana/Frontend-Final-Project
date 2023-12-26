@@ -19,7 +19,10 @@ const ItemBoardgameRecommend = ({
   let descriptionOptimize = description.slice(0, 250);
   let orderBackspace = descriptionOptimize.lastIndexOf(" ");
   descriptionOptimize = descriptionOptimize.slice(0, orderBackspace);
-  descriptionOptimize = descriptionOptimize.replace(/\&.*\;/gi, "");
+  descriptionOptimize = descriptionOptimize.replace(
+    /&#10;|&quot;|&rdquo;|&ldquo;|&mdash;|&#9;|&rsquo;/gi,
+    " "
+  );
 
   return (
     <div className="p-6 flex flex-col items-center md:flex-row md:items-start mb-4">

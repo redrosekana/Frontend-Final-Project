@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserState } from "./userSlice.interface";
+import { UserState } from "./types/userSlice.interface";
 
 const initialState: UserState = {};
 
@@ -15,6 +15,7 @@ export const userSlice = createSlice({
       state.provider = action.payload.provider;
       state.memberParty = action.payload.memberParty;
       state.ownerParty = action.payload.ownerParty;
+      state.scoreEntries = action.payload.scoreEntries;
     },
     logoutRedux() {
       return initialState;
