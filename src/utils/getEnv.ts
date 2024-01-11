@@ -1,0 +1,11 @@
+export const VITE_URL_BACKEND = import.meta.env.VITE_URL_BACKEND;
+export const VITE_URL_APIKEY = import.meta.env.VITE_URL_APIKEY;
+export const VITE_URL_AWESOME = import.meta.env.VITE_URL_AWESOME;
+export const VITE_WEBBORADGAME = import.meta.env.VITE_WEBBORADGAME;
+export const VITE_BASE = import.meta.env.VITE_BASE;
+export const VITE_APIKEY_FIREBASE = import.meta.env.VITE_APIKEY_FIREBASE;
+export const VITE_AUTHDOMAIN = import.meta.env.VITE_AUTHDOMAIN;
+export const VITE_PROJECTID = import.meta.env.VITE_PROJECTID;
+export const VITE_STORAGEBUCKET = import.meta.env.VITE_STORAGEBUCKET;
+export const VITE_MESSAGINGSENDERID = import.meta.env.VITE_MESSAGINGSENDERID;
+export const VITE_APPID = import.meta.env.VITE_APPID;

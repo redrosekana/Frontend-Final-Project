@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  box-sizing: border-box;
+  font-family: "Kanit", sans-serif;
+  font-family: "Itim", cursive;
+}
+
+@layer components {
+  .notActiveclassName {
+    @apply mx-3 text-xl font-medium hover:border-b-2 hover:border-black transition duration-150 ease-in;
+  }
+
+  .activeclassName {
+    @apply mx-3 text-xl font-medium border-b-2 border-black transition duration-150 ease-in;
+  }
+}
