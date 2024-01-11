@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
 import Cookies from "universal-cookie";
@@ -40,7 +40,12 @@ function Profile() {
   const navigate = useNavigate();
   const selector = useAppSelector((state: RootState) => state.users);
   const cookies = new Cookies();
+  const location = useLocation();
 
+  // useRef
+  const topicScoreEntrieRef = useRef<HTMLDivElement>(null);
+
+  // useState
   const [showModalPassword, setShowModalPassword] = useState<boolean>(false);
   const [showModalInformation, setShowModalInformation] =
     useState<boolean>(false);
@@ -84,6 +89,17 @@ function Profile() {
   useEffect(() => {
     setAvatar(selector.urlAvatar as string);
   }, [showModalAvatar]);
+
+  useEffect(() => {
+    if (location.state?.redirect) {
+      window.scrollTo(
+        0,
+        (topicScoreEntrieRef.current?.offsetTop as number) / 2
+      );
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, []);
 
   const onChangePassword = async () => {
     setIsSubmitChangePassword(true);
@@ -388,7 +404,10 @@ function Profile() {
           )}
 
           <div className="max-w-2xl w-full my-4">
-            <div className="text-2xl text-center mb-4">
+            <div
+              className="text-2xl text-center mb-4"
+              ref={topicScoreEntrieRef}
+            >
               รายการบอร์ดเกมที่เคยประเมิน
             </div>
 

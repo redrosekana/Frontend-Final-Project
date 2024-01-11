@@ -12,9 +12,11 @@ import type { RootState } from "../../../store/store";
 import useAxios from "../../../hooks/useAxios";
 import { useAppDispatch } from "../../../store/hook";
 import { loginRedux } from "../../../store/userSlice";
+import { resetProperty } from "../../../store/recommendPayloadSlice";
 
 // utils
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
+import { createSwal } from "../../../utils/createSwal";
 import renewToken from "../../../utils/renewToken";
 
 // types
@@ -145,6 +147,23 @@ const RecommendStepThree = () => {
     }
   };
 
+  const nextToProfilePage = () => {
+    createSwal(
+      "แจ้งเตือน",
+      "การให้คะแนนจะมีผลต่อการแนะนำบอร์ดเกมครั้งต่อไป โปรดให้ความสำคัญในส่วนนี้ด้วย",
+      "question",
+      "#00B728",
+      true
+    ).then((result: any) => {
+      if (result.isConfirmed) {
+        dispatch(resetProperty());
+        setTimeout(() => {
+          navigate("/page/profile", { state: { redirect: true } });
+        }, 200);
+      }
+    });
+  };
+
   return (
     <React.Fragment>
       {reload ? <Reload /> : null}
@@ -192,12 +211,19 @@ const RecommendStepThree = () => {
               })}
             </div>
 
-            <div>
+            <div className="flex justify-between">
               <button
                 onClick={() => navigate("/page/recommend/2")}
-                className="text-white bg-redrose hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
+                className="py-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-24 sm:w-20 transition ease-in duration-150"
               >
                 ย้อนกลับ
+              </button>
+
+              <button
+                onClick={nextToProfilePage}
+                className="py-2 bg-thrith hover:bg-orange-500 text-white rounded-md text-md w-20 sm:w-16 transition ease-in duration-150"
+              >
+                ต่อไป
               </button>
             </div>
           </React.Fragment>

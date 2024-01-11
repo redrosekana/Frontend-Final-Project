@@ -59,10 +59,20 @@ const recommendPayloadSlice = createSlice({
         state.category = action.payload;
       }
     },
+
+    resetProperty: () => {
+      return initialState;
+    },
   },
 });
 
-export const { setPlayers, setTime, setWeight, setCategory, setAllCategory } =
-  recommendPayloadSlice.actions;
+export const {
+  setPlayers,
+  setTime,
+  setWeight,
+  setCategory,
+  setAllCategory,
+  resetProperty,
+} = recommendPayloadSlice.actions;
 
 export default recommendPayloadSlice.reducer;

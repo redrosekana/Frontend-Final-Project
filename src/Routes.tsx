@@ -15,7 +15,7 @@ import RecommendStepThree from "./pages/ProtectRoutes/Recommend/RecommendStepThr
 import PartyProtect from "./pages/ProtectRoutes/Party/Party";
 import MapProtect from "./pages/ProtectRoutes/Map/Map";
 import Profile from "./pages/ProtectRoutes/Profile/Profile";
-import BoardgameRatingOnly from "./pages/ProtectRoutes/BoardgameRatingOnly";
+import BoardgameRatingOnly from "./pages/ProtectRoutes/BoardgameRatingOnly/BoardgameRatingOnly";
 
 import Login from "./pages/PublicRoutes/Login/Login";
 import Register from "./pages/PublicRoutes/Register/Register";

@@ -6,29 +6,29 @@ import { isAxiosError } from "axios";
 import Cookies from "universal-cookie";
 
 // hooks
-import useAxios from "../../hooks/useAxios";
-import { useAppDispatch } from "../../store/hook";
-import { loginRedux } from "../../store/userSlice";
+import useAxios from "../../../hooks/useAxios";
+import { useAppDispatch } from "../../../store/hook";
+import { loginRedux } from "../../../store/userSlice";
 
 // global components
-import Reload from "../../components/Reload";
+import Reload from "../../../components/Reload";
 
 // global types
-import { ErrorResponse } from "../../types/ErrorResponseTypes";
+import { ErrorResponse } from "../../../types/ErrorResponseTypes";
 
 // utils
-import { createSwal } from "../../utils/createSwal";
-import { toastError, toastSuccess } from "../../utils/toastExtra";
-import renewToken from "../../utils/renewToken";
+import { createSwal } from "../../../utils/createSwal";
+import { toastError, toastSuccess } from "../../../utils/toastExtra";
+import renewToken from "../../../utils/renewToken";
 
 // components
-import SearchBoardgameRecommendInput from "../PublicRoutes/Recommend/components/FormSearchBoardgameRecommend";
-import ItemBoardgameRecommendThree from "./Recommend/components/ItemRecommendBoardgameAuthUser";
-import ModalPostScore from "./Recommend/components/ModalPostScore";
+import SearchBoardgameRecommendInput from "../../PublicRoutes/Recommend/components/FormSearchBoardgameRecommend";
+import ItemRecommendBoardgameAuthUser from "../Recommend/components/ItemRecommendBoardgameAuthUser";
+import ModalPostScore from "../Recommend/components/ModalPostScore";
 
-import { FormSearchBoardgameRecommend } from "../PublicRoutes/Recommend/types/RecommendTypes";
-import { ScoreEntrieTypes } from "./Recommend/types/RecommendStepThreeTypes";
-import { RecommendBoardgameAuthUser } from "./Recommend/types/RecommendStepThreeTypes";
+import { FormSearchBoardgameRecommend } from "../../PublicRoutes/Recommend/types/RecommendTypes";
+import { ScoreEntrieTypes } from "../Recommend/types/RecommendStepThreeTypes";
+import { RecommendBoardgameAuthUser } from "../Recommend/types/RecommendStepThreeTypes";
 
 const BoardgameRatingOnly = () => {
   const dispatch = useAppDispatch();
@@ -213,7 +213,7 @@ const BoardgameRatingOnly = () => {
           {boardgameCurrent ? (
             <div className="mt-16">
               <div className="font-semibold text-4xl">เกมที่คุณค้นหา</div>
-              <ItemBoardgameRecommendThree
+              <ItemRecommendBoardgameAuthUser
                 {...boardgameCurrent}
                 scoreEntries={scoreEntries}
                 setBoardgameName={setBoardgameName}

@@ -35,7 +35,6 @@ const Recommend2 = () => {
   useEffect(() => {
     readCategoryFromCsvFile()
       .then((result) => {
-        console.log(result);
         setCategoryOption(result);
       })
       .catch((error) => {
@@ -49,9 +48,8 @@ const Recommend2 = () => {
 
     let categoriesTmp = [];
 
-    console.log(text);
     for (let i = 0; i < text.data.length; i++) {
-      if (i === 0 || i === text.data.length - 1) continue;
+      if (i === 0 || i === text.data.length) continue;
 
       const target: any = {};
       const header = [...(text.data[0] as string[])];

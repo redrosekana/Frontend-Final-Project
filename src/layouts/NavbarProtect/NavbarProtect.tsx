@@ -21,6 +21,7 @@ import { createSwal } from "../../utils/createSwal";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import type { RootState } from "../../store/store";
 import { logoutRedux } from "../../store/userSlice";
+import { resetProperty } from "../../store/recommendPayloadSlice";
 
 // context
 import { Store } from "../../context/store";
@@ -73,6 +74,7 @@ function NavbarProtect() {
         cookies.remove("accessToken");
         cookies.remove("refreshToken");
         dispatch(logoutRedux());
+        dispatch(resetProperty());
         navigate("/");
       }
     });
