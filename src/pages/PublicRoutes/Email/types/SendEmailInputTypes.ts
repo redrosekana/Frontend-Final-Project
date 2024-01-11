@@ -1,13 +1,13 @@
 import { Path, UseFormRegister } from "react-hook-form";
 
 // types
-import { FormSendEmail } from "./EmailTypes";
+import { FormSendEmailTypes } from "./EmailTypes";
 
 export interface SendEmailInputProps {
   type: string;
   placeholder: string;
-  name: Path<FormSendEmail>;
-  register: UseFormRegister<FormSendEmail>;
+  name: Path<FormSendEmailTypes>;
+  register: UseFormRegister<FormSendEmailTypes>;
   required: boolean;
   pattern: RegExp;
 }

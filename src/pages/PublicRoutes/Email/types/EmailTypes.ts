@@ -1,3 +1,3 @@
-export interface FormSendEmail {
+export interface FormSendEmailTypes {
   email: string;
 }

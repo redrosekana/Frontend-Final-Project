@@ -6,7 +6,7 @@ export interface UserState {
   provider?: string;
   ownerParty?: MemberParty;
   memberParty?: OwnerParty;
-  scoreEntries?: ScoreEntries[];
+  scoring?: Scoring;
 }
 
 interface MemberParty {
@@ -43,6 +43,10 @@ interface Owner {
 }
 
 interface Member extends Owner {}
+
+interface Scoring {
+  scoreEntries: ScoreEntries[];
+}
 
 interface ScoreEntries {
   name: string;

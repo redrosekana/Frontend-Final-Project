@@ -34,40 +34,27 @@ const ModalPostScore = ({
     >
       <Modal.Header>ให้คะแนนบอร์ดเกม {boardgameName}</Modal.Header>
       <Modal.Body>
-        <div>
-          <ul>
-            <li>
-              - ในการให้คะแนนเกม สามารถให้คะแนนได้หลายเกม
-              ตามรายการเกมที่ระบบแนะนำมาให้
-            </li>
-            <li>
-              - เมื่อให้คะแนนแล้วจะมี ระฆังแจ้งเตือนขึ้นมาที่ <b>มุมขวาล่าง</b>{" "}
-              ให้กดเพื่อบันทึกการให้คะแนนอีกครั้ง
-            </li>
-          </ul>
+        <div className="max-w-lg w-full mx-auto">
+          <div className="text-center text-4xl flex items-center justify-center gap-x-4">
+            <img src={`/icons/${emoji}`} className="w-16" />
+            <p>{score} คะแนน</p>
+          </div>
 
-          <div className="max-w-lg w-full mx-auto mt-6">
-            <div className="text-center text-4xl flex items-center justify-center gap-x-4">
-              <img src={`/icons/${emoji}`} className="w-16" />
-              <p>{score} คะแนน</p>
-            </div>
-
-            <div className="flex justify-center gap-x-6 mt-6">
-              <input
-                type="range"
-                value={score}
-                onInput={scoreAction}
-                min="0"
-                max="10"
-                className="w-full h-3 bg-gray-300 rounded-md appearance-none cursor-pointer"
-              ></input>
-            </div>
+          <div className="flex justify-center gap-x-6 mt-6">
+            <input
+              type="range"
+              value={score}
+              onInput={scoreAction}
+              min="0"
+              max="10"
+              className="w-full h-3 bg-gray-300 rounded-md appearance-none cursor-pointer"
+            ></input>
           </div>
         </div>
       </Modal.Body>
       <Modal.Footer className="flex justify-end">
         <button
-          onClick={saveScore}
+          onClick={() => saveScore(boardgameName, score)}
           className="w-20 rounded-md text-white bg-limegreen hover:bg-green-500 focus:ring-1 focus:border-green-400 focus:outline-none focus:ring-green-400 p-2 transition duration-150 ease-in"
         >
           ให้คะแนน

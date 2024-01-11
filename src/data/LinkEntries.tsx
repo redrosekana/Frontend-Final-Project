@@ -1,4 +1,4 @@
-export const LinkThaiContent: string[] = [
+export const LinkThaiContentPublic: string[] = [
   "หน้าแรก",
   "เกี่ยวกับ",
   "ระบบแนะนำ",
@@ -6,7 +6,7 @@ export const LinkThaiContent: string[] = [
   "แผนที่",
 ];
 
-export const LinkEngContent: string[] = [
+export const LinkEngContentPublic: string[] = [
   "home",
   "about",
   "recommend",
@@ -14,9 +14,36 @@ export const LinkEngContent: string[] = [
   "map",
 ];
 
-export const LinkIcon: string[] = [
+export const LinkIconPublic: string[] = [
   "fa-house",
   "fa-address-card",
+  "fa-comment",
+  "fa-user-group",
+  "fa-map",
+];
+
+export const LinkThaiContentPrivate: string[] = [
+  "หน้าแรก",
+  "เกี่ยวกับ",
+  "ระบบแนะนำ",
+  "ให้คะแนนเกม",
+  "ปาร์ตี้",
+  "แผนที่",
+];
+
+export const LinkEngContentPrivate: string[] = [
+  "home",
+  "about",
+  "recommend",
+  "rating-game-only",
+  "party",
+  "map",
+];
+
+export const LinkIconPrivate: string[] = [
+  "fa-house",
+  "fa-address-card",
+  "fa-comment",
   "fa-comment",
   "fa-user-group",
   "fa-map",

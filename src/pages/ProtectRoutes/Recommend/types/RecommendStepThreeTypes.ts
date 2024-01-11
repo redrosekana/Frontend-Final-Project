@@ -1,4 +1,4 @@
-export interface BoardgameRecommendThreeTypes {
+export interface RecommendBoardgameAuthUser {
   id: string;
   name: string;
   minplayers: number;

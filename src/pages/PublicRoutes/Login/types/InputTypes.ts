@@ -1,12 +1,12 @@
 import { UseFormRegister, Path } from "react-hook-form";
 
 // types
-import { FormLogin } from "./LoginTypes";
+import { FormLoginTypes } from "./LoginTypes";
 
 export interface TextInputProps {
   type: string;
   placeholder: string;
-  name: Path<FormLogin>;
-  register: UseFormRegister<FormLogin>;
+  name: Path<FormLoginTypes>;
+  register: UseFormRegister<FormLoginTypes>;
   required: boolean;
 }

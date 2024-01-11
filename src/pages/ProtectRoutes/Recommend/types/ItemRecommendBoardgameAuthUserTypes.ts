@@ -1,6 +1,6 @@
-import { ScoreEntrieTypes } from "./RecommendThreeTypes";
+import { ScoreEntrieTypes } from "./RecommendStepThreeTypes";
 
-export interface ItemBoardgameRecommendThreeProps {
+export interface ItemRecommendBoardgameAuthUserProps {
   id: string;
   name: string;
   minplayers: number;

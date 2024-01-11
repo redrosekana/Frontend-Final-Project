@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Papa from "papaparse";
 
@@ -33,7 +33,6 @@ function SearchMap({
 
   // ไว้เก็บรายการ suggest , lon , lat
   const [suggestList, setSuggestList] = useState<{ w: string }[]>([]);
-
   const [information, setInformation] = useState({
     sourceAddress: "",
     longitude: "",
@@ -156,7 +155,6 @@ function SearchMap({
         Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
     const distance = R * c; // Distance in meters
     return distance;
   }
@@ -241,44 +239,40 @@ function SearchMap({
   };
 
   return (
-    <>
-      <main className="max-w-[1400px] mx-auto mt-8 p-5">
-        <div>
-          <h3 className="text-xl sm:text-3xl xl:text-5xl font-bold text-center">
-            ค้นหาร้านบอร์ดเกมใกล้เคียง
-          </h3>
-          <div className="mt-4 ml-4">
-            <p className="text-lg sm:text-xl lg:text-2xl">คำแนะนำการใช้งาน</p>
-            <ul>
-              <ItemAdvice content="ผู้ใช้งานสามารถเลือกสถานที่ปัจจุบันของผู้ใช้งานได้ หรือสถานที่ที่ผู้ใช้ต้องการทราบระยะทางจากร้านบอร์ดเกมที่ใกล้เคียงที่สุดโดยการ search ที่ช่องค้นหา" />
-              <ItemAdvice content="เมื่อผู้ใช้งานได้ทำการเลือกสถานที่เสร็จเรียบร้อย ให้ทำการคลิ๊กที่หมุดในแผนที่ 1 ครั้ง จะมีข้อมูลสถานที่แสดงในกรอบ ที่อยู่ปัจจุบัน เพื่อเป็นการยืนยันว่าผู้ใช้เลือกสถานที่นี้" />
-              <ItemAdvice content="เมื่อเช็คว่าเป็นสถานที่นี้แล้ว ก็ทำการกดที่ปุ่มคำนวณระยะทาง" />
-              <ItemAdvice content="เมื่อทำการกดปุ่มแล้วจะมีรายการร้านบอร์ดเกมที่ใกล้เคียงแสดงขึ้นมาเพื่อให้ผู้ใช้ทราบสถานที่การเดินทาง พร้อมทั้งบอกระยะทางที่สั้นที่สุดในการเดินทาง" />
-            </ul>
-          </div>
+    <React.Fragment>
+      <main className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
+        <h3 className="text-center text-4xl md:text-5xl font-semibold">
+          ค้นหาร้านบอร์ดเกมใกล้เคียง
+        </h3>
+
+        <div className="mt-4 mb-8">
+          <p className="text-xl tl:text-2xl md:text-3xl lg:text-4xl">
+            คำแนะนำการใช้งาน
+          </p>
+          <ul>
+            <ItemAdvice content="ผู้ใช้งานสามารถเลือกสถานที่ปัจจุบันของผู้ใช้งานได้ หรือสถานที่ที่ผู้ใช้ต้องการทราบระยะทางจากร้านบอร์ดเกมที่ใกล้เคียงที่สุดโดยการ search ที่ช่องค้นหา" />
+            <ItemAdvice content="เมื่อผู้ใช้งานได้ทำการเลือกสถานที่เสร็จเรียบร้อย ให้ทำการคลิ๊กที่หมุดในแผนที่ 1 ครั้ง จะมีข้อมูลสถานที่แสดงในกรอบ ที่อยู่ปัจจุบัน เพื่อเป็นการยืนยันว่าผู้ใช้เลือกสถานที่นี้" />
+            <ItemAdvice content="เมื่อเช็คว่าเป็นสถานที่นี้แล้ว ก็ทำการกดที่ปุ่มคำนวณระยะทาง" />
+            <ItemAdvice content="เมื่อทำการกดปุ่มแล้วจะมีรายการร้านบอร์ดเกมที่ใกล้เคียงแสดงขึ้นมาเพื่อให้ผู้ใช้ทราบสถานที่การเดินทาง พร้อมทั้งบอกระยะทางที่สั้นที่สุดในการเดินทาง" />
+          </ul>
         </div>
 
-        <h3 className="text-lg sm:text-2xl xl:text-4xl font-semibold text-center mt-12 text-gray-500">
+        <h3 className="text-xl sm:text-2xl xl:text-4xl font-semibold text-center mt-12 text-gray-500">
           หากพร้อมแล้วไปกันเลยย :)
         </h3>
         <AnimationCarTranfer />
-      </main>
 
-      <main className="max-w-[1400px] mx-auto mt-5 p-5 mb-5">
-        <div className="text-xl md:text-3xl">แผนที่</div>
-        <div className="mt-4 flex flex-col justify-center sm:flex-row sm:justify-start">
-          <div className="max-w-4xl w-full">
+        <div className="text-2xl md:text-3xl mt-8">แผนที่</div>
+        <div className="mt-4 flex flex-col sm:flex-row gap-x-4">
+          <div className="max-w-4xl w-full rounded-2xl h-[400px] sm:h-[450px]">
             <div
               ref={mapEl}
-              className="w-full h-[400px] sm:h-[450px] rounded-2xl overflow-hidden"
+              className="w-full h-full rounded-2xl overflow-hidden"
             ></div>
           </div>
 
-          <div className="self-center sm:self-start w-full sm:w-[550px]">
-            <form
-              className="relative mx-2 mt-4 sm:mt-0"
-              onSubmit={(ev) => searchSubmit(ev)}
-            >
+          <div className="w-full sm:w-[550px] mt-6 sm:mt-0">
+            <form className="relative" onSubmit={(ev) => searchSubmit(ev)}>
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
                 <svg
                   aria-hidden="true"
@@ -301,17 +295,17 @@ function SearchMap({
                 placeholder="ค้นหาสถานที่"
                 ref={searchEl}
                 onInput={suggestInput}
-                className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-gray-500 focus:border-gray-500"
+                className="w-full rounded-md p-4 pl-10 mb-1 text-md text-gray-700 outline-none bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1"
               />
               <button
                 type="submit"
-                className="text-white absolute right-2.5 bottom-2.5 bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-lg text-sm px-4 py-2 transition-colors duration-200 ease-in"
+                className="absolute bottom-4 right-3 bg-primary hover:bg-green-500 text-white rounded-md text-md py-1 px-3 transition ease-in duration-150"
               >
                 ค้นหา
               </button>
             </form>
 
-            <div className="p-2 ml-2 mt-2">
+            <div className="p-2 mt-2">
               {suggestList.map((element, index: number) => {
                 return (
                   <SuggestItem
@@ -327,24 +321,22 @@ function SearchMap({
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <div className="max-w-lg w-full">
-            <label className="font-medium text-xl">ที่อยู่ปัจจุบัน</label>
-            <div className="flex items-center justify-center text-center mt-2 border border-gray-500 h-[150px] text-lg rounded bg-slate-50">
-              {information.sourceAddress}
-            </div>
-            <div className="text-end mt-3">
-              <button
-                onClick={() => calculateDistance()}
-                className="text-white bg-limegreen hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium rounded-md text-base px-4 py-2 transition-colors duration-200 ease-in"
-              >
-                คำนวณระยะทาง
-              </button>
-            </div>
+        <div className="mt-8 max-w-lg w-full mx-auto">
+          <label className="font-medium text-xl">ที่อยู่ปัจจุบัน</label>
+          <div className="text-center flex items-center h-[150px] rounded-md mt-4 text-lg text-gray-700 border bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1">
+            {information.sourceAddress}
+          </div>
+          <div className="text-end mt-3">
+            <button
+              onClick={() => calculateDistance()}
+              className="mt-2 p-2 bg-primary hover:bg-green-500 text-white rounded-md text-md transition ease-in duration-150"
+            >
+              คำนวณระยะทาง
+            </button>
           </div>
         </div>
       </main>
-    </>
+    </React.Fragment>
   );
 }
 

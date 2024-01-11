@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { isAxiosError } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -12,11 +12,11 @@ import Reload from "../../../components/Reload";
 
 // component
 import SearchBoardgameRecommendInput from "./components/FormSearchBoardgameRecommend";
-import ItemBoardgameRecommend from "./components/ItemBoardgameRecommend";
+import ItemRecommendBoardGuestUser from "./components/ItemRecommendBoardgameGuestUser";
 
 // types
 import {
-  RecommendEntries,
+  RecommendBoardgameEntries,
   FormSearchBoardgameRecommend,
 } from "./types/RecommendTypes";
 
@@ -27,9 +27,9 @@ function RecommendPublic() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
     setValue,
+    formState: { errors },
   } = useForm<FormSearchBoardgameRecommend>({
     defaultValues: {
       search: "",
@@ -38,11 +38,10 @@ function RecommendPublic() {
 
   const [reload, setReload] = useState<boolean>(false);
   const [boardgames, setBoardgames] = useState<string[]>([]);
-  const [boardgameCurrent, setBoardgameCurrent] =
-    useState<RecommendEntries | null>(null);
-
-  const [boardgameRecommend, setBoardgameRecommend] = useState<
-    RecommendEntries[]
+  const [currentBoardgame, setCurrentBoardgame] =
+    useState<RecommendBoardgameEntries | null>(null);
+  const [recommendBoardgameEntries, setRecommendBoardgameEntries] = useState<
+    RecommendBoardgameEntries[]
   >([]);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ function RecommendPublic() {
       });
   }, []);
 
-  // ฟังชันก์เอาไว้ใช้เป็น callback function ในการ filter ของ search engine
   const checkConditionInput = (boardgame: string, index: number) => {
     if (watch("search").includes(".") && index > 600) return false;
     if (watch("search").search(/\\/gi) !== -1) return false;
@@ -67,7 +65,6 @@ function RecommendPublic() {
     }
   };
 
-  // เมื่อเลือกเกมที่ต้องการ แล้วกดปุ่มจะทำฟังชันก์นี้เพื่อค้นหาเกมมาแนะนำ
   const onSubmit: SubmitHandler<FormSearchBoardgameRecommend> = async (
     data: FormSearchBoardgameRecommend
   ) => {
@@ -77,48 +74,43 @@ function RecommendPublic() {
     }
 
     try {
-      const body = { boardgame_name: data.search.trim() };
-
       setReload(true);
+      const body = { boardgame_name: data.search.trim() };
       const result = await useAxios("/boardgames/guest", "post", body, false);
 
       const filterBoardgameCurrentResult =
         result.data.data.boardgameCurrentResult;
       const filterBoardgameEntriesResult =
         result.data.data.boardgameEntriesResult.filter(
-          (item: RecommendEntries) => item
+          (item: RecommendBoardgameEntries) => item
         );
 
       setValue("search", "");
-      setBoardgameCurrent(filterBoardgameCurrentResult);
-      setBoardgameRecommend(filterBoardgameEntriesResult);
+      setCurrentBoardgame(filterBoardgameCurrentResult);
+      setRecommendBoardgameEntries(filterBoardgameEntriesResult);
       setReload(false);
     } catch (error) {
       setReload(false);
-
-      if (isAxiosError(error)) {
-        toastError("เกิดข้อผิดพลาดในการทำรายการ");
-      } else {
-        toastError("เกิดข้อผิดพลาดในการทำรายการ");
-      }
+      toastError("เกิดข้อผิดพลาดในการทำรายการ");
     }
   };
 
   return (
-    <>
+    <React.Fragment>
       {reload ? <Reload /> : null}
       <main>
-        <div className="px-5 mt-12 max-w-[1400px] mx-auto">
-          <h3 className="text-center text-3xl sm:text-4xl md:text-5xl font-semibold">
-            Recommend Boardgame
+        <div className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
+          <h3 className="text-center text-4xl md:text-5xl font-semibold">
+            ค้นหาเกมที่คุณสนใจ
           </h3>
+
           <form
             className="flex items-center gap-x-2 max-w-3xl w-full mx-auto mt-8"
             onSubmit={handleSubmit(onSubmit)}
           >
             <SearchBoardgameRecommendInput
               type="text"
-              placeholder="Search"
+              placeholder="ค้นหา"
               register={register}
               required
             />
@@ -139,43 +131,43 @@ function RecommendPublic() {
             ) : (
               boardgames
                 .filter(checkConditionInput)
-                .map((element: string, index: number) => {
+                .map((boardgame: string, index: number) => {
                   return (
                     <span
-                      onClick={() => setValue("search", element)}
+                      onClick={() => setValue("search", boardgame)}
                       key={index}
-                      className="border border-gray-200 cursor-pointer rounded-md shadow-md text-center bg-slate-50 p-4 h-10 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200 transition duration-75 ease-in"
+                      className="border border-gray-200 cursor-pointer rounded-md shadow-md text-center bg-slate-50 p-4 h-10 flex justify-center items-center hover:bg-slate-100 active:bg-slate-200 transition ease-in duration-100"
                     >
-                      {element}
+                      {boardgame}
                     </span>
                   );
                 })
             )}
           </div>
 
-          {boardgameCurrent ? (
-            <div className="mt-16">
-              <div className="font-semibold text-4xl">เกมที่คุณค้นหา</div>
-              <ItemBoardgameRecommend {...boardgameCurrent} />
-            </div>
+          {currentBoardgame ? (
+            <React.Fragment>
+              <div className="font-semibold text-4xl mt-16">เกมที่คุณค้นหา</div>
+              <ItemRecommendBoardGuestUser {...currentBoardgame} />
+            </React.Fragment>
           ) : null}
 
-          {boardgameRecommend.length !== 0 ? (
-            <div className="mt-16">
-              <div className="font-semibold text-4xl">เกมที่แนะนำ</div>
-              {boardgameRecommend.map((boardgame, index) => (
-                <ItemBoardgameRecommend
+          {recommendBoardgameEntries.length !== 0 ? (
+            <React.Fragment>
+              <div className="font-semibold text-4xl mt-16">เกมที่แนะนำ</div>
+              {recommendBoardgameEntries.map((recommendBoardgame, index) => (
+                <ItemRecommendBoardGuestUser
                   key={index}
-                  {...boardgame}
+                  {...recommendBoardgame}
                   index={index}
                 />
               ))}
-            </div>
+            </React.Fragment>
           ) : null}
         </div>
-        <ToastContainer />
       </main>
-    </>
+      <ToastContainer />
+    </React.Fragment>
   );
 }
 

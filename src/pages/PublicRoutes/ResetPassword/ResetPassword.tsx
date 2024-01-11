@@ -2,12 +2,7 @@ import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { isAxiosError } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
-import {
-  useLocation,
-  Location,
-  useNavigate,
-  NavigateFunction,
-} from "react-router-dom";
+import { useLocation, Location, useNavigate } from "react-router-dom";
 
 // utils
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
@@ -29,7 +24,7 @@ import useAxios from "../../../hooks/useAxios";
 
 export default function ResetPassword() {
   const location: Location = useLocation();
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,

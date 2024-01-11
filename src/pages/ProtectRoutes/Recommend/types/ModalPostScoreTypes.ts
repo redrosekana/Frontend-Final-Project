@@ -6,5 +6,5 @@ export interface ModalPostScoreProps {
   setScore: React.Dispatch<React.SetStateAction<number>>;
   setEmoji: React.Dispatch<React.SetStateAction<string>>;
   setOpenPostScoreModel: React.Dispatch<React.SetStateAction<boolean>>;
-  saveScore: () => void;
+  saveScore: (name: string, score: number) => void;
 }

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { isAxiosError } from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -23,7 +23,7 @@ import { toastError, toastSuccess } from "../../../utils/toastExtra";
 import useAxios from "../../../hooks/useAxios";
 
 function Register() {
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -71,7 +71,7 @@ function Register() {
   };
 
   return (
-    <>
+    <React.Fragment>
       {reload ? <Reload /> : null}
       <main className="container max-w-7xl mx-auto">
         <form
@@ -158,23 +158,25 @@ function Register() {
             </span>
           ) : null}
 
-          <button
-            type="button"
-            onClick={() => navigate("/home")}
-            className="mt-2 text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center transition-colors duration-200 ease-in"
-          >
-            กลับหน้าหลัก
-          </button>
-          <button
-            type="submit"
-            className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-auto px-4 py-2 text-center ml-2 transition-colors duration-200 ease-in"
-          >
-            ยืนยัน
-          </button>
+          <div className="flex gap-2 mt-4">
+            <button
+              type="button"
+              onClick={() => navigate("/home")}
+              className="py-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-28 transition ease-in duration-150"
+            >
+              กลับหน้าหลัก
+            </button>
+            <button
+              type="submit"
+              className="py-2 bg-primary hover:bg-green-500 text-white rounded-md text-md w-20 transition ease-in duration-150"
+            >
+              ยืนยัน
+            </button>
+          </div>
         </form>
       </main>
       <ToastContainer />
-    </>
+    </React.Fragment>
   );
 }
 

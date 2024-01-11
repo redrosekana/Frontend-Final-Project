@@ -16,7 +16,7 @@ const InputOnModalInformation = ({
         value={value}
         type={type}
         onInput={(ev) => onInput(ev.currentTarget.value)}
-        className="bg-slate-50 border border-gray-300 text-gray-700 text-base rounded-lg focus:ring-blue-700 focus:border-blue-700 w-full p-3"
+        className="w-full rounded-md p-3 text-lg text-gray-700 outline-none bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1"
       />
       {!value ? <div className="text-red-800 mt-1">{text}</div> : null}
     </div>

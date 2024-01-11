@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { useNavigate, NavigateFunction, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Cookies from "universal-cookie";
 
 // firebase
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -20,29 +21,29 @@ import LoginTextInput from "./components/LoginTextInput";
 import { ErrorResponse } from "../../../types/ErrorResponseTypes";
 
 // types
-import { FormLogin } from "./types/LoginTypes";
+import { FormLoginTypes } from "./types/LoginTypes";
 
 // hooks
 import useAxios from "../../../hooks/useAxios";
-import useCookie from "../../../hooks/useCookie";
 
 // utils
 import { toastSuccess, toastError } from "../../../utils/toastExtra";
 
 function Login() {
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
+  const cookies = new Cookies();
 
-  const [accessToken, setAccessToken] = useCookie("accessToken", null);
-  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
   const [reload, setReload] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormLogin>();
+  } = useForm<FormLoginTypes>();
 
-  const onSubmit: SubmitHandler<FormLogin> = async (data: FormLogin) => {
+  const onSubmit: SubmitHandler<FormLoginTypes> = async (
+    data: FormLoginTypes
+  ) => {
     try {
       const body = {
         username: data.username.trim(),
@@ -50,6 +51,8 @@ function Login() {
       };
 
       setReload(true);
+      cookies.remove("accessToken");
+      cookies.remove("refreshToken");
       const result = await useAxios(
         "/auth/login-password",
         "post",
@@ -58,8 +61,8 @@ function Login() {
       );
 
       setReload(false);
-      setAccessToken(result.data.accessToken);
-      setRefreshToken(result.data.refreshToken);
+      cookies.set("accessToken", result.data.accessToken);
+      cookies.set("refreshToken", result.data.refreshToken);
       toastSuccess("เข้าสู่ระบบสำเร็จ");
 
       setTimeout(() => {
@@ -97,11 +100,13 @@ function Login() {
       };
 
       setReload(true);
+      cookies.remove("accessToken");
+      cookies.remove("refreshToken");
       const result = await useAxios("/auth/login-google", "post", body, false);
 
       setReload(false);
-      setAccessToken(result.data.accessToken);
-      setRefreshToken(result.data.refreshToken);
+      cookies.set("accessToken", result.data.accessToken);
+      cookies.set("refreshToken", result.data.refreshToken);
       toastSuccess("เข้าสู่ระบบสำเร็จ");
 
       setTimeout(() => {
@@ -117,17 +122,15 @@ function Login() {
   };
 
   return (
-    <>
+    <React.Fragment>
       {reload ? <Reload /> : null}
-      <main className="container max-w-7xl w-full min-h-screen mx-auto flex justify-center items-center">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="max-w-2xl w-full p-5"
-        >
-          <h1 className="font-bold text-center mb-10 text-3xl telephone:text-4xl sm:text-5xl lg:text-6xl">
+      <main className="max-w-[1400px] w-full min-h-screen mx-auto flex justify-center items-center p-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl w-full">
+          <h1 className="font-bold text-center text-4xl sm:text-5xl md:text-6xl mb-10">
             Board Game Recommu
           </h1>
-          <div className="mb-4">
+
+          <div className="mb-3">
             <LoginTextInput
               type="text"
               placeholder="ชื่อผู้ใช้งาน (username)"
@@ -158,11 +161,11 @@ function Login() {
             <NavLink to={"/email"}>ลืมรหัสผ่าน</NavLink>
           </div>
 
-          <div className="flex flex-col telephone:flex-row gap-x-2">
+          <div className="flex flex-col tl:flex-row gap-2">
             <NavLink to={"/home"}>
               <button
                 type="button"
-                className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-full telephone:w-32 h-10 px-5 py-2 text-center transition-colors duration-200 ease-in"
+                className="py-2 tl:py-1 tl:mt-0 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-full h-full tl:w-32 transition ease-in duration-150"
               >
                 กลับหน้าหลัก
               </button>
@@ -172,7 +175,7 @@ function Login() {
 
             <button
               type="submit"
-              className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md w-full telephone:w-32 mt-2 telephone:mt-0 h-10 px-5 py-2 text-center transition-colors duration-200 ease-in"
+              className="py-2 tl:py-1 tl:mt-0 bg-primary hover:bg-green-500 text-white rounded-md text-md w-full tl:w-28 transition ease-in duration-150"
             >
               เข้าสู่ระบบ
             </button>
@@ -180,7 +183,7 @@ function Login() {
         </form>
         <ToastContainer />
       </main>
-    </>
+    </React.Fragment>
   );
 }
 

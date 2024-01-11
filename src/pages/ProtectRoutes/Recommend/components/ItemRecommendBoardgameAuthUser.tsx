@@ -1,10 +1,10 @@
 // types
-import { ItemBoardgameRecommendThreeProps } from "../types/ItemBoardgameRecommendThreeTypes";
+import { ItemRecommendBoardgameAuthUserProps } from "../types/ItemRecommendBoardgameAuthUserTypes";
 
 // utils
 import { VITE_WEBBORADGAME } from "../../../../utils/getEnv";
 
-const ItemBoardgameRecommendThree = ({
+const ItemRecommendBoardgameAuthUser = ({
   id,
   name,
   minplayers,
@@ -19,7 +19,7 @@ const ItemBoardgameRecommendThree = ({
   scoreEntries,
   setOpenPostScoreModel,
   setBoardgameName,
-}: ItemBoardgameRecommendThreeProps) => {
+}: ItemRecommendBoardgameAuthUserProps) => {
   const customizeDescription = (description: string) => {
     let descriptionOptimize = description.slice(0, 250);
     let orderBackspace = descriptionOptimize.lastIndexOf(" ");
@@ -52,8 +52,8 @@ const ItemBoardgameRecommendThree = ({
   };
 
   return (
-    <div className="p-6 flex flex-col items-center lg:flex-row lg:items-start mb-4 gap-x-6">
-      <div className="max-w-[250px] w-full h-[300px]">
+    <div className="flex flex-col items-center lg:flex-row lg:items-start mb-4 gap-x-6 p-6">
+      <div className="max-w-[270px] w-full h-[300px]">
         <img
           src={image}
           alt="image"
@@ -63,7 +63,7 @@ const ItemBoardgameRecommendThree = ({
 
       <div className="max-w-[800px] w-full mt-4 lg:mt-0">
         <p className="font-semibold text-3xl">
-          {index + 1}. {name}
+          {index + 1}). {name}
         </p>
         <p className="mt-1 font-normal text-xl text-gray-500">
           {yearpublished}
@@ -134,15 +134,15 @@ const ItemBoardgameRecommendThree = ({
         </div>
       </div>
 
-      <div className="flex-grow flex mt-4 w-full lg:mt-0 lg:w-auto justify-center xl:justify-end">
+      <div className="flex-grow mt-4 w-full lg:mt-0 lg:w-auto flex justify-center xl:justify-end">
         <button
           onClick={() => actionOpenModal(name)}
           disabled={disableButtonGiveSocre(name)}
-          className={`w-28 text-white ${
+          className={`${
             disableButtonGiveSocre(name)
               ? "bg-gray-400"
-              : "bg-orangey hover:bg-orange-400"
-          } focus:ring-2 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in`}
+              : "bg-thrith hover:bg-orange-500"
+          } py-2 text-white rounded-md w-28 text-md transition ease-in duration-150`}
         >
           ให้คะแนน
         </button>
@@ -151,4 +151,4 @@ const ItemBoardgameRecommendThree = ({
   );
 };
 
-export default ItemBoardgameRecommendThree;
+export default ItemRecommendBoardgameAuthUser;

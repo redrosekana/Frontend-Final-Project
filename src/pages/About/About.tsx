@@ -1,20 +1,20 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 // global components
-import Footer from "../../../components/Footer";
+import Footer from "../../components/Footer";
 
 // components
-import ItemAbout from "./components/Item";
+import ItemAbout from "./components/ItemAbout";
 
-function AboutProtect() {
+function About() {
   useEffect(() => {
     window.scrollTo(0, 0);
     return () => {};
   }, []);
 
   return (
-    <main>
-      <div className="mt-20 sm:mt-32 px-5 max-w-[1400px] mx-auto">
+    <React.Fragment>
+      <main className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
         <ItemAbout
           order={0}
           img={"/about1.svg"}
@@ -47,10 +47,10 @@ function AboutProtect() {
             "เมื่อคุณทำการประเมินเกมที่คุณได้รับการแนะนำไปหรือใส่ข้อมูลเพิ่มว่าคุณเคยเล่นเกมอะไรมาบ้าง เว็บไซต์ของเราจะทำการเก็บข้อมูลดังกล่าว เพื่อนำไปปรับปรุงประสิทธิภาพการแนะนำให้เหมาะสมกับคุณมากขึ้น"
           }
         />
-      </div>
+      </main>
       <Footer />
-    </main>
+    </React.Fragment>
   );
 }
 
-export default AboutProtect;
+export default About;

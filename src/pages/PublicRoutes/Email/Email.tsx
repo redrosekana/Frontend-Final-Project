@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink, useNavigate, NavigateFunction } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { isAxiosError } from "axios";
 import { ToastContainer } from "react-toastify";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -17,23 +17,23 @@ import SendEmailInput from "./components/SendEmailInput";
 import { ErrorResponse } from "../../../types/ErrorResponseTypes";
 
 // types
-import { FormSendEmail } from "./types/EmailTypes";
+import { FormSendEmailTypes } from "./types/EmailTypes";
 
 // hooks
 import useAxios from "../../../hooks/useAxios";
 
 function Email() {
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormSendEmail>();
+  } = useForm<FormSendEmailTypes>();
 
   const [reload, setReload] = useState<boolean>(false);
 
-  const onSubmit: SubmitHandler<FormSendEmail> = async (
-    data: FormSendEmail
+  const onSubmit: SubmitHandler<FormSendEmailTypes> = async (
+    data: FormSendEmailTypes
   ) => {
     try {
       setReload(true);
@@ -69,63 +69,65 @@ function Email() {
     }
   };
   return (
-    <div className="min-h-screen max-w-7xl mx-auto w-full flex items-center justify-center">
+    <React.Fragment>
       {reload ? <Reload /> : null}
-      <div className="max-w-3xl w-full p-4">
-        <div className="mb-10 text-center">
-          <h3 className="text-3xl telephone:text-4xl sm:text-5xl lg:text-6xl font-bold">
+      <main className="max-w-[1400px] w-full min-h-screen mx-auto flex justify-center items-center p-4">
+        <div className="max-w-2xl w-full">
+          <h3 className="font-bold text-center text-4xl sm:text-5xl md:text-6xl mb-8">
             Board Game RecCommu
           </h3>
-        </div>
 
-        <form
-          className="flex flex-col max-w-2xl w-full mx-auto"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <label
-            htmlFor="reset-password"
-            className="text-xl text-gray-900 font-medium"
+          <form
+            className="flex flex-col max-w-2xl w-full mx-auto"
+            onSubmit={handleSubmit(onSubmit)}
           >
-            กรอกอีเมลล์ของคุณ <span className="text-red-700">*</span>
-          </label>
-          <SendEmailInput
-            type="text"
-            placeholder="อีเมล (email)"
-            name="email"
-            register={register}
-            required
-            pattern={/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
-          />
-
-          {errors.email?.type === "required" ? (
-            <span className=" text-red-700 mt-1">โปรดกรอกอีเมลล์</span>
-          ) : null}
-
-          {errors.email?.type === "pattern" ? (
-            <span className=" text-red-700 mt-1">รูปแบบอีเมลล์ไม่ถูกต้อง</span>
-          ) : null}
-
-          <div className="mt-4">
-            <NavLink to="/login">
-              <button
-                type="reset"
-                className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md w-full telephone:w-24 px-4 py-2 text-center"
-              >
-                ย้อนกลับ
-              </button>
-            </NavLink>
-
-            <button
-              type="submit"
-              className="text-white bg-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-md px-4 py-2 text-center w-full telephone:w-24 mt-3 telephone:mt-1 ml-0 telephone:ml-2"
+            <label
+              htmlFor="reset-password"
+              className="text-xl text-gray-900 font-medium mb-3"
             >
-              ยืนยัน
-            </button>
-          </div>
-        </form>
-      </div>
+              กรอกอีเมลล์ของคุณ <span className="text-red-700">*</span>
+            </label>
+            <SendEmailInput
+              type="text"
+              placeholder="อีเมล (email)"
+              name="email"
+              register={register}
+              required
+              pattern={/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
+            />
+
+            {errors.email?.type === "required" ? (
+              <span className=" text-red-700 mt-1">โปรดกรอกอีเมลล์</span>
+            ) : null}
+
+            {errors.email?.type === "pattern" ? (
+              <span className=" text-red-700 mt-1">
+                รูปแบบอีเมลล์ไม่ถูกต้อง
+              </span>
+            ) : null}
+
+            <div className="mt-4 flex flex-col tl:flex-row gap-2">
+              <NavLink to="/login">
+                <button
+                  type="reset"
+                  className="py-2 tl:py-2 tl:px-4 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-full h-full tl:w-28 transition ease-in duration-150"
+                >
+                  ย้อนกลับ
+                </button>
+              </NavLink>
+
+              <button
+                type="submit"
+                className="py-2 tl:py-2 tl:px-4 bg-primary hover:bg-green-500 text-white rounded-md text-md w-full tl:w-28 transition ease-in duration-150"
+              >
+                ยืนยัน
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
       <ToastContainer />
-    </div>
+    </React.Fragment>
   );
 }
 

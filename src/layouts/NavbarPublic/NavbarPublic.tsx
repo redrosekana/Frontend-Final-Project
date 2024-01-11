@@ -1,13 +1,13 @@
 import React, { useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // data
 import {
-  LinkEngContent,
-  LinkThaiContent,
-  LinkIcon,
-} from "../../../data/LinkEntries";
+  LinkEngContentPublic,
+  LinkThaiContentPublic,
+  LinkIconPublic,
+} from "../../data/LinkEntries";
 
 // component
 import MenuHorizontal from "./components/MenuHorizontal";
@@ -16,7 +16,7 @@ import MenuVertical from "./components/MenuVertical";
 function NavbarPublic() {
   const buttonHamberger = useRef<HTMLButtonElement>(null);
   const sideBar = useRef<HTMLDivElement>(null);
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.addEventListener("resize", autoDisplaySideBar);
@@ -46,48 +46,44 @@ function NavbarPublic() {
   return (
     <React.Fragment>
       {/* Navbar */}
-      <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
-        <div className="flex justify-between items-center">
-          <div
-            className="flex items-center cursor-pointer -translate-x-6"
-            onClick={() => navigate("/home")}
-          >
-            <div>
-              <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
-            </div>
-            <span className="font-bold text-2xl -translate-x-4">BGRC</span>
-          </div>
+      <nav className="max-w-[1450px] h-20 mx-auto w-full flex justify-between pr-4">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate("/home")}
+        >
+          <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
+          <span className="font-bold text-2xl">BGRC</span>
+        </div>
 
-          <div className="flex specific:hidden items-center text-3xl">
-            <button ref={buttonHamberger} onClick={clickButtonHamberger}>
-              <i className="fa-solid fa-bars"></i>
+        <div className="flex lg:hidden items-center text-3xl">
+          <button ref={buttonHamberger} onClick={clickButtonHamberger}>
+            <i className="fa-solid fa-bars"></i>
+          </button>
+        </div>
+
+        <ul className="hidden lg:flex justify-center items-center gap-x-14 flex-grow">
+          {LinkEngContentPublic.map((link: string, index: number) => {
+            return (
+              <MenuHorizontal
+                key={index}
+                path={link}
+                name={LinkThaiContentPublic[index]}
+              />
+            );
+          })}
+        </ul>
+
+        <div className="hidden lg:flex items-center">
+          <NavLink to="/login">
+            <button className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
+              เข้าสู่ระบบ
             </button>
-          </div>
-
-          <ul className="hidden specific:flex items-center">
-            {LinkEngContent.map((link: string, index: number) => {
-              return (
-                <MenuHorizontal
-                  key={index}
-                  path={link}
-                  name={LinkThaiContent[index]}
-                />
-              );
-            })}
-          </ul>
-
-          <div className="hidden specific:flex">
-            <a href="/login">
-              <button className="mr-2 text-md bg-slate-100 hover:bg-slate-200 focus:ring-1 focus:ring-gray-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
-                เข้าสู่ระบบ
-              </button>
-            </a>
-            <NavLink to="/register">
-              <button className="ml-1 text-md text-white bg-limegreen  hover:bg-green-500 focus:ring-1 focus:ring-green-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
-                สมัครสมาชิก
-              </button>
-            </NavLink>
-          </div>
+          </NavLink>
+          <NavLink to="/register">
+            <button className="ml-1 text-md text-white bg-limegreen  hover:bg-green-500 focus:ring-1 focus:ring-green-300 font-medium px-3 py-1.5 rounded-md transition-colors duration-75 ease-in">
+              สมัครสมาชิก
+            </button>
+          </NavLink>
         </div>
       </nav>
 
@@ -113,13 +109,13 @@ function NavbarPublic() {
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
-          {LinkEngContent.map((link, index) => {
+          {LinkEngContentPublic.map((link, index) => {
             return (
               <MenuVertical
                 key={index}
                 path={link}
-                name={LinkThaiContent[index]}
-                icon={LinkIcon[index]}
+                name={LinkThaiContentPublic[index]}
+                icon={LinkIconPublic[index]}
                 onclick={autoDisplaySideBarClickButton}
               />
             );
@@ -129,11 +125,11 @@ function NavbarPublic() {
         <div className="flex flex-col items-center mt-10">
           <a
             href="/login"
-            className="text-md flex justify-center bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in"
+            className="text-md flex justify-center bg-slate-200 hover:bg-slate-300 font-medium px-3 py-1.5 rounded-md w-40 transition duration-150 ease-in"
           >
             เข้าสู่ระบบ
           </a>
-          <button className="mt-2 text-md text-white bg-limegreen hover:bg-green-500 font-medium px-3 py-1.5 rounded-md w-40 transition-colors duration-200 ease-in">
+          <button className="mt-2 text-md text-white bg-primary hover:bg-green-500 font-medium px-3 py-1.5 rounded-md w-40 transition duration-150 ease-in">
             <NavLink to="/register">สมัครสมาชิก</NavLink>
           </button>
         </div>

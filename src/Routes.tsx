@@ -1,20 +1,21 @@
 import { Routes, Route } from "react-router-dom";
 
 import PublicRoute from "./pages/PublicRoutes/PublicRoutes";
-import HomePublic from "./pages/PublicRoutes/Home/Home";
+import Home from "./pages/Home/Home";
+import About from "./pages/About/About";
+
 import RecommendPublic from "./pages/PublicRoutes/Recommend/Recommend";
 import AlertMessage from "./pages/PublicRoutes/components/AlertMessage";
-
 import ProtectRoute from "./pages/ProtectRoutes/ProtectRoute";
-import HomeProtect from "./pages/ProtectRoutes/Home/Home";
-import AboutProtect from "./pages/ProtectRoutes/About/About";
+
 import RecommendProtect from "./pages/ProtectRoutes/Recommend/Recommend";
-import Recommend1 from "./pages/ProtectRoutes/Recommend/RecommendOne";
-import Recommend2 from "./pages/ProtectRoutes/Recommend/RecommendTwo";
-import Recommend3 from "./pages/ProtectRoutes/Recommend/RecommendThree";
+import RecommendStepOne from "./pages/ProtectRoutes/Recommend/RecommendStepOne";
+import RecommendStepTwo from "./pages/ProtectRoutes/Recommend/RecommendStepTwo";
+import RecommendStepThree from "./pages/ProtectRoutes/Recommend/RecommendStepThree";
 import PartyProtect from "./pages/ProtectRoutes/Party/Party";
 import MapProtect from "./pages/ProtectRoutes/Map/Map";
 import Profile from "./pages/ProtectRoutes/Profile/Profile";
+import BoardgameRatingOnly from "./pages/ProtectRoutes/BoardgameRatingOnly";
 
 import Login from "./pages/PublicRoutes/Login/Login";
 import Register from "./pages/PublicRoutes/Register/Register";
@@ -26,9 +27,9 @@ function Router() {
     <Routes>
       {/* unauthentication routes */}
       <Route path="/" element={<PublicRoute />}>
-        <Route index element={<HomePublic />} />
-        <Route path="home" element={<HomePublic />} />
-        <Route path="about" element={<AboutProtect />} />
+        <Route index element={<Home />} />
+        <Route path="home" element={<Home />} />
+        <Route path="about" element={<About />} />
         <Route path="recommend" element={<RecommendPublic />} />
         <Route
           path="party"
@@ -62,20 +63,21 @@ function Router() {
 
       {/* authentication routes */}
       <Route path="page" element={<ProtectRoute />}>
-        <Route index element={<HomeProtect />} />
-        <Route path="home" element={<HomeProtect />} />
-        <Route path="about" element={<AboutProtect />} />
+        <Route index element={<Home />} />
+        <Route path="home" element={<Home />} />
+        <Route path="about" element={<About />} />
 
         <Route path="recommend" element={<RecommendProtect />}>
-          <Route index element={<Recommend1 />} />
-          <Route path="1" element={<Recommend1 />} />
-          <Route path="2" element={<Recommend2 />} />
-          <Route path="3" element={<Recommend3 />} />
+          <Route index element={<RecommendStepOne />} />
+          <Route path="1" element={<RecommendStepOne />} />
+          <Route path="2" element={<RecommendStepTwo />} />
+          <Route path="3" element={<RecommendStepThree />} />
         </Route>
 
         <Route path="party" element={<PartyProtect />} />
         <Route path="map" element={<MapProtect />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="rating-game-only" element={<BoardgameRatingOnly />} />
       </Route>
     </Routes>
   );

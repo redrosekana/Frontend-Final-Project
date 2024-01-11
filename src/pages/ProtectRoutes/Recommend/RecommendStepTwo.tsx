@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, NavigateFunction } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Papa from "papaparse";
 
@@ -18,7 +18,7 @@ import { VITE_BASE } from "../../../utils/getEnv";
 import CheckList from "./components/checkList";
 
 // types
-import { CategoryOptionsType } from "./types/RecommendTwoTypes";
+import { CategoryOptionsType } from "./types/RecommendStepTwoTypes";
 
 const Recommend2 = () => {
   const recommendPayload = useAppSelector(
@@ -26,15 +26,8 @@ const Recommend2 = () => {
   );
 
   const dispatch = useAppDispatch();
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
 
-  const [categoryDetail, setCategoryDetail] = useState<CategoryOptionsType>({
-    bgg_url: "",
-    cat_en: "",
-    cat_th: "",
-    description_th: "",
-    pic_url: "",
-  });
   const [categoryOption, setCategoryOption] = useState<CategoryOptionsType[]>(
     []
   );
@@ -42,6 +35,7 @@ const Recommend2 = () => {
   useEffect(() => {
     readCategoryFromCsvFile()
       .then((result) => {
+        console.log(result);
         setCategoryOption(result);
       })
       .catch((error) => {
@@ -54,14 +48,16 @@ const Recommend2 = () => {
     const text = Papa.parse(result.data);
 
     let categoriesTmp = [];
+
+    console.log(text);
     for (let i = 0; i < text.data.length; i++) {
       if (i === 0 || i === text.data.length - 1) continue;
 
       const target: any = {};
-      const header = [...(text.data[0] as string)];
+      const header = [...(text.data[0] as string[])];
 
       for (let j = 0; j < header.length; j++) {
-        target[header[j]] = (text.data[i] as any[])[j];
+        target[header[j]] = (text.data[i] as string[])[j];
       }
       categoriesTmp.push(target);
     }
@@ -70,34 +66,15 @@ const Recommend2 = () => {
   };
 
   return (
-    <main>
-      <div className="mt-8 p-5 max-w-[1400px] mx-auto relative">
-        <h3 className="text-center text-xl sm:text-3xl xl:text-5xl font-bold mb-8">
+    <React.Fragment>
+      <div className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
+        <h3 className="text-4xl tl:text-5xl font-bold text-center">
           ระบบแนะนำบอร์ดเกม
         </h3>
 
-        <div className="text-center text-lg sm:text-xl xl:text-3xl">
+        <div className="text-2xl tl:text-3xl text-center mt-4">
           เลือกประเภทเกม
         </div>
-
-        {/* {Object.entries(categoryDetail)[0][1] ? (
-          <div className="flex justify-center mt-8 max-w-[260px] w-full h-[260px] rounded-full mx-auto">
-            <img
-              src={categoryDetail.pic_url}
-              alt="pictrue error"
-              className="w-full rounded-full object-cover"
-            />
-          </div>
-        ) : null}
-
-        {Object.entries(categoryDetail)[0][1] ? (
-          <div className="max-w-4xl w-full mx-auto mt-6">
-            <div>
-              <h3 className="text-2xl">ข้อมูล {categoryDetail?.cat_th}</h3>
-              <p className="text-lg">{categoryDetail?.description_th}</p>
-            </div>
-          </div>
-        ) : null} */}
 
         <div className="max-w-4xl w-full mx-auto mt-6">
           <div className="text-2xl">ประเภทเกม</div>
@@ -117,7 +94,6 @@ const Recommend2 = () => {
 
                     dispatch(setAllCategory(t));
                   } else {
-                    setCategoryDetail(item);
                     dispatch(setCategory({ index: index, value: item.cat_en }));
                   }
                 }}
@@ -126,34 +102,29 @@ const Recommend2 = () => {
                     ? true
                     : false
                 }
+                checkTooltip={item.description_summarize}
               />
             ))}
           </div>
         </div>
 
-        <div className="max-w-[800px] w-full mx-auto mt-10">
-          <div className="flex justify-between">
-            <div className="w-32 text-start">
-              <button
-                onClick={() => navigate("/page/recommend")}
-                className="text-white bg-redrose hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
-              >
-                ย้อนกลับ
-              </button>
-            </div>
+        <div className="flex flex-row justify-between mt-6">
+          <button
+            onClick={() => navigate("/page/recommend")}
+            className="py-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-24 sm:w-20 transition ease-in duration-150"
+          >
+            ย้อนกลับ
+          </button>
 
-            <div className="w-32 text-end">
-              <button
-                onClick={() => navigate("/page/recommend/3")}
-                className="text-white bg-orangey hover:bg-orange-400 focus:ring-2 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
-              >
-                ต่อไป
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => navigate("/page/recommend/3")}
+            className="py-2 bg-thrith hover:bg-orange-500 text-white rounded-md text-md w-20 sm:w-16 transition ease-in duration-150"
+          >
+            ต่อไป
+          </button>
         </div>
       </div>
-    </main>
+    </React.Fragment>
   );
 };
 

@@ -1,7 +1,6 @@
-export interface ItemListPopularProps {
+export interface PopularListItemTypes {
   id: string;
   name: string;
   picture: string;
   year: string;
-  index: number;
 }

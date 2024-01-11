@@ -246,7 +246,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: rgb(229, 229, 229);
 }
 
 ::-webkit-scrollbar-thumb {

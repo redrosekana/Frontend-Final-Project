@@ -1,37 +1,44 @@
 function Footer() {
   return (
-    <main className="mt-16 lg:mt-40 bg-slate-100 px-5 py-8">
-      <h3 className="text-3xl lg:text-4xl text-center font-bold mt-6">
+    <main className="mt-16 lg:mt-40 bg-slate-100 p-4">
+      <h3 className="text-3xl tl:text-4xl lg:text-5xl text-center font-bold mt-6">
         Board Game RecCommu
       </h3>
-      <div className="text-center mt-4 lg:text-xl">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi inventore
-        quos et illum quaerat optio, saepe minima beatae
+      <div className="text-center mt-4 text-xl md:text-2xl max-w-7xl w-full mx-auto">
+        ระบบแนะนำบอร์ดเกมของเรา ถูกพัฒนาขึ้นโดยนิสิตวิศวกรรมคอมพิวเตอร์ชั้นปีที่
+        4 เพื่อเป็นแนวทางให้กับผู้คนที่สนใจในการเล่นบอร์ดเกม
       </div>
 
-      <div className="mt-4 p-4 flex justify-center gap-x-3">
-        <button className="bg-slate-200 hover:bg-slate-300 p-2 rounded-3xl w-28 transition-colors duration-200 ease-in">
-          Insights
-        </button>
-        <button className="bg-slate-200  hover:bg-slate-300 p-2 rounded-3xl w-28 transition-colors duration-200 ease-in">
-          Contact
-        </button>
+      <div className="mt-4 p-4 max-w-2xl w-full mx-auto">
+        <div className="flex items-center gap-x-6">
+          <img src="/sukachathum.jpg" className="w-20 rounded-full" />
+          <p className="text-xl sm:text-2xl">
+            นายสุคชาธัม เซียวศิริถาวร รหัสนิสิต 6310500066
+          </p>
+        </div>
+
+        <div className="flex items-center gap-x-6 mt-4">
+          <img src="/tiwat.jpg" className="w-20 rounded-full" />
+          <p className="text-xl sm:text-2xl">
+            นายทิวัตถ์ ทรัพย์รัตนกุล รหัสนิสิต 6310500295
+          </p>
+        </div>
       </div>
 
-      <div className="flex justify-center mt-6 px-8">
-        <hr className="h-[2px] sm:w-max-[1000px] w-full bg-gray-300" />
+      <div className="flex justify-center max-w-[1400px] w-full mx-auto mt-4">
+        <hr className="h-[2px] w-full bg-gray-300" />
       </div>
 
       <div className="flex flex-col items-center gap-y-4 mt-6 lg:flex-row lg:justify-around">
-        <div>
+        <div className="flex justify-center flex-grow">
           <img src="/Logo.png" alt="skeleton" className="w-24 h-24" />
         </div>
 
-        <div className="text-center text-lg lg:text-xl lg:translate-x-14">
+        <div className="text-center text-xl md:text-2xl flex-grow">
           &copy; 2023 BoardGame RecCommu. All Rights Reserved.{" "}
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex justify-center gap-4 flex-grow">
           <a href="https://www.facebook.com/nkana.jung" target="_blank">
             <img
               src="/facebook.svg"

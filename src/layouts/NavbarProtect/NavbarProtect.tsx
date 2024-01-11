@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useContext } from "react";
-import { NavLink, useNavigate, NavigateFunction } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 // components
 import ScopeProfile from "../../pages/ProtectRoutes/Profile/components/scopeProfile";
@@ -8,9 +9,9 @@ import MenuVertical from "./components/MenuVertical";
 
 // data
 import {
-  LinkEngContent,
-  LinkThaiContent,
-  LinkIcon,
+  LinkEngContentPrivate,
+  LinkThaiContentPrivate,
+  LinkIconPrivate,
 } from "../../data/LinkEntries";
 
 // utils
@@ -24,21 +25,15 @@ import { logoutRedux } from "../../store/userSlice";
 // context
 import { Store } from "../../context/store";
 
-// hooks
-import useCookie from "../../hooks/useCookie";
-
 function NavbarProtect() {
-  const navigate: NavigateFunction = useNavigate();
-
-  const selector = useAppSelector((state: RootState) => state.users);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const selector = useAppSelector((state: RootState) => state.users);
   const context = useContext(Store);
+  const cookies = new Cookies();
 
   const buttonHamberger = useRef<HTMLButtonElement>(null);
   const sideBar = useRef<HTMLDivElement>(null);
-
-  const [accessToken, setAccessToken] = useCookie("accessToken", null);
-  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
 
   useEffect(() => {
     window.addEventListener("resize", autoDisplaySideBar);
@@ -75,8 +70,8 @@ function NavbarProtect() {
       true
     ).then((value: any) => {
       if (value.isConfirmed) {
-        setAccessToken(null);
-        setRefreshToken(null);
+        cookies.remove("accessToken");
+        cookies.remove("refreshToken");
         dispatch(logoutRedux());
         navigate("/");
       }
@@ -88,46 +83,44 @@ function NavbarProtect() {
       {context?.isScopeProfile ? (
         <ScopeProfile LogoutButton={LogoutButton} />
       ) : null}
-      <nav className="container max-w-[1400px] h-20 mx-auto w-full px-5">
-        <div className="flex justify-between">
-          <div
-            className=" flex items-center cursor-pointer -translate-x-6"
-            onClick={() => navigate("/page/home")}
-          >
-            <div>
-              <img src="/Logo.png" alt="Logo" className="w-24 h-24" />
-            </div>
-            <span className="font-bold text-2xl -translate-x-4">BGRC</span>
+      <nav className="container max-w-[1450px] h-20 mx-auto w-full flex justify-between pr-4">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate("/page/home")}
+        >
+          <div>
+            <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
           </div>
+          <span className="font-bold text-2xl -translate-x-4">BGRC</span>
+        </div>
 
-          <div className="flex specific:hidden items-center text-3xl">
-            <button ref={buttonHamberger} onClick={clickButtonHamberger}>
-              <i className="fa-solid fa-bars"></i>
-            </button>
-          </div>
+        <div className="flex lg:hidden items-center text-3xl">
+          <button ref={buttonHamberger} onClick={clickButtonHamberger}>
+            <i className="fa-solid fa-bars"></i>
+          </button>
+        </div>
 
-          <ul className="hidden specific:flex items-center">
-            {LinkEngContent.map((link: string, index: number) => {
-              return (
-                <MenuHorizontal
-                  key={index}
-                  path={link}
-                  name={LinkThaiContent[index]}
-                />
-              );
-            })}
-          </ul>
-
-          <div className="hidden specific:flex specific:items-center">
-            <div className="text-xl mr-1">{selector.displayName}</div>
-            <div className="w-[50px] cursor-pointer">
-              <img
-                src={selector.urlAvatar}
-                alt="avatar"
-                className="w-full object-cover"
-                onClick={() => context?.setIsScopeProfile((prev) => !prev)}
+        <ul className="hidden lg:flex justify-center items-center lg:gap-x-6 xl:gap-x-14 flex-grow">
+          {LinkEngContentPrivate.map((link: string, index: number) => {
+            return (
+              <MenuHorizontal
+                key={index}
+                path={link}
+                name={LinkThaiContentPrivate[index]}
               />
-            </div>
+            );
+          })}
+        </ul>
+
+        <div className="hidden lg:flex lg:items-center">
+          <div className="text-xl mr-2">{selector.displayName}</div>
+          <div className="w-[50px] cursor-pointer">
+            <img
+              src={selector.urlAvatar}
+              alt="avatar"
+              className="w-full object-cover"
+              onClick={() => context?.setIsScopeProfile((prev) => !prev)}
+            />
           </div>
         </div>
       </nav>
@@ -154,13 +147,13 @@ function NavbarProtect() {
         </div>
 
         <ul className="flex flex-col items-center px-3 mt-10">
-          {LinkEngContent.map((link: string, index: number) => {
+          {LinkEngContentPrivate.map((link: string, index: number) => {
             return (
               <MenuVertical
                 key={index}
                 path={link}
-                name={LinkThaiContent[index]}
-                icon={LinkIcon[index]}
+                name={LinkThaiContentPrivate[index]}
+                icon={LinkIconPrivate[index]}
                 onclick={autoDisplaySideBarClickButton}
               />
             );

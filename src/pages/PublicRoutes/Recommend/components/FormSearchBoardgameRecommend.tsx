@@ -15,7 +15,7 @@ function SearchBoardgameRecommendInput({
         </div>
         <input
           type={type}
-          className="w-full rounded-md text-lg h-12 pl-10 text-gray-700 outline-none bg-slate-50 border-slate-300 focus:border-blue-600 focus:ring-1"
+          className="w-full h-12 rounded-md text-lg pl-10 text-gray-700 outline-none bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1"
           placeholder={placeholder}
           {...register("search", { required })}
         />
@@ -23,7 +23,7 @@ function SearchBoardgameRecommendInput({
 
       <button
         type="submit"
-        className="px-4 h-12 text-lg font-medium text-white bg-limegreen rounded-md border border-limegreen hover:bg-green-500 focus:ring-2 focus:outline-none focus:ring-green-300"
+        className="px-4 h-12 text-lg font-medium text-white bg-primary rounded-lg focus:ring-2 ring-green-300 focus:outline-none"
       >
         <i className="fa-solid fa-magnifying-glass"></i>
       </button>

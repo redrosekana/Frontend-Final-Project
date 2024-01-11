@@ -92,7 +92,7 @@ export default function DisplayDetailMap(props: DisplayDetailMapProps) {
       </div>
 
       <button
-        className="mt-4 text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-4 py-2 text-center transition-colors duration-200 ease-in"
+        className="mt-4 p-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md transition ease-in duration-150"
         onClick={() => props.setStagePage("entriesMap")}
       >
         ย้อนกลับ

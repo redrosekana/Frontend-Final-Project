@@ -1,6 +1,10 @@
 import { BoardgameListEvalutedProps } from "../types/BoardgameListEvalutedTypes";
 
-const BoardgameListEvaluted = ({ name, score }: BoardgameListEvalutedProps) => {
+const BoardgameListEvaluted = ({
+  name,
+  score,
+  onClickRemoveScoring,
+}: BoardgameListEvalutedProps) => {
   const ACTION = ["sad.svg", "haha.svg", "lover.svg"];
 
   const scoreAction = () => {
@@ -14,14 +18,22 @@ const BoardgameListEvaluted = ({ name, score }: BoardgameListEvalutedProps) => {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="text-lg flex-grow">{name}</div>
-      <div className="w-21 flex gap-x-1">
-        <img src={`/icons/${scoreAction()}`} className="w-8" />
-        <div className="flex flex-col items-center">
+    <div className="flex flex-col sm:flex-row items-center mt-2">
+      <div className="w-full sm:w-8/12 text-center sm:text-start">{name}</div>
+      <div className="w-full sm:w-3/12 flex justify-center sm:justify-center items-center gap-x-2 mt-2 sm:mt-0">
+        <img src={`/icons/${scoreAction()}`} className="w-10" />
+        <div className="flex gap-x-2">
           <p>{score}</p>
           <p>คะแนน</p>
         </div>
+      </div>
+      <div className="flex-grow text-center mt-2 sm:mt-0">
+        <button
+          onClick={() => onClickRemoveScoring(name)}
+          className=" bg-gray-400 py-1 px-2 rounded text-white"
+        >
+          ลบ
+        </button>
       </div>
     </div>
   );

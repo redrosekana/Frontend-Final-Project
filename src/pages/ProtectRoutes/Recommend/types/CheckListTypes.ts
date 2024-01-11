@@ -1,8 +1,9 @@
+import React from "react";
+
 export interface CheckListTypes {
   title: string;
-  icon: string;
-  onClick?: any;
-  checked?: boolean;
-  onHover?: any;
-  onUnHover?: any;
+  icon: string | React.ReactNode;
+  checked: boolean;
+  onClick: () => void;
+  checkTooltip: string;
 }

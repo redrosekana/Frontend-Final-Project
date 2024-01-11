@@ -15,7 +15,7 @@ export const userSlice = createSlice({
       state.provider = action.payload.provider;
       state.memberParty = action.payload.memberParty;
       state.ownerParty = action.payload.ownerParty;
-      state.scoreEntries = action.payload.scoreEntries;
+      state.scoring = action.payload.scoring;
     },
     logoutRedux() {
       return initialState;

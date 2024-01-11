@@ -8,4 +8,5 @@ export interface CardPartyProps {
   countMember: number;
   owner: string;
   canJoin: boolean;
+  setState: React.Dispatch<React.SetStateAction<number>>;
 }

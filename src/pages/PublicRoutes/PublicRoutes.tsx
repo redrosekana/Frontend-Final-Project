@@ -1,27 +1,35 @@
-import { useEffect } from "react";
-import { Outlet } from "react-router-dom";
-
-// hooks
-import useCookie from "../../hooks/useCookie";
+import React, { useEffect, useState } from "react";
+import { Outlet, Navigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 // Layouts
-import NavbarPublic from "./Navbar/Navbar";
+import NavbarPublic from "../../layouts/NavbarPublic/NavbarPublic";
 
 const PublicRoute = () => {
-  const [accessToken, setAccessToken] = useCookie("accessToken", null);
-  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
+  const cookies = new Cookies();
+
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [checkLogin, setCheckLogin] = useState<boolean>(false);
 
   useEffect(() => {
-    setAccessToken(null);
-    setRefreshToken(null);
+    if (cookies.get("accessToken") && cookies.get("refreshToken")) {
+      setIsLogin(true);
+    }
+    setCheckLogin(true);
   }, []);
 
-  return (
-    <>
-      <NavbarPublic />
-      <Outlet />
-    </>
-  );
+  if (!checkLogin) {
+    return <></>;
+  } else if (checkLogin && isLogin) {
+    return <Navigate to="/page/home" />;
+  } else {
+    return (
+      <React.Fragment>
+        <NavbarPublic />
+        <Outlet />
+      </React.Fragment>
+    );
+  }
 };
 
 export default PublicRoute;

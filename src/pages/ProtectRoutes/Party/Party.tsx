@@ -1,11 +1,13 @@
-import { useState } from "react";
-import ItemAdvice from "../../../components/ItemAdvice";
+import React, { useState } from "react";
 
 // components
 import CreateParty from "./components/CreateParty";
 import FindParty from "./components/FindParty";
 import MyParty from "./components/MyParty";
 import ManageParty from "./components/ManageParty";
+
+// global components
+import ItemAdvice from "../../../components/ItemAdvice";
 
 // redux
 import type { RootState } from "../../../store/store";
@@ -19,14 +21,16 @@ function PartyProtect() {
   );
 
   return (
-    <main>
-      <div className="mt-8 p-5 max-w-[1400px] mx-auto">
-        <div className="text-center text-xl sm:text-3xl xl:text-5xl font-bold mb-8">
+    <React.Fragment>
+      <main className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
+        <h3 className="text-center text-4xl md:text-5xl font-semibold">
           เข้าร่วมปาร์ตี้
-        </div>
+        </h3>
 
-        <div className="mt-4 mb-8 ml-4">
-          <p className="text-lg sm:text-xl lg:text-2xl">คำแนะนำการใช้งาน</p>
+        <div className="mt-4 mb-8">
+          <p className="text-xl tl:text-2xl md:text-3xl lg:text-4xl">
+            คำแนะนำการใช้งาน
+          </p>
           <ul>
             <ItemAdvice content="ผู้ใช้งานสามารถเข้าร่วมได้ปาร์ตี้เดียวเท่านั้น" />
             <ItemAdvice content="ผู้ใช้งานที่เป็นเจ้าของปาร์ตี้ จะไม่สามารถเข้าร่วมกับปาร์ตี้อื่นได้ ต้องทำการลบปาร์ตี้ที่ตนเองสร้างก่อน" />
@@ -36,8 +40,8 @@ function PartyProtect() {
 
         <section className="border border-x-0 border-t-0 flex mb-8">
           <div
-            className={`p-3 cursor-pointer hover:bg-slate-50  ${
-              stage === 1 ? " text-blue-500 bg-slate-100" : "text-gray-500"
+            className={`p-3 cursor-pointer hover:bg-slate-100  ${
+              stage === 1 ? " text-blue-500 bg-slate-50" : "text-gray-500"
             }`}
             onClick={() => setStage(1)}
           >
@@ -45,8 +49,8 @@ function PartyProtect() {
           </div>
           {selector.ownerParty ? (
             <div
-              className={`p-3 cursor-pointer hover:bg-slate-50  ${
-                stage === 2 ? " text-blue-500 bg-slate-100" : "text-gray-500"
+              className={`p-3 cursor-pointer hover:bg-slate-100  ${
+                stage === 2 ? " text-blue-500 bg-slate-50" : "text-gray-500"
               }`}
               onClick={() => setStage(2)}
             >
@@ -55,8 +59,8 @@ function PartyProtect() {
           ) : null}
           {!selector.ownerParty && !selector.memberParty ? (
             <div
-              className={`p-3 cursor-pointer hover:bg-slate-50  ${
-                stage === 3 ? " text-blue-500 bg-slate-100" : "text-gray-500"
+              className={`p-3 cursor-pointer hover:bg-slate-100  ${
+                stage === 3 ? " text-blue-500 bg-slate-50" : "text-gray-500"
               }`}
               onClick={() => setStage(3)}
             >
@@ -76,14 +80,14 @@ function PartyProtect() {
         {stage === 1 ? (
           <MyParty />
         ) : stage === 2 ? (
-          <ManageParty />
+          <ManageParty setState={setStage} />
         ) : stage === 3 ? (
-          <CreateParty />
+          <CreateParty setState={setStage} />
         ) : (
-          <FindParty />
+          <FindParty setState={setStage} />
         )}
-      </div>
-    </main>
+      </main>
+    </React.Fragment>
   );
 }
 

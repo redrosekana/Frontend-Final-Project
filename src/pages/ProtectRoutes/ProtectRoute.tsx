@@ -1,20 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { isAxiosError } from "axios";
-import {
-  Outlet,
-  Navigate,
-  useNavigate,
-  NavigateFunction,
-  useLocation,
-  Location,
-} from "react-router-dom";
+import { Outlet, Navigate, useNavigate, useLocation } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 // types
 import { ErrorResponse } from "../../types/ErrorResponseTypes";
 
 // hooks
 import useAxios from "../../hooks/useAxios";
-import useCookie from "../../hooks/useCookie";
 import useAxiosRenewToken from "../../hooks/useAxiosRenewToken";
 
 // context
@@ -24,21 +17,26 @@ import { Store } from "../../context/store";
 import { useAppDispatch } from "../../store/hook";
 import { loginRedux } from "../../store/userSlice";
 
+// utils
+import renewToken from "../../utils/renewToken";
+
 // layouts
 import NavbarProtect from "../../layouts/NavbarProtect/NavbarProtect";
 
 const ProtectRoute = () => {
-  const navigate: NavigateFunction = useNavigate();
-  const location: Location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const cookies = new Cookies();
 
+  const [isVerifyAccessToken, setIsVerifyAccessToken] =
+    useState<boolean>(false);
+  const [permitFromAccessToken, setPermitFromAccessToken] =
+    useState<boolean>(false);
+  const [isRenewToken, setIsRenewToken] = useState<boolean>(false);
+  const [permitFromRenewToken, setPermitFromRenewToken] =
+    useState<boolean>(false);
   const [isScopeProfile, setIsScopeProfile] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useCookie("accessToken", null);
-  const [refreshToken, setRefreshToken] = useCookie("refreshToken", null);
-
-  // for check authentication
-  const [permit, setPermit] = useState<boolean | string>("none");
-  const [expireToken, setExpireToken] = useState<boolean>(false);
 
   useEffect(() => {
     setIsScopeProfile(false);
@@ -47,39 +45,33 @@ const ProtectRoute = () => {
   useEffect(() => {
     useAxios("/auth/detail-user", "get", false, true)
       .then((result) => {
-        console.log(result);
-        dispatch(
-          loginRedux({
-            displayName: result.data.data.displayName,
-            username: result.data.data.username,
-            email: result.data.data.email,
-            urlAvatar: result.data.data.urlAvatar,
-            provider: result.data.data.provider,
-            ownerParty: result.data.data.ownerParty,
-            memberParty: result.data.data.memberParty,
-            scoreEntries: result.data.data.scoring.scoreEntries,
-          })
-        );
-        setPermit(true);
+        dispatch(loginRedux(result.data.data));
+        setIsVerifyAccessToken(true);
+        setPermitFromAccessToken(true);
       })
       .catch(async (error) => {
-        setPermit(false);
+        setIsVerifyAccessToken(true);
+        setPermitFromAccessToken(false);
+
         if (isAxiosError(error)) {
           const data: ErrorResponse = error.response?.data;
           if (data.message === "token expired") {
             try {
-              const resultRenewToken = await useAxiosRenewToken(
-                "/auth/new-token",
+              await renewToken();
+              const updateUser = await useAxios(
+                "/auth/detail-user",
                 "get",
                 false,
                 true
               );
-              setAccessToken(resultRenewToken.data.accessToken);
-              setRefreshToken(resultRenewToken.data.refreshToken);
-              window.location.reload();
+              dispatch(loginRedux(updateUser.data.data));
+              setIsRenewToken(true);
+              setPermitFromRenewToken(true);
             } catch (error) {
-              setExpireToken(true);
-              console.log(error);
+              setIsRenewToken(true);
+              setPermitFromRenewToken(false);
+              cookies.remove("accessToken");
+              cookies.remove("refreshToken");
             }
           } else {
             navigate("/login");
@@ -90,17 +82,26 @@ const ProtectRoute = () => {
       });
   }, []);
 
-  if (permit === "none") {
-    return <></>;
-  } else if (!permit && expireToken) {
-    return <Navigate to="/login" />;
-  } else {
+  if (!isVerifyAccessToken) {
+    return <React.Fragment></React.Fragment>;
+  } else if (isVerifyAccessToken && permitFromAccessToken) {
     return (
       <Store.Provider value={{ isScopeProfile, setIsScopeProfile }}>
         <NavbarProtect />
         <Outlet />
       </Store.Provider>
     );
+  } else if (!isRenewToken) {
+    return <React.Fragment></React.Fragment>;
+  } else if (isRenewToken && permitFromRenewToken) {
+    return (
+      <Store.Provider value={{ isScopeProfile, setIsScopeProfile }}>
+        <NavbarProtect />
+        <Outlet />
+      </Store.Provider>
+    );
+  } else {
+    return <Navigate to="/login" />;
   }
 };
 

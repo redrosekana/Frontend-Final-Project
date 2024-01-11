@@ -1,7 +1,7 @@
 // types
-import { ItemProps } from "../types/ItemTypes";
+import { ItemAboutProps } from "../types/ItemAboutTypes";
 
-const ItemAbout = ({ order, img, title, content }: ItemProps) => {
+const ItemAbout = ({ order, img, title, content }: ItemAboutProps) => {
   return (
     <div className="flex flex-col md:flex-row mb-20 md:mb-32 lg:mb-48">
       <div
@@ -12,7 +12,7 @@ const ItemAbout = ({ order, img, title, content }: ItemProps) => {
         <img
           src={img}
           alt="about1"
-          className="w-[350px] md:w-[500px] lg:w-[650px] xl:w-[800] rounded-2xl "
+          className="w-[350px] md:w-[500px] lg:w-[650px] rounded-2xl"
         />
       </div>
       <div
@@ -21,7 +21,7 @@ const ItemAbout = ({ order, img, title, content }: ItemProps) => {
         <h3
           className={`mt-6 ml-4 md:mt-0 ${
             order % 2 === 0 ? "md:ml-4 lg:ml-10" : "md:mr-4 lg:mr-10"
-          }  font-bold text-2xl md:text-2xl lg:text-3xl xl:text-5xl`}
+          }  font-bold text-2xl lg:text-3xl xl:text-5xl`}
         >
           {title}
         </h3>

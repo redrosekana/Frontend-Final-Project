@@ -1,5 +1,4 @@
-// import library
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // components
 import DisplayEntriesMap from "./components/DisplayEntriesMap";
@@ -25,7 +24,6 @@ function MapProtect() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
     return () => {};
   }, []);
 
@@ -37,23 +35,23 @@ function MapProtect() {
 
   if (stagePage === "searchMap") {
     return (
-      <>
+      <React.Fragment>
         {reload ? <Reload /> : null}
         <SearchMap
           setEntrieShops={setEntrieShops}
           setStagePage={setStagePage}
           setReload={setReload}
         />
-      </>
+      </React.Fragment>
     );
   } else if (stagePage === "entriesMap") {
     return (
-      <main className="max-w-[1400px] mx-auto mt-4 p-5">
-        <div className="text-center text-2xl md:text-3xl lg:text-4xl font-bold mb-8">
+      <main className="mt-12 mb-4 max-w-[1400px] mx-auto px-4">
+        <h3 className="text-center text-4xl md:text-5xl font-semibold">
           ร้านบอร์ดเกมใกล้เคียง
-        </div>
+        </h3>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
           {entrieShops
             .sort((a, b) => a.distance - b.distance)
             .map((entrie, index) => (
@@ -64,9 +62,10 @@ function MapProtect() {
               />
             ))}
         </div>
+
         <div className="mt-10">
           <button
-            className="text-white bg-redrose hover:bg-red-800 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-md px-3 py-2 text-center transition-colors duration-200 ease-in"
+            className="py-2 px-3 bg-secondary hover:bg-red-700 text-white rounded-md text-md transition ease-in duration-150"
             onClick={() => {
               setStagePage("searchMap");
               setEntrieShops([]);

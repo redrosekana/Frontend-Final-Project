@@ -5,14 +5,13 @@ import { ModalAvatarProps } from "../types/ModalAvatarTypes";
 
 function ModalAvatar({
   showModal,
-  onClose,
   avatar,
+  onClose,
   setAvatar,
-  clickUpdateAvtar,
-  closeAvatarButton,
+  onClickUpdateAvtar,
 }: ModalAvatarProps) {
   return (
-    <Modal show={showModal} onClose={onClose}>
+    <Modal show={showModal} onClose={() => onClose(false)}>
       <Modal.Header>
         <div>เลือก Avatar ที่ต้องการ</div>
       </Modal.Header>
@@ -52,13 +51,13 @@ function ModalAvatar({
       </Modal.Body>
       <Modal.Footer className="flex justify-end">
         <button
-          onClick={clickUpdateAvtar}
+          onClick={onClickUpdateAvtar}
           className="w-20 rounded-md text-white bg-limegreen hover:bg-green-500 focus:ring-1 focus:border-green-400 focus:outline-none focus:ring-green-400 p-2 transition duration-150 ease-in"
         >
           ยืนยัน
         </button>
         <button
-          onClick={closeAvatarButton}
+          onClick={() => onClose(false)}
           className="w-20 rounded-md text-white bg-redrose hover:bg-red-800 focus:ring-1 focus:border-red-600 focus:outline-none focus:ring-red-600 p-2 transition duration-150 ease-in"
         >
           ยกเลิก

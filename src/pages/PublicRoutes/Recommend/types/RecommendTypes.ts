@@ -1,4 +1,4 @@
-export interface RecommendEntries {
+export interface RecommendBoardgameEntries {
   id: string;
   name: string;
   minplayers: number;

@@ -13,10 +13,8 @@ function DisplayEntriesMap(props: DisplayEntriesMapProps) {
       </div>
       <div className="mt-2">จังหวัด {props.destinationProvince}</div>
       <div>เบอร์ติดต่อร้าน {props.destinationTel}</div>
-      <div className="absolute left-0 w-full bottom-2 flex justify-between items-center">
-        <span className=" ml-4">
-          ระยะทาง {(props.distance / 1000).toFixed(2)} กม.
-        </span>
+      <div className="absolute left-0 bottom-2 w-full flex justify-between items-center">
+        <span className="ml-4">ระยะทาง {(props.distance / 1000).toFixed(2)} กม.</span>
         <button
           onClick={() =>
             props.clickDetailMap({
@@ -32,7 +30,7 @@ function DisplayEntriesMap(props: DisplayEntriesMapProps) {
               destinationContact: props.destinationContact,
             })
           }
-          className="mr-3 bg-orangey px-2 py-1 font-medium text-base rounded-lg text-white hover:bg-orange-500 transition-colors duration-150 ease-in"
+          className="mr-2 px-2 py-1 bg-thrith hover:bg-orange-500 text-white rounded-md text-md transition ease-in duration-150"
         >
           แผนที่
         </button>

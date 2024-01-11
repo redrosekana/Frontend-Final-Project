@@ -1,20 +1,31 @@
 import { ToastContainer } from "react-toastify";
 import { Modal } from "flowbite-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { isAxiosError } from "axios";
+import Cookies from "universal-cookie";
+
+// global types
+import { ErrorResponse } from "../../../../types/ErrorResponseTypes";
 
 // redux
 import type { RootState } from "../../../../store/store";
-import { useAppSelector } from "../../../../store/hook";
+import { useAppSelector, useAppDispatch } from "../../../../store/hook";
+import { loginRedux } from "../../../../store/userSlice";
 
 // utils
 import { createSwal } from "../../../../utils/createSwal";
 import { customDuration } from "../../../../utils/customDuration";
 import { toastSuccess, toastError } from "../../../../utils/toastExtra";
+import renewToken from "../../../../utils/renewToken";
 
 // hooks
 import useAxios from "../../../../hooks/useAxios";
 
 const MyParty = () => {
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { ownerParty, memberParty } = useAppSelector(
     (state: RootState) => state.users
   );
@@ -56,17 +67,51 @@ const MyParty = () => {
           false,
           true
         );
-
+        const updateUser = await useAxios(
+          "/auth/detail-user",
+          "get",
+          false,
+          true
+        );
+        dispatch(loginRedux(updateUser.data.data));
         toastSuccess(
           ownerParty ? "ลบปาร์ตี้นี้เรียบร้อย" : "ออกจากปาร์ตี้นี้เรียบร้อย"
         );
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       }
     } catch (error) {
-      console.log(error);
-      toastError("เกิดข้อผิดพลาด โปรดทำรายการใหม่อีกครั้ง");
+      if (isAxiosError(error)) {
+        const data = error.response?.data as ErrorResponse;
+        if (data.message === "token expired") {
+          try {
+            await renewToken();
+            await useAxios(
+              ownerParty ? `/party/removing/${id}` : `/party/leaving/${id}`,
+              ownerParty ? "delete" : "get",
+              false,
+              true
+            );
+            const updateUser = await useAxios(
+              "/auth/detail-user",
+              "get",
+              false,
+              true
+            );
+            dispatch(loginRedux(updateUser.data.data));
+            toastSuccess(
+              ownerParty ? "ลบปาร์ตี้นี้เรียบร้อย" : "ออกจากปาร์ตี้นี้เรียบร้อย"
+            );
+          } catch (error) {
+            toastError("ทำรายการไม่สำเร็จ เข้าสู่ระบบอีกครั้ง");
+            cookies.remove("accessToken");
+            cookies.remove("refreshToken");
+            setTimeout(() => {
+              navigate("/login");
+            }, 2500);
+          }
+        } else {
+          toastError("เกิดข้อผิดพลาด");
+        }
+      }
     }
   };
 

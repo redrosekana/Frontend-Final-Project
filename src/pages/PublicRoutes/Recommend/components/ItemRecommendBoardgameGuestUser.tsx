@@ -1,10 +1,10 @@
 // types
-import { ItemBoardgameRecommendProps } from "../types/ItemBoardgameRecommendTypes";
+import { ItemBoardgameRecommendProps } from "../types/ItemRecommendBoardgameGuestUserTypes";
 
 // utils
 import { VITE_WEBBORADGAME } from "../../../../utils/getEnv";
 
-const ItemBoardgameRecommend = ({
+const ItemRecommendBoardGuestUser = ({
   id,
   name,
   minplayers,
@@ -16,25 +16,28 @@ const ItemBoardgameRecommend = ({
   image,
   index,
 }: ItemBoardgameRecommendProps) => {
-  let descriptionOptimize = description.slice(0, 250);
-  let orderBackspace = descriptionOptimize.lastIndexOf(" ");
-  descriptionOptimize = descriptionOptimize.slice(0, orderBackspace);
-  descriptionOptimize = descriptionOptimize.replace(
-    /&#10;|&quot;|&rdquo;|&ldquo;|&mdash;|&#9;|&rsquo;/gi,
-    " "
-  );
+  const customDescription = (word: string) => {
+    let descriptionOptimize = word.slice(0, 250);
+    let orderBackspace = descriptionOptimize.lastIndexOf(" ");
+    descriptionOptimize = descriptionOptimize.slice(0, orderBackspace);
+    descriptionOptimize = descriptionOptimize.replace(
+      /&#10;|&quot;|&rdquo;|&ldquo;|&mdash;|&#9;|&rsquo;/gi,
+      " "
+    );
+    return descriptionOptimize;
+  };
 
   return (
-    <div className="p-6 flex flex-col items-center md:flex-row md:items-start mb-4">
-      <div className="max-w-[270px] w-full h-[250px] rounded-2xl md:self-center md:h-[300px]">
+    <div className="flex flex-col md:flex-row items-center gap-x-8 gap-y-4 mb-5 p-4">
+      <div className="max-w-[270px] w-full h-[300px] rounded-2xl">
         <img
           src={image}
           alt="image"
-          className="w-full h-full object-fill rounded-2xl md:h-full"
+          className="w-full h-full object-fill rounded-2xl"
         />
       </div>
 
-      <div className="max-w-[400px] w-full mt-6 md:mt-2 md:ml-8 md:max-w-max">
+      <div className="max-w-5xl w-full">
         <p className="font-semibold text-3xl">
           {index !== undefined ? index + 1 + ")." : null} {name}
         </p>
@@ -43,7 +46,7 @@ const ItemBoardgameRecommend = ({
         </p>
         <p className="mt-4 text-xl">
           <span className="font-semibold">รายละเอียด</span>{" "}
-          {descriptionOptimize}{" "}
+          {customDescription(description)}{" "}
           <a
             className="text-blue-700 underline ml-1"
             href={`${VITE_WEBBORADGAME}/${id}`}
@@ -53,12 +56,12 @@ const ItemBoardgameRecommend = ({
           </a>
         </p>
 
-        <div className=" flex justify-center md:justify-start mt-4 gap-x-4">
-          <div className="text-lg  flex flex-col items-center px-2">
+        <div className="flex justify-center md:justify-start mt-4 gap-x-4">
+          <div className="text-lg flex flex-col items-center px-2">
             <img
               src="/person.png"
               alt="person"
-              className="max-w-[60px] w-full h-[60px] "
+              className="max-w-[60px] w-full h-[60px]"
             />
             <span className="text-center mt-1">
               {" "}
@@ -69,7 +72,7 @@ const ItemBoardgameRecommend = ({
               คน
             </span>
           </div>
-          <div className="text-lg  flex flex-col items-center px-2">
+          <div className="text-lg flex flex-col items-center px-2">
             <img
               src="/time.png"
               alt="time"
@@ -80,7 +83,7 @@ const ItemBoardgameRecommend = ({
               นาที
             </span>
           </div>
-          <div className="text-lg  flex flex-col items-center px-2">
+          <div className="text-lg flex flex-col items-center px-2">
             <img
               src="/age.png"
               alt="time"
@@ -97,4 +100,4 @@ const ItemBoardgameRecommend = ({
   );
 };
 
-export default ItemBoardgameRecommend;
+export default ItemRecommendBoardGuestUser;

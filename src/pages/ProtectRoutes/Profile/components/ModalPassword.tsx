@@ -15,7 +15,7 @@ function ModalPassword({
   checkConfirmPassword,
 }: ModalpasswordProps) {
   return (
-    <Modal show={showModal} onClose={onClose}>
+    <Modal show={showModal} onClose={() => onClose(false)}>
       <Modal.Header>
         <div className="text-2xl">เปลี่ยนรหัสผ่าน</div>
       </Modal.Header>
@@ -56,7 +56,7 @@ function ModalPassword({
         </button>
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => onClose(false)}
           className="w-20 rounded-md text-white bg-redrose hover:bg-red-800 focus:ring-1 focus:border-red-600 focus:outline-none focus:ring-red-600 p-2 transition duration-150 ease-in"
         >
           ยกเลิก
