@@ -57,9 +57,9 @@ function Email() {
         if (Array.isArray(data.message)) {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         } else if (data.message === "invalid format email") {
-          toastError("รูปแบบอีเมลล์ไม่ถูกต้อง");
+          toastError("รูปแบบอีเมลไม่ถูกต้อง");
         } else if (data.message === "there is no email in the system") {
-          toastError("ไม่มีอีเมลล์นี้ในระบบ");
+          toastError("ไม่มีอีเมลนี้ในระบบ");
         } else {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
@@ -85,7 +85,7 @@ function Email() {
               htmlFor="reset-password"
               className="text-xl text-gray-900 font-medium mb-3"
             >
-              กรอกอีเมลล์ของคุณ <span className="text-red-700">*</span>
+              กรอกอีเมลของคุณ <span className="text-red-700">*</span>
             </label>
             <SendEmailInput
               type="text"
@@ -97,12 +97,12 @@ function Email() {
             />
 
             {errors.email?.type === "required" ? (
-              <span className=" text-red-700 mt-1">โปรดกรอกอีเมลล์</span>
+              <span className=" text-red-700 mt-1">โปรดกรอกอีเมล</span>
             ) : null}
 
             {errors.email?.type === "pattern" ? (
               <span className=" text-red-700 mt-1">
-                รูปแบบอีเมลล์ไม่ถูกต้อง
+                รูปแบบอีเมลไม่ถูกต้อง
               </span>
             ) : null}
 

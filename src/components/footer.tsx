@@ -35,7 +35,7 @@ function Footer() {
         </div>
 
         <div className="text-center text-xl md:text-2xl flex-grow">
-          &copy; 2023 BoardGame RecCommu. All Rights Reserved.{" "}
+          &copy; 2023 BoardGame RecCommu.
         </div>
 
         <div className="flex justify-center gap-4 flex-grow">
@@ -48,15 +48,8 @@ function Footer() {
           </a>
           <a href="https://www.instagram.com/kanadss" target="_blank">
             <img
-              src="/ig.svg"
+              src="/ig.png"
               alt="instagram"
-              className="w-[50px] cursor-pointer"
-            />
-          </a>
-          <a href="https://twitter.com/" target="_blank">
-            <img
-              src="/twitter.svg"
-              alt="twitter"
               className="w-[50px] cursor-pointer"
             />
           </a>

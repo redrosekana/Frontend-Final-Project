@@ -1,5 +1,5 @@
 import { ToastContainer } from "react-toastify";
-import { Modal } from "flowbite-react";
+import { Modal, Badge } from "flowbite-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { isAxiosError } from "axios";
@@ -139,9 +139,17 @@ const MyParty = () => {
             <span className="text-2xl">ชื่อปาร์ตี้:</span> &nbsp;{" "}
             <span className="text-xl font-medium">{name}</span>
           </div>
-          <div className="mt-1">
-            <span className="text-2xl">ประเภทของเกม:</span> &nbsp;{" "}
-            <span className="text-xl font-medium">{category}</span>
+          <div className="mt-1 tl:flex flex-wrap items-center gap-x-2">
+            <span className="text-2xl">บอร์ดเกมที่ต้องการเล่น:</span>
+            {category?.map((item, index) => {
+              return (
+                <div className="text-2xl font-medium flex flex-wrap mt-1">
+                  <Badge key={index} color="green">
+                    {item}
+                  </Badge>
+                </div>
+              );
+            })}
           </div>
           <div className="mt-1">
             <span className="text-2xl">เวลาในการเล่นเกม:</span> &nbsp;{" "}

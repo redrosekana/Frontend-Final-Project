@@ -31,11 +31,13 @@ const Recommend2 = () => {
   const [categoryOption, setCategoryOption] = useState<CategoryOptionsType[]>(
     []
   );
+  const [isReload, setIsReload] = useState<boolean>(true);
 
   useEffect(() => {
     readCategoryFromCsvFile()
       .then((result) => {
         setCategoryOption(result);
+        setIsReload(false);
       })
       .catch((error) => {
         console.log(error);
@@ -74,53 +76,61 @@ const Recommend2 = () => {
           เลือกประเภทเกม
         </div>
 
-        <div className="max-w-4xl w-full mx-auto mt-6">
-          <div className="text-2xl">ประเภทเกม</div>
+        {isReload ? (
+          <React.Fragment></React.Fragment>
+        ) : (
+          <React.Fragment>
+            <div className="max-w-4xl w-full mx-auto mt-6">
+              <div className="text-2xl">ประเภทเกม</div>
 
-          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-2 gap-y-6">
-            {categoryOption.map((item, index) => (
-              <CheckList
-                key={index}
-                title={item.cat_th}
-                icon={item.pic_url}
-                onClick={() => {
-                  if (item.cat_en === "All") {
-                    const t = categoryOption.map((e, index) => ({
-                      index: index,
-                      value: e.cat_en,
-                    }));
+              <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-2 gap-y-6">
+                {categoryOption.map((item, index) => (
+                  <CheckList
+                    key={index}
+                    title={item.cat_th}
+                    icon={item.pic_url}
+                    onClick={() => {
+                      if (item.cat_en === "All") {
+                        const t = categoryOption.map((e, index) => ({
+                          index: index,
+                          value: e.cat_en,
+                        }));
 
-                    dispatch(setAllCategory(t));
-                  } else {
-                    dispatch(setCategory({ index: index, value: item.cat_en }));
-                  }
-                }}
-                checked={
-                  recommendPayload.category.find((e) => e.index === index)
-                    ? true
-                    : false
-                }
-                checkTooltip={item.description_summarize}
-              />
-            ))}
-          </div>
-        </div>
+                        dispatch(setAllCategory(t));
+                      } else {
+                        dispatch(
+                          setCategory({ index: index, value: item.cat_en })
+                        );
+                      }
+                    }}
+                    checked={
+                      recommendPayload.category.find((e) => e.index === index)
+                        ? true
+                        : false
+                    }
+                    checkTooltip={item.description_summarize}
+                  />
+                ))}
+              </div>
+            </div>
 
-        <div className="flex flex-row justify-between mt-6">
-          <button
-            onClick={() => navigate("/page/recommend")}
-            className="py-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-24 sm:w-20 transition ease-in duration-150"
-          >
-            ย้อนกลับ
-          </button>
+            <div className="flex flex-row justify-between mt-6">
+              <button
+                onClick={() => navigate("/page/recommend")}
+                className="py-2 bg-secondary hover:bg-red-700 text-white rounded-md text-md w-24 sm:w-20 transition ease-in duration-150"
+              >
+                ย้อนกลับ
+              </button>
 
-          <button
-            onClick={() => navigate("/page/recommend/3")}
-            className="py-2 bg-thrith hover:bg-orange-500 text-white rounded-md text-md w-20 sm:w-16 transition ease-in duration-150"
-          >
-            ต่อไป
-          </button>
-        </div>
+              <button
+                onClick={() => navigate("/page/recommend/3")}
+                className="py-2 bg-thrith hover:bg-orange-500 text-white rounded-md text-md w-20 sm:w-16 transition ease-in duration-150"
+              >
+                ต่อไป
+              </button>
+            </div>
+          </React.Fragment>
+        )}
       </div>
     </React.Fragment>
   );

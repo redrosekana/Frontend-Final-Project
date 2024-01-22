@@ -150,9 +150,10 @@ const RecommendStepThree = () => {
   const nextToProfilePage = () => {
     createSwal(
       "แจ้งเตือน",
-      "การให้คะแนนจะมีผลต่อการแนะนำบอร์ดเกมครั้งต่อไป โปรดให้ความสำคัญในส่วนนี้ด้วย",
+      "ถ้าได้ลองเล่นเกมที่เราแนะนำไปแล้ว อย่าลืมให้คะแนนเพื่อระบบแนะนำที่ดีขึ้นด้วยนะครับ",
       "question",
       "#00B728",
+      true,
       true
     ).then((result: any) => {
       if (result.isConfirmed) {

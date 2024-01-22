@@ -84,7 +84,7 @@ function RecommendStepOne() {
           <div className="text-2xl">เลือกเวลาในการเล่น</div>
           <div className="mt-4 grid grid-cols-1 tl:grid-cols-3 gap-4">
             <CheckList
-              title="15 - 30 นาที"
+              title="น้อยกว่า 30 นาที"
               icon={<IoPlay />}
               onClick={() => {
                 dispatch(setTime("select_1"));
@@ -93,7 +93,7 @@ function RecommendStepOne() {
               checkTooltip={""}
             />
             <CheckList
-              title="30 นาทีขึ้นไป"
+              title="31 - 60 นาที"
               icon={<IoPlayForward />}
               onClick={() => {
                 dispatch(setTime("select_2"));
@@ -102,7 +102,7 @@ function RecommendStepOne() {
               checkTooltip={""}
             />
             <CheckList
-              title="1 ชั่วโมงขึ้นไป"
+              title="60 นาทีขึ้นไป"
               icon={<IoPlaySkipForward />}
               onClick={() => {
                 dispatch(setTime("select_3"));

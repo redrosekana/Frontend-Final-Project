@@ -181,7 +181,6 @@ const CreateParty = ({
               </label>
               <input
                 type="number"
-                min="1"
                 className={`w-full rounded-md p-2 mb-1 text-lg text-gray-700 outline-none bg-slate-50 focus:border-blue-500 ${
                   errors.limit
                     ? "border border-red-600"
@@ -193,7 +192,7 @@ const CreateParty = ({
                 <span className="mt-1 text-red-500">โปรดกรอกจำนวนคน</span>
               ) : null}
               {errors.limit?.type === "min" ? (
-                <span className="mt-1 text-red-500">จำนวนคนต้องมากกว่า 1</span>
+                <span className="mt-1 text-red-500">จำนวนคนต้องมากกว่า 0</span>
               ) : null}
             </div>
 
@@ -204,7 +203,6 @@ const CreateParty = ({
               </label>
               <input
                 type="number"
-                min="0"
                 className={`w-full rounded-md p-2 mb-1 text-lg text-gray-700 outline-none bg-slate-50 focus:border-blue-500 ${
                   errors.duration
                     ? "border border-red-600"
@@ -212,7 +210,7 @@ const CreateParty = ({
                 }`}
                 {...register("duration", {
                   required: true,
-                  min: 0,
+                  min: 1,
                   max: 1440,
                 })}
               />
@@ -223,7 +221,7 @@ const CreateParty = ({
               ) : null}
               {errors.duration?.type === "min" ? (
                 <span className="mt-1 text-red-500">
-                  ระยะเวลาเล่นเกมห้ามเป็นค่าติดลบ
+                  ระยะเวลาเล่นเกมต้องมากกว่า 0
                 </span>
               ) : null}
             </div>
@@ -247,7 +245,7 @@ const CreateParty = ({
             </div>
           </div>
 
-          <div className="p-1 flex flex-col flex-grow">
+          <div className="p-1">
             <label className="text-lg">บอร์ดเกมที่ต้องการเล่น</label>
             <Controller
               name="category"

@@ -382,11 +382,7 @@ function Profile() {
                 type="text"
                 value={selector.displayName}
               />
-              <InputProfile
-                title="อีเมลล์"
-                type="text"
-                value={selector.email}
-              />
+              <InputProfile title="อีเมล" type="text" value={selector.email} />
             </div>
           ) : (
             <div className="max-w-xl w-full">
@@ -395,11 +391,7 @@ function Profile() {
                 type="text"
                 value={selector.displayName}
               />
-              <InputProfile
-                title="อีเมลล์"
-                type="text"
-                value={selector.email}
-              />
+              <InputProfile title="อีเมล" type="text" value={selector.email} />
             </div>
           )}
 

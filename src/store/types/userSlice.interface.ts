@@ -13,7 +13,7 @@ interface MemberParty {
   _id: string;
   name: string;
   limit: number;
-  category: string;
+  category: string[];
   duration: number;
   place: string;
   description: string;
@@ -26,7 +26,7 @@ interface OwnerParty {
   _id: string;
   name: string;
   limit: number;
-  category: string;
+  category: string[];
   duration: number;
   place: string;
   description: string;

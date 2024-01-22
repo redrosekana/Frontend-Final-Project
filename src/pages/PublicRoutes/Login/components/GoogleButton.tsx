@@ -11,7 +11,7 @@ const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
       <div className="w-8 h-8 bg-white flex justify-center items-center tl:absolute tl:top-1 tl:left-1 rounded">
         <img className="google-icon" src="/google-icons.png" />
       </div>
-      <div className="text-white tl:ml-7">google</div>
+      <div className="text-white tl:ml-7">Google</div>
     </button>
   );
 };

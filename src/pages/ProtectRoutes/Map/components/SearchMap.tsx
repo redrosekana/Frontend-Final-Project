@@ -41,6 +41,7 @@ function SearchMap({
 
   useEffect(() => {
     init();
+
     return () => {};
   }, []);
 
@@ -75,8 +76,11 @@ function SearchMap({
 
     // event เมื่อ click ที่หมุด
     tmpMap.Event.bind("overlayClick", function (ev: any) {
+      console.log(ev);
       // method ที่หาค่าลองติจูดและละติจูดตอนทำการคลิ๊กที่หมุดได้
       let mouseLocation = map.location(window.longdo.LocationMode.Pointer);
+
+      window.scrollBy(0, 900);
 
       // แสดงข้อมูลที่อยู่ ณ ตำแหน่งนั้นให้ผู้ใช้งาน ในกรณีที่เป็นหมุด กับ เส้นทางสีน้ำเงิน
       if (ev.data.address) {
@@ -323,9 +327,10 @@ function SearchMap({
 
         <div className="mt-8 max-w-lg w-full mx-auto">
           <label className="font-medium text-xl">ที่อยู่ปัจจุบัน</label>
-          <div className="text-center flex items-center h-[150px] rounded-md mt-4 text-lg text-gray-700 border bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1">
-            {information.sourceAddress}
-          </div>
+          <textarea
+            className="text-center max-w-[700px] w-full h-[120px] resize-none rounded-md mt-4 text-lg text-gray-700 border bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1"
+            value={information.sourceAddress}
+          />
           <div className="text-end mt-3">
             <button
               onClick={() => calculateDistance()}

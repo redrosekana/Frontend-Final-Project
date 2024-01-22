@@ -60,7 +60,7 @@ function Register() {
         } else if (data.message === "username is repeated") {
           toastError("ชื่อผู้ใช้งานถูกใช้งานแล้ว");
         } else if (data.message === "email is repeated") {
-          toastError("อีเมลล์ถูกใช้งานแล้ว");
+          toastError("อีเมลถูกใช้งานแล้ว");
         } else {
           toastError("เกิดข้อผิดพลาดในการทำรายการ");
         }
@@ -120,11 +120,11 @@ function Register() {
           />
 
           {errors.email?.type === "required" ? (
-            <span className=" block mb-2 text-red-700">โปรดกรอกอีเมลล์</span>
+            <span className=" block mb-2 text-red-700">โปรดกรอกอีเมล</span>
           ) : null}
           {errors.email?.type === "pattern" ? (
             <span className=" block mb-2 text-red-700">
-              รูปแบบของอีเมลล์ไม่ถูกต้อง
+              รูปแบบของอีเมลไม่ถูกต้อง
             </span>
           ) : null}
 

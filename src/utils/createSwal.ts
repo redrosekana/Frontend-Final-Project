@@ -7,7 +7,8 @@ const createSwal = (
   text: string,
   icon: IconSwal,
   colorButton: string,
-  showcancelButton: boolean = false
+  showcancelButton: boolean = false,
+  showDenyButton: boolean = false
 ): any => {
   return Swal.fire({
     title: title,
@@ -18,6 +19,9 @@ const createSwal = (
     showCancelButton: showcancelButton,
     cancelButtonText: "ยกเลิก",
     cancelButtonColor: "#e10000",
+    denyButtonText: "ให้คะแนนก่อน",
+    denyButtonColor: "#FF8F3E",
+    showDenyButton: showDenyButton,
   });
 };
 
