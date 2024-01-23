@@ -49,7 +49,7 @@ function RecommendStepOne() {
         <div className="max-w-4xl w-full mx-auto mt-6">
           <div className="text-2xl">เลือกจำนวนผู้เล่น</div>
 
-          <div className="mt-4 grid grid-cols-1 tl:grid-cols-3 gap-4">
+          <div className="mt-4 flex flex-wrap justify-around gap-4">
             <CheckList
               title="1 - 2 คน"
               icon="/icons/person.svg"
@@ -82,7 +82,7 @@ function RecommendStepOne() {
 
         <div className="max-w-4xl w-full mx-auto mt-6">
           <div className="text-2xl">เลือกเวลาในการเล่น</div>
-          <div className="mt-4 grid grid-cols-1 tl:grid-cols-3 gap-4">
+          <div className="mt-4 flex flex-wrap justify-around gap-4">
             <CheckList
               title="น้อยกว่า 30 นาที"
               icon={<IoPlay />}
@@ -115,7 +115,7 @@ function RecommendStepOne() {
 
         <div className="max-w-4xl w-full mx-auto mt-4">
           <div className="text-2xl">เลือกความยากของเกม</div>
-          <div className="mt-4 grid grid-cols-1 tl:grid-cols-3 gap-4">
+          <div className="mt-4 flex flex-wrap justify-around gap-4">
             <CheckList
               title="ง่าย"
               icon="/icons/circle-E.svg"
@@ -146,7 +146,7 @@ function RecommendStepOne() {
           </div>
         </div>
 
-        <div className="text-center sm:text-end mt-6">
+        <div className="text-end mt-6">
           <button
             onClick={() => navigate("/page/recommend/2")}
             className="py-2 bg-thrith hover:bg-orange-500 text-white rounded-md text-md w-20 sm:w-16 transition ease-in duration-150"

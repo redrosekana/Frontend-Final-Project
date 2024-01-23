@@ -2,7 +2,7 @@ export interface CardPartyProps {
   _id: string;
   name: string;
   limit: number;
-  category: string;
+  category: string[];
   duration: number;
   place: string;
   countMember: number;

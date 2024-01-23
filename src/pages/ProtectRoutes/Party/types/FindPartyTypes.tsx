@@ -2,7 +2,7 @@ export interface PartyItem {
   _id: string;
   name: string;
   limit: number;
-  category: string;
+  category: string[];
   duration: number;
   place: string;
   member: Array<unknown>;

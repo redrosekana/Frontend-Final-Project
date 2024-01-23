@@ -51,7 +51,7 @@ function MapProtect() {
           ร้านบอร์ดเกมใกล้เคียง
         </h3>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
+        <div className="mt-8 flex flex-wrap justify-end gap-y-6">
           {entrieShops
             .sort((a, b) => a.distance - b.distance)
             .map((entrie, index) => (

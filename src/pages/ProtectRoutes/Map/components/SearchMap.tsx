@@ -76,7 +76,6 @@ function SearchMap({
 
     // event เมื่อ click ที่หมุด
     tmpMap.Event.bind("overlayClick", function (ev: any) {
-      console.log(ev);
       // method ที่หาค่าลองติจูดและละติจูดตอนทำการคลิ๊กที่หมุดได้
       let mouseLocation = map.location(window.longdo.LocationMode.Pointer);
 
@@ -195,48 +194,47 @@ function SearchMap({
           `โปรดทำการเลือกที่อยู่ปัจจุบัน`,
           "warning",
           "#ec9e18"
-        ).then(() => {
-          return;
-        });
+        );
+      } else {
+        setReload(true);
+
+        for (let i = 0; i < boardGameShops.length; i++) {
+          Object.assign(boardGameShops[i], {
+            distance: haversine(
+              parseFloat(latitude),
+              parseFloat(longitude),
+              parseFloat(boardGameShops[i].lat),
+              parseFloat(boardGameShops[i].lon)
+            ),
+          });
+        }
+
+        boardGameShops = boardGameShops
+          .sort((a: any, b: any) => a.distance - b.distance)
+          .filter((_, index: number) => index < 9);
+
+        for (let i = 0; i < boardGameShops.length; i++) {
+          const body: InformationEntrieShopOnlySearchItemPage = {
+            sourceAddress: sourceAddress,
+            destinationAddress: boardGameShops[i].name,
+            sourceLatitude: parseFloat(latitude),
+            sourceLongitude: parseFloat(longitude),
+            destinationLatitude: parseFloat(boardGameShops[i].lat),
+            destinationLongitude: parseFloat(boardGameShops[i].lon),
+            destinationProvince: boardGameShops[i].province,
+            destinationTel: boardGameShops[i].tel,
+            destinationContact: boardGameShops[i].contact,
+          };
+
+          const result = await CalculateDistanceApi(body);
+          setEntrieShops((prev: any) => {
+            return [...prev, result];
+          });
+        }
+
+        setReload(false);
+        setStagePage("entriesMap");
       }
-      setReload(true);
-
-      for (let i = 0; i < boardGameShops.length; i++) {
-        Object.assign(boardGameShops[i], {
-          distance: haversine(
-            parseFloat(latitude),
-            parseFloat(longitude),
-            parseFloat(boardGameShops[i].lat),
-            parseFloat(boardGameShops[i].lon)
-          ),
-        });
-      }
-
-      boardGameShops = boardGameShops
-        .sort((a: any, b: any) => a.distance - b.distance)
-        .filter((_, index: number) => index < 9);
-
-      for (let i = 0; i < boardGameShops.length; i++) {
-        const body: InformationEntrieShopOnlySearchItemPage = {
-          sourceAddress: sourceAddress,
-          destinationAddress: boardGameShops[i].name,
-          sourceLatitude: parseFloat(latitude),
-          sourceLongitude: parseFloat(longitude),
-          destinationLatitude: parseFloat(boardGameShops[i].lat),
-          destinationLongitude: parseFloat(boardGameShops[i].lon),
-          destinationProvince: boardGameShops[i].province,
-          destinationTel: boardGameShops[i].tel,
-          destinationContact: boardGameShops[i].contact,
-        };
-
-        const result = await CalculateDistanceApi(body);
-        setEntrieShops((prev: any) => {
-          return [...prev, result];
-        });
-      }
-
-      setReload(false);
-      setStagePage("entriesMap");
     } catch (error) {
       console.log(error);
     }
@@ -329,7 +327,8 @@ function SearchMap({
           <label className="font-medium text-xl">ที่อยู่ปัจจุบัน</label>
           <textarea
             className="text-center max-w-[700px] w-full h-[120px] resize-none rounded-md mt-4 text-lg text-gray-700 border bg-slate-50 border-slate-300 focus:border-blue-500 focus:ring-1"
-            value={information.sourceAddress}
+            disabled
+            defaultValue={information.sourceAddress}
           />
           <div className="text-end mt-3">
             <button

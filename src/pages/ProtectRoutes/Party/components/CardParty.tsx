@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { isAxiosError } from "axios";
+import { Badge } from "flowbite-react";
 
 // utils
 import { createSwal } from "../../../../utils/createSwal";
@@ -96,7 +97,7 @@ const CardParty = ({
   };
 
   return (
-    <div className="max-w-sm w-full mx-auto p-4 m-0 border rounded shadow">
+    <div className="basis-[400px] p-4 m-0 border rounded shadow relative">
       <div className="flex justify-between text-2xl">
         <div>{name}</div>
         <div>
@@ -105,23 +106,36 @@ const CardParty = ({
       </div>
 
       <div className="mt-2">
-        <div>ประเภท {category}</div>
-        <div>เวลาในการเล่น {customDuration(duration)}</div>
-        <div>สถานที่ {place}</div>
-        <div>ผู้สร้าง {owner}</div>
+        <div>
+          บอร์ดเกมที่ต้องการเล่น:
+          {category.length === 0 ? (
+            <span className="mx-1">ไม่ได้ระบุ</span>
+          ) : (
+            category?.map((item, index) => {
+              return (
+                <Badge key={index} color="green" className="inline-block mx-1">
+                  {item}
+                </Badge>
+              );
+            })
+          )}
+          {}
+        </div>
+        <div>เวลาในการเล่น: {customDuration(duration)}</div>
+        <div>สถานที่: {place}</div>
+        <div>ผู้สร้าง: {owner}</div>
       </div>
 
-      <div className="mt-8 text-end">
-        <button
-          onClick={() => joinParty(_id)}
-          className={`${
-            limit - countMember > 0 && canJoin ? "bg-primary" : "bg-gray-500"
-          } text-white w-16 py-1 rounded`}
-          disabled={limit - countMember > 0 && canJoin ? false : true}
-        >
-          เข้าร่วม
-        </button>
-      </div>
+      <button
+        onClick={() => joinParty(_id)}
+        className={`${
+          limit - countMember > 0 && canJoin ? "bg-primary" : "bg-gray-500"
+        } text-white w-16 py-1 rounded absolute bottom-2 right-3`}
+        disabled={limit - countMember > 0 && canJoin ? false : true}
+      >
+        เข้าร่วม
+      </button>
+
       <ToastContainer />
     </div>
   );

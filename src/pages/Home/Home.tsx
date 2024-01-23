@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 
 // global components
@@ -15,6 +15,7 @@ import { PopularListItemTypes } from "./types/HomeTypes";
 import useAxios from "../../hooks/useAxios";
 
 function Home() {
+  const navigate = useNavigate();
   const cookies = new Cookies();
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -52,15 +53,21 @@ function Home() {
               นอกจากนี้ยังมีชุมชนที่สามารถเข้าร่วมกับผู้อื่นที่สนใจจะเล่นบอร์ดเกมด้วยกันโดยง่ายพร้อมกับค้นหาสถานที่เล่นบอร์ดเกม
             </p>
             <div className="flex flex-col items-center gap-y-2 justify-center tl:flex-row lg:justify-start gap-x-3 mt-4">
-              <button className="py-2 px-4 bg-thrith hover:bg-orange-500 text-white rounded-md text-lg w-48 transition ease-in duration-150">
-                <NavLink to={`${isLogin ? "/page/recommend" : "/recommend"}`}>
-                  ระบบแนะนำบอร์ดเกม
-                </NavLink>
+              <button
+                onClick={() =>
+                  isLogin ? navigate("/page/recommend") : navigate("/recommend")
+                }
+                className="py-2 px-4 bg-thrith hover:bg-orange-500 text-white rounded-md text-lg w-48 transition ease-in duration-150"
+              >
+                ระบบแนะนำบอร์ดเกม
               </button>
-              <button className="py-2 px-4 border-2 border-black rounded-md text-lg w-40 transition ease-in duration-150">
-                <NavLink to={`${isLogin ? "/page/party" : "/party"}`}>
-                  ระบบค้นหาผู้เล่น
-                </NavLink>
+              <button
+                onClick={() =>
+                  isLogin ? navigate("/page/party") : navigate("/party")
+                }
+                className="py-2 px-4 border-2 border-black rounded-md text-lg w-40 transition ease-in duration-150"
+              >
+                ระบบค้นหาผู้เล่น
               </button>
             </div>
           </div>

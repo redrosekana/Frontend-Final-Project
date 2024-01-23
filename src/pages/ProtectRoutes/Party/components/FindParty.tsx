@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pagination } from "flowbite-react";
+import { Pagination, Badge } from "flowbite-react";
 import Cookies from "universal-cookie";
 import { isAxiosError } from "axios";
 
@@ -176,7 +176,7 @@ const FindParty = ({
           />
         </form>
 
-        <div className="mt-4 p-2 grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="mt-4 p-2 flex flex-wrap justify-center gap-8">
           {parties.map((party: PartyItem, index: number) => {
             return (
               <CardParty

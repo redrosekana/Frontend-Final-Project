@@ -83,7 +83,7 @@ const Recommend2 = () => {
             <div className="max-w-4xl w-full mx-auto mt-6">
               <div className="text-2xl">ประเภทเกม</div>
 
-              <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-x-2 gap-y-6">
+              <div className="mt-4 flex flex-wrap justify-center gap-y-10 gap-x-12">
                 {categoryOption.map((item, index) => (
                   <CheckList
                     key={index}
