@@ -8,7 +8,6 @@ import { ErrorResponse } from "../../types/ErrorResponseTypes";
 
 // hooks
 import useAxios from "../../hooks/useAxios";
-import useAxiosRenewToken from "../../hooks/useAxiosRenewToken";
 
 // context
 import { Store } from "../../context/store";

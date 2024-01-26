@@ -400,7 +400,7 @@ function Profile() {
               className="text-2xl text-center mb-4"
               ref={topicScoreEntrieRef}
             >
-              รายการบอร์ดเกมที่เคยประเมิน
+              รายการบอร์ดเกมที่เคยให้คะแนน
             </div>
 
             {selector.scoring?.scoreEntries?.length === 0 ? (

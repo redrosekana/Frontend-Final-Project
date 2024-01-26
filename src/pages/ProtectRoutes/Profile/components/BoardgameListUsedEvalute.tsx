@@ -30,9 +30,9 @@ const BoardgameListEvaluted = ({
       <div className="flex-grow text-center mt-2 sm:mt-0">
         <button
           onClick={() => onClickRemoveScoring(name)}
-          className=" bg-gray-400 py-1 px-2 rounded text-white"
+          className=" bg-gray-100 py-1 px-2 rounded text-gray-500"
         >
-          ลบ
+          <i className="fa-solid fa-xmark"></i>
         </button>
       </div>
     </div>

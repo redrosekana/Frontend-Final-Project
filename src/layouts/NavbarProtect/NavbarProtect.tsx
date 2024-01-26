@@ -82,9 +82,6 @@ function NavbarProtect() {
 
   return (
     <React.Fragment>
-      {context?.isScopeProfile ? (
-        <ScopeProfile LogoutButton={LogoutButton} />
-      ) : null}
       <nav className="container max-w-[1450px] h-20 mx-auto w-full flex justify-between pr-4">
         <div
           className="flex items-center cursor-pointer"
@@ -116,13 +113,16 @@ function NavbarProtect() {
 
         <div className="hidden lg:flex lg:items-center">
           <div className="text-xl mr-2">{selector.displayName}</div>
-          <div className="w-[50px] cursor-pointer">
+          <div className="w-[50px] cursor-pointer relative">
             <img
               src={selector.urlAvatar}
               alt="avatar"
               className="w-full object-cover"
               onClick={() => context?.setIsScopeProfile((prev) => !prev)}
             />
+            {context?.isScopeProfile ? (
+              <ScopeProfile LogoutButton={LogoutButton} />
+            ) : null}
           </div>
         </div>
       </nav>
