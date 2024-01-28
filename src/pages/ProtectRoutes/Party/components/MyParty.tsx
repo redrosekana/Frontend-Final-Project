@@ -141,15 +141,19 @@ const MyParty = () => {
           </div>
           <div className="mt-1 tl:flex flex-wrap items-center gap-x-2">
             <span className="text-2xl">บอร์ดเกมที่ต้องการเล่น:</span>
-            {category?.map((item, index) => {
-              return (
-                <div className="text-2xl font-medium flex flex-wrap mt-1">
-                  <Badge key={index} color="green">
-                    {item}
-                  </Badge>
-                </div>
-              );
-            })}
+            {category?.length === 0 ? (
+              <div className="text-xl font-medium">ไม่ได้ระบุ</div>
+            ) : (
+              category?.map((item, index) => {
+                return (
+                  <div className="text-2xl font-medium flex flex-wrap mt-1">
+                    <Badge key={index} color="green">
+                      {item}
+                    </Badge>
+                  </div>
+                );
+              })
+            )}
           </div>
           <div className="mt-1">
             <span className="text-2xl">เวลาในการเล่นเกม:</span> &nbsp;{" "}

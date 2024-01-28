@@ -3,6 +3,7 @@ import FacebookIcon from "../assets/social-icons/facebook.svg";
 import IgIcon from "../assets/social-icons/ig.png";
 import SukachathumPicture from "../assets/developer-pictures/sukachathum.jpg";
 import TiwatPicture from "../assets/developer-pictures/tiwat.jpg";
+import Logo from "../assets/logo.png";
 
 function Footer() {
   return (
@@ -38,7 +39,7 @@ function Footer() {
 
       <div className="flex flex-col items-center gap-y-4 mt-6 lg:flex-row lg:justify-around">
         <div className="flex justify-center flex-grow">
-          <img src="/Logo.png" alt="skeleton" className="w-24 h-24" />
+          <img src={Logo} alt="skeleton" className="w-24 h-24" />
         </div>
 
         <div className="text-center text-xl md:text-2xl flex-grow">
