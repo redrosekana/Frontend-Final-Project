@@ -7,7 +7,7 @@ import { ScopeProfileProps } from "../types/ScopeProfileTypes";
 export default function ScopeProfile({ LogoutButton }: ScopeProfileProps) {
   return (
     <React.Fragment>
-      <div className="absolute top-20 -right-2 w-40 h-24 bg-gray-100 rounded-lg drop-shadow-xl z-50">
+      <div className="absolute top-20 -right-2 w-44 h-24 bg-gray-100 rounded-lg drop-shadow-xl z-50">
         <ul className="h-full p-2 flex flex-col justify-center">
           <li className="flex items-center pl-2 rounded-md flex-grow cursor-pointer hover:bg-gray-200 z-20">
             <NavLink to="/page/profile" className="w-full">

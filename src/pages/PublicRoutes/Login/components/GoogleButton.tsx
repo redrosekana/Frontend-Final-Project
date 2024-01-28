@@ -1,6 +1,9 @@
 // types
 import { GoogleButtonProps } from "../types/GoogleButtonTypes";
 
+// assests
+import GoogleIcon from "../../../../assets/social-icons/google.png";
+
 const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
   return (
     <button
@@ -9,7 +12,7 @@ const GoogleButton = ({ onLoginGoogle }: GoogleButtonProps) => {
       type="button"
     >
       <div className="w-8 h-8 bg-white flex justify-center items-center tl:absolute tl:top-1 tl:left-1 rounded">
-        <img className="google-icon" src="/google-icons.png" />
+        <img className="google-icon" src={GoogleIcon} />
       </div>
       <div className="text-white tl:ml-7">Google</div>
     </button>

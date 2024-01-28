@@ -33,9 +33,9 @@ export default function DisplayDetailMap(props: DisplayDetailMapProps) {
     const markerSource = new window.longdo.Marker(
       { lat: props.sourceLatitude, lon: props.sourceLongitude },
       {
-        clickable: true, // hover หมุดได้
+        clickable: false, // hover หมุดได้
         title: "สถานที่ต้นทาง",
-        detail: "I'm here",
+        detail: "คุณอยู่ที่นี่",
       }
     );
 

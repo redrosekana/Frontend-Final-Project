@@ -216,7 +216,7 @@ const ManageParty = ({
                         )
                       }
                     >
-                      <Tooltip content="Tranfer owner">
+                      <Tooltip content="มอบหัวหน้าปาร์ตี้">
                         <i className="fa-solid fa-arrow-right-from-bracket text-lg text-white"></i>
                       </Tooltip>
                     </div>
@@ -229,7 +229,7 @@ const ManageParty = ({
                         )
                       }
                     >
-                      <Tooltip content="Fired member">
+                      <Tooltip content="เตะผู้เล่น">
                         <i className="fa-regular fa-circle-xmark text-lg text-white"></i>
                       </Tooltip>
                     </div>

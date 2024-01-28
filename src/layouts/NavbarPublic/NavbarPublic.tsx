@@ -13,6 +13,9 @@ import {
 import MenuHorizontal from "./components/MenuHorizontal";
 import MenuVertical from "./components/MenuVertical";
 
+// assets
+import Logo from "../../assets/logo.png";
+
 function NavbarPublic() {
   const buttonHamberger = useRef<HTMLButtonElement>(null);
   const sideBar = useRef<HTMLDivElement>(null);
@@ -51,7 +54,7 @@ function NavbarPublic() {
           className="flex items-center cursor-pointer"
           onClick={() => navigate("/home")}
         >
-          <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
+          <img src={Logo} alt="Logo" className="w-20 h-20" />
           <span className="font-bold text-2xl">BGRC</span>
         </div>
 
@@ -103,7 +106,7 @@ function NavbarPublic() {
 
         <div className="flex text-2xl cursor-pointer items-center">
           <div>
-            <img src="/Logo.png" alt="Logo" className="w-20 h-20" />
+            <img src={Logo} alt="Logo" className="w-20 h-20" />
           </div>
           <span className="font-bold text-xl -translate-x-4">BGRC</span>
         </div>

@@ -78,12 +78,10 @@ function MapProtect() {
     );
   } else {
     return (
-      <>
-        <DisplayDetailMap
-          {...(entrieShop as InformationEntrieShop)}
-          setStagePage={setStagePage}
-        />
-      </>
+      <DisplayDetailMap
+        {...(entrieShop as InformationEntrieShop)}
+        setStagePage={setStagePage}
+      />
     );
   }
 }

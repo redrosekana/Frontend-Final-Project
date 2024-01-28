@@ -14,6 +14,9 @@ import { PopularListItemTypes } from "./types/HomeTypes";
 // hooks
 import useAxios from "../../hooks/useAxios";
 
+// assets
+import MainPictureHomePage from "../../assets/home-page-pictures/main-picture-home-page.jpg";
+
 function Home() {
   const navigate = useNavigate();
   const cookies = new Cookies();
@@ -73,7 +76,7 @@ function Home() {
           </div>
           <div className="flex justify-center items-center lg:basis-[1100px] order-1 lg:order-2">
             <img
-              src="/picture1.jpg"
+              src={MainPictureHomePage}
               alt="picture1"
               className="w-[500px] lg:w-full rounded-md shakeAnimation"
             />

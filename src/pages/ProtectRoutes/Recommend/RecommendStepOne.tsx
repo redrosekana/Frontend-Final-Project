@@ -20,6 +20,9 @@ import type { RootState } from "../../../store/store";
 // components
 import CheckList from "./components/checkList";
 
+// assets
+import MainPictureRecommendPage from "../../../assets/recommend-pictures/main-picture-recommend-page.png";
+
 function RecommendStepOne() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -40,7 +43,7 @@ function RecommendStepOne() {
 
         <div className="flex justify-center mt-8">
           <img
-            src="/recommend-1.png"
+            src={MainPictureRecommendPage}
             alt="pictrue error"
             className="max-w-[250px] w-full"
           />

@@ -41,7 +41,6 @@ function SearchMap({
 
   useEffect(() => {
     init();
-
     return () => {};
   }, []);
 
@@ -54,7 +53,7 @@ function SearchMap({
     });
 
     // กำหนดการ zoom เริ่มต้นตอนสร้างแผนที่ ค่า defalut 1-20
-    tmpMap.zoom(15, true);
+    tmpMap.zoom(14, true);
 
     // ตั้งค่าให้โหมดของแผนที่ไม่แสดงผล
     tmpMap.Ui.LayerSelector.visible(false);
@@ -78,7 +77,6 @@ function SearchMap({
     tmpMap.Event.bind("overlayClick", function (ev: any) {
       // method ที่หาค่าลองติจูดและละติจูดตอนทำการคลิ๊กที่หมุดได้
       let mouseLocation = map.location(window.longdo.LocationMode.Pointer);
-
       window.scrollBy(0, 900);
 
       // แสดงข้อมูลที่อยู่ ณ ตำแหน่งนั้นให้ผู้ใช้งาน ในกรณีที่เป็นหมุด กับ เส้นทางสีน้ำเงิน

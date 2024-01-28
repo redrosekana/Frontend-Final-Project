@@ -1,3 +1,9 @@
+// assets
+import FacebookIcon from "../assets/social-icons/facebook.svg";
+import IgIcon from "../assets/social-icons/ig.png";
+import SukachathumPicture from "../assets/developer-pictures/sukachathum.jpg";
+import TiwatPicture from "../assets/developer-pictures/tiwat.jpg";
+
 function Footer() {
   return (
     <main className="mt-16 lg:mt-40 bg-slate-100 p-4">
@@ -12,14 +18,14 @@ function Footer() {
 
       <div className="mt-4 p-4 max-w-2xl w-full mx-auto">
         <div className="flex items-center gap-x-6">
-          <img src="/sukachathum.jpg" className="w-20 rounded-full" />
+          <img src={SukachathumPicture} className="w-20 h-20 rounded-full" />
           <p className="text-xl sm:text-2xl">
             นายสุคชาธัม เซียวศิริถาวร รหัสนิสิต 6310500066
           </p>
         </div>
 
         <div className="flex items-center gap-x-6 mt-4">
-          <img src="/tiwat.jpg" className="w-20 rounded-full" />
+          <img src={TiwatPicture} className="w-20 rounded-full" />
           <p className="text-xl sm:text-2xl">
             นายทิวัตถ์ ทรัพย์รัตนกุล รหัสนิสิต 6310500295
           </p>
@@ -42,14 +48,14 @@ function Footer() {
         <div className="flex justify-center gap-4 flex-grow">
           <a href="https://www.facebook.com/nkana.jung" target="_blank">
             <img
-              src="/facebook.svg"
+              src={FacebookIcon}
               alt="facebook"
               className="w-[50px] cursor-pointer"
             />
           </a>
           <a href="https://www.instagram.com/kanadss" target="_blank">
             <img
-              src="/ig.png"
+              src={IgIcon}
               alt="instagram"
               className="w-[50px] cursor-pointer"
             />

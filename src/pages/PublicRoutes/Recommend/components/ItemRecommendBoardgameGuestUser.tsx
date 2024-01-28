@@ -59,7 +59,7 @@ const ItemRecommendBoardGuestUser = ({
         <div className="flex justify-center md:justify-start mt-4 gap-x-4">
           <div className="text-lg flex flex-col items-center px-2">
             <img
-              src="/person.png"
+              src="/icons/person.png"
               alt="person"
               className="max-w-[60px] w-full h-[60px]"
             />
@@ -74,7 +74,7 @@ const ItemRecommendBoardGuestUser = ({
           </div>
           <div className="text-lg flex flex-col items-center px-2">
             <img
-              src="/time.png"
+              src="/icons/time.png"
               alt="time"
               className="max-w-[60px] w-full h-[60px] "
             />
@@ -85,7 +85,7 @@ const ItemRecommendBoardGuestUser = ({
           </div>
           <div className="text-lg flex flex-col items-center px-2">
             <img
-              src="/age.png"
+              src="/icons/age.png"
               alt="time"
               className="max-w-[60px] w-full h-[60px] "
             />
