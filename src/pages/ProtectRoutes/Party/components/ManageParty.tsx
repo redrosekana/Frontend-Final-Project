@@ -179,12 +179,10 @@ const ManageParty = ({
     return selector.ownerParty?.owner._id !== member._id;
   };
 
-  console.log(selector);
-
   return (
     <React.Fragment>
       <div className="w-full">
-        <div className="text-3xl text-center font-semibold">ค้นหาปาร์ตี้</div>
+        <div className="text-3xl text-center font-semibold">จัดการผู้เล่น</div>
 
         <div className="max-w-2xl w-full mx-auto mt-4">
           {selector.memberParty?.member
